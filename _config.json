@@ -1,0 +1,33 @@
+{
+  "discordToken": "",
+  "prefix": "T!",
+  "elevated": ["158049329150427136"],
+  "redis": {
+    "prefix": "trello:",
+		"host": "",
+		"port": 6379,
+		"password": ""
+  },
+	"rethink": {
+		"user": "",
+		"password": "",
+		"host": "",
+		"port": 28015,
+		"database": "Trello"
+	},
+  "discord": {
+    "autoReconnect": true,
+    "disableEveryone": true,
+    "maxCachedMessages": 250,
+    "bot": true,
+    "disabledEvents": ["TYPING_START", "TYPING_STOP"]
+  },
+  "debug": false,
+  "botlist": {},
+  "api": {
+    "trellotoken": "",
+    "trellokey": ""
+  },
+  "commands": "./Commands",
+  "color_scheme": 4365262
+}

@@ -1,0 +1,24 @@
+{
+  "name": "trello-bot",
+  "version": "4.0.0",
+  "description": "Manage Trello boards in Discord",
+  "main": "index.js",
+  "scripts": {
+    "start": "node sharding.js",
+    "start-noshard": "node index.js"
+  },
+  "author": "Snazzah",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "dbots": "^1.1.0",
+    "discord.js": "^11.5.1",
+    "eventemitter3": "^3.1.0",
+    "faux-classes": "./Classes",
+    "faux-core": "./Core",
+    "redis": "^2.8.0",
+    "rethinkdb": "^2.3.3",
+    "text-table": "^0.2.0",
+    "fuzzy": "^0.1.3"
+  }
+}
