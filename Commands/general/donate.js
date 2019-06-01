@@ -6,7 +6,7 @@ module.exports = class Donate extends Command {
   get aliases() { return ['patreon', 'paypal'] }
 
   exec(message) {
-    message.channel.send(`Support development by donating!\n  • Monthly: **<https://patreon.com/Snazzah>**\n  • One-time: **<<https://cash.app/$Snazzah>**`)
+    message.channel.send(`Support development by donating!\n  • Monthly: **<https://patreon.com/Snazzah>**\n  • One-time: **<https://cash.app/$Snazzah>**`)
   }
 
   get helpMeta() { return {
