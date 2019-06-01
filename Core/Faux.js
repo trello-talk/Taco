@@ -97,7 +97,7 @@ module.exports = class Faux extends Discord.Client {
 // LOGGING
 
   get logPrefix() {
-    return `${chalk.gray('[')}${this.isSharded() ? `SHARD ${chalk.magenta(this.shard.id)}` : 'BOT'}${chalk.gray(']')}`
+    return `${chalk.gray('[')}${this.isSharded() ? `SHARD ${chalk.blue(this.shard.id)}` : 'BOT'}${chalk.gray(']')}`
   }
 
   log(...a) {
