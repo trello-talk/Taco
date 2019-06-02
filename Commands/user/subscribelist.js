@@ -9,19 +9,21 @@ module.exports = class SubscribeList extends Command {
 
   async exec(message, args, {user}) {
     let body = await this.client.trello.get.lists(user.trelloToken, user.current)
-    let bid = undefined;
-    for(let board in body){
-      board = body[board];
-      if(board.name.toLowerCase() === args.join(" ").toLowerCase()){
-        bid = board;
-      }
-    }
-    if(bid !== undefined){
-      let newSub = !bid.subscribed
-      await this.client.trello.subscribe.list(user.trelloToken, bid.id, newSub);
-      message.channel.send(`You are ${newSub ? "now" : "no longer"} subcribed to list "${bid.name}"`)
+    let listName = args.join(' ')
+    let query = await this.client.util.query(
+      message, body, 
+      listName, 
+      'name', item => `${item.name} (${item.cards.length} Cards)`,
+      "Type the number of the list you want to (un)subscribe to."
+    )
+    if(query.quit) return;
+    let result = query.result;
+    if(result !== undefined){
+      let newSub = !result.subscribed
+      await this.client.trello.subscribe.list(user.trelloToken, result.id, newSub);
+      message.channel.send(`You are ${newSub ? "now" : "no longer"} subcribed to list "${result.name}".`)
     }else{
-      message.reply(`No list by the name of "${args.join(' ')}" was found!`)
+      message.reply(`No list by the name of "${listName}" was found!`)
     }
   }
 
