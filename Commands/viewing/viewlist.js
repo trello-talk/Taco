@@ -27,31 +27,27 @@ module.exports = class ViewList extends Command {
     if(query.quit) return;
     let result = query.result;
     if(result !== null){
-      let pageVars = this.client.util.pageNumber(ipp, result.cards.length, p),
-        page = pageVars[0],
-        maxPages = pageVars[1];
-      let cards = [];
-      for(let card in result.cards){
-        card = result.cards[card];
-        let l = "";
-        if(card.labels.length){
-          l += "{"+this.client.util.layout.cardLabels(card.labels).join(', ')+"}";
-        }
-        if(card.subscribed){
-          l += " <SUBSCRIBED>";
-        }
-        cards.push("[" + card.name + "](ID: " + card.shortLink + ")" + l)
-      }
-      let sets = this.client.util.splitArray(cards, ipp);
-      let msg = `\`\`\`md\n#====== Page ${page}/${maxPages} ======#\n`;
       if(!result.cards.length){
         message.channel.send("```\nNo cards found.\n```");
       }else{
-        sets[page - 1].map(c=> msg += c + "\n");
-        message.channel.send(msg+"```\nUse `" + this.client.config.prefix + "card <cardID>` to view all info on the card");
+        this.client.promptList(message, result.cards, (card, embed) => {
+          let emojis = (card.subscribed ? "🔔" : "")
+          if(embed)
+            return `\`${card.shortLink}\` ${card.name} ${emojis} ${card.labels.map(label => `**\`${label.name} (${label.color})\`**`).join(" ")}`;
+            else {
+              let l = "";
+              if(card.labels.length)
+                l += "{"+this.client.util.layout.cardLabels(card.labels).join(', ')+"}";
+              return `${card.shortLink}: ${card.name} ${emojis} ${l}`;
+            }
+        }, {
+          header: "Use `" + this.client.config.prefix + "card <cardID>` to see card information\n" + 
+            "Use `" + this.client.config.prefix + "viewlist " + result.name + " [page]` to iterate this list",
+          pluralName: "Trello Lists",
+          itemsPerPage: 10,
+          startPage: args[0]
+        });
       }
-    }else{
-      message.reply(`No list by the name of "${listname}" was found!`)
     }
   }
 
