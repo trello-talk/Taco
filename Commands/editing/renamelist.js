@@ -30,6 +30,6 @@ module.exports = class RenameList extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Renames a list.',
-    usage: "<oldname> | <newname>"
+    usage: "<oldName> | <newName>"
   } }
 }

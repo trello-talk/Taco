@@ -44,6 +44,7 @@ module.exports = class Boards extends Command {
 
   get helpMeta() { return {
     category: 'Viewing',
-    description: 'Lists all of your boards.'
+    description: 'Lists all of your boards.',
+    usage: "[page]"
   } }
 }
