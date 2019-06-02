@@ -188,15 +188,17 @@ module.exports = class Faux extends Discord.Client {
   }
   
   prompt(cxtMessage, items, displayFunc = i => i,
-      promptText = "Type the number of the item you want to use. Responding with anything else will cancel this prompt.",
+      promptText = "Type the number of the item you want to use.",
       timeout = 30000) {
+    promptText += " Responding with anything else will cancel this prompt."
+    var itemsPerPage = 30;
     return new Promise(async resolve => {
       let paginatable = this.canPaginate(cxtMessage)
-      if(items.length > 30 && !paginatable) {
-        await cxtMessage.channel.send("More than 30 items were in a prompt, please make your search more specific or give this bot `Manage Messages` and `Add Reactions` permissions.")
+      if(items.length > itemsPerPage && !paginatable) {
+        await cxtMessage.channel.send(`More than ${itemsPerPage} items were in a prompt, please make your search more specific or give this bot \`Manage Messages\` and \`Add Reactions\` permissions.`)
         return resolve(null)
       }
-      let pageVars = this.util.pageNumber(30, items.length),
+      let pageVars = this.util.pageNumber(itemsPerPage, items.length),
         page = pageVars[0],
         maxPages = pageVars[1],
         textTableRows = [],
@@ -205,9 +207,9 @@ module.exports = class Faux extends Discord.Client {
         textTableRows.push([index, displayFunc(item)])
         index++
       });
-      let splitRows = this.util.splitArray(textTableRows, 30)
+      let splitRows = this.util.splitArray(textTableRows, itemsPerPage)
       let makePage = () => {
-        return CodeBlock.apply(`======[${items.length} Items, Page (${page}/${maxPages})]======\n` +
+        return CodeBlock.apply(`[${items.length} Items, Page (${page}/${maxPages})]\n\n` +
               table(splitRows[page - 1], { hsep: ': ' }) +
               `\n\nc: Cancel Prompt`, 'prolog');
       }
@@ -215,7 +217,7 @@ module.exports = class Faux extends Discord.Client {
       let promptFooter = ""
       let queryComplete = false
       let promptMessage = await cxtMessage.channel.send(promptContent)
-      if(paginatable && items.length > 30){
+      if(paginatable && items.length > itemsPerPage){
         this.startPagination(cxtMessage, promptMessage, async (e, r, q)=>{
           if(queryComplete) return q()
           if(e){
@@ -238,7 +240,7 @@ module.exports = class Faux extends Discord.Client {
           }
           if(r.emoji.name === "◀") page--;
           if(r.emoji.name === "▶") page++;
-          page = this.util.pageNumber(30, items.length, page)[0]
+          page = this.util.pageNumber(itemsPerPage, items.length, page)[0]
           promptContent = promptText + "\n" + makePage()
           r.remove(cxtMessage.author);
           promptMessage.edit(promptContent + promptFooter);
