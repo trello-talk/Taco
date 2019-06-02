@@ -220,6 +220,18 @@ module.exports = (client) => {
       Object.keys(obj).map(o => {
         f(o, obj[o]);
       });
+    },
+    async query(cxtMessage, items, query, key = 'name', displayItem = i => i) {
+      let results = Util.qSearch(items, query, key)
+      let result = null
+      if(results.length == 1)
+        result = results[0];
+        else if(results.length > 1) {
+          let promptResult = await client.prompt(cxtMessage, results, displayItem)
+          if(promptResult === null) return { quit: true };
+          result = promptResult;
+        }
+      return { results, result }
     }
   }
   return Util

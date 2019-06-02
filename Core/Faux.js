@@ -187,7 +187,7 @@ module.exports = class Faux extends Discord.Client {
     delete this.awaitedMessages[chnId];
   }
   
-  prompt(cxtMessage, items, displayFunc = (i) => i,
+  prompt(cxtMessage, items, displayFunc = i => i,
       promptText = "Type the number of the item you want to use. Responding with anything else will cancel this prompt.",
       timeout = 30000) {
     return new Promise(async resolve => {
