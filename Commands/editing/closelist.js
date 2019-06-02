@@ -8,19 +8,21 @@ module.exports = class CloseList extends Command {
   get argRequirement() { return 1 }
 
   async exec(message, args, {user}) {
+    let listName = args.join(' ')
     let body = await this.client.trello.get.lists(user.trelloToken, user.current)
-    let bid = undefined;
-    for(let board in body){
-      board = body[board];
-      if(board.name.toLowerCase() === args.join(" ").toLowerCase()){
-        bid = board;
-      }
-    }
-    if(bid !== undefined){
-      await this.client.trello.set.list.closed(user.trelloToken, bid.id, true)
-      message.reply(`Archived list "${bid.name}".`)
+    let query = await this.client.util.query(
+      message, body, 
+      listName, 
+      'name', item => `${item.name} (${item.cards.length} Cards)`,
+      "Type the number of the list you want to close."
+    )
+    if(query.quit) return;
+    let result = query.result;
+    if(result !== null){
+      await this.client.trello.set.list.closed(user.trelloToken, result.id, true)
+      message.reply(`Archived list "${result.name}".`)
     }else{
-      message.reply(`No list by the name of "${args.join(' ')}" was found!`)
+      message.reply(`No list by the name of "${listName}" was found!`)
     }
   }
 

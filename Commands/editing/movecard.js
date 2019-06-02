@@ -11,22 +11,23 @@ module.exports = class MoveCard extends Command {
     let card = undefined;
     Object.keys(body).map((board)=>{
       board = body[board];
-      if(board.shortLink==args[0]){
+      if(board.shortLink == args[0]){
         card = board;
         card.id = args[0];
       }
     });
     if(card !== undefined){
       let lists = await this.client.trello.get.lists(user.trelloToken, user.current)
-      let bid = undefined;
-      for(let board in lists){
-        board = lists[board];
-        if(board.name.toLowerCase() === args.slice(1).join(' ').slice().toLowerCase() || board.name.toLowerCase().startsWith(args.slice(1).join(' ').toLowerCase())){
-          bid = board;
-        }
-      }
-      if(bid !== undefined){
-        await this.client.trell.set.card.list(user.trelloToken, card.id, bid.id)
+      let query = await this.client.util.query(
+        message, lists, 
+        listName, 
+        'name', item => `${item.name} (${item.cards.length} Cards)`,
+        "Type the number of the list you want to move the card to."
+      )
+      if(query.quit) return;
+      let result = query.result;
+      if(result !== null){
+        await this.client.trello.set.card.list(user.trelloToken, card.id, result.id)
         message.reply(`Moved card "${card.name}" \`(${args[0]})\` to list "${args.slice(1).join(' ')}".`)
       }else{
         message.reply("Uh-Oh! Either that list is non-existant or it's not on the seleted board!");

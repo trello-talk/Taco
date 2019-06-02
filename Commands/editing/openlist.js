@@ -8,19 +8,21 @@ module.exports = class OpenList extends Command {
   get argRequirement() { return 1 }
 
   async exec(message, args, {user}) {
+    let listName = args.join(' ')
     let body = await this.client.trello.get.listsArchived(user.trelloToken, user.current)
-    let bid = undefined;
-    for(let board in body){
-      board = body[board];
-      if(board.name.toLowerCase() === args.join(" ").toLowerCase()){
-        bid = board;
-      }
-    }
-    if(bid !== undefined){
-      await this.client.trello.set.list.closed(user.trelloToken, bid.id, false)
-      message.reply(`Removed list "${bid.name}" from the archive.`)
+    let query = await this.client.util.query(
+      message, body, 
+      listName, 
+      'name', item => `${item.name} (${item.cards.length} Cards)`,
+      "Type the number of the list you want to open."
+    )
+    if(query.quit) return;
+    let result = query.result;
+    if(result !== null){
+      await this.client.trello.set.list.closed(user.trelloToken, result.id, false)
+      message.reply(`Removed list "${result.name}" from the archive.`)
     }else{
-      message.reply(`No list by the name of "${args.join(' ')}" was found!`)
+      message.reply(`No list by the name of "${listName}" was found!`)
     }
   }
 

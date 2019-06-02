@@ -10,20 +10,22 @@ module.exports = class RenameList extends Command {
     let body = await this.client.trello.get.lists(user.trelloToken, user.current)
     if(!args.join(" ").match(/\s\|\s/,"|")){message.channel.send(`Format is invalid!`); return;}
     let c = args.join(" ").replace(/\s\|\s/,"|").split("|");
-    let cargs = c.reverse()[0].split(" ");
-    let bid = undefined;
-    for(let board in body){
-      board = body[board];
-      if(board.name.toLowerCase() === c.slice(c.length-1).join(" ").toLowerCase()){
-        bid = board;
-      }
-    }
-    if(bid !== undefined){
-      if(bid.name !== cargs.join(" "))
-        await this.client.trello.set.list.name(user.trelloToken, bid.id, cargs.join(" "));
-      message.reply(`Renamed list "${bid.name}" to "${cargs.join(" ")}".`);
+    let oldName = c[0].trim();
+    let newName = c[1].trim();
+    let query = await this.client.util.query(
+      message, body, 
+      oldName, 
+      'name', item => `${item.name} (${item.cards.length} Cards)`,
+      "Type the number of the list you want to rename."
+    )
+    if(query.quit) return;
+    let result = query.result;
+    if(result !== null){
+      if(result.name !== newName)
+        await this.client.trello.set.list.name(user.trelloToken, result.id, newName);
+      message.reply(`Renamed list "${result.name}" to "${newName}".`);
     }else{
-      message.reply(`No list by the name of "${c.slice(c.length-1).join(' ')}" was found!`)
+      message.reply(`No list by the name of "${oldName}" was found!`)
     }
   }
 
