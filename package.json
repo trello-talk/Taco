@@ -7,6 +7,10 @@
     "start": "node sharding.js",
     "start-noshard": "node index.js"
   },
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Snazzah/TrelloBot.git"
+	},
   "author": "Snazzah",
   "license": "Apache-2.0",
   "dependencies": {
