@@ -9,7 +9,7 @@ module.exports = class AddList extends Command {
 
   async exec(message, args, {user}) {
     await this.client.trello.add.list(user.trelloToken, user.current, args.join(' '))
-    message.channel.send("Added list "+args.join(' '));
+    message.channel.send(`Added list "${args.join(' ')}".`);
   }
 
   get helpMeta() { return {

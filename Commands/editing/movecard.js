@@ -27,7 +27,7 @@ module.exports = class MoveCard extends Command {
       }
       if(bid !== undefined){
         await this.client.trell.set.card.list(user.trelloToken, card.id, bid.id)
-        message.reply("Moved card "+card.name+" `("+args[0]+")` to list "+args.slice(1).join(' '))
+        message.reply(`Moved card "${card.name}" \`(${args[0]})\` to list "${args.slice(1).join(' ')}".`)
       }else{
         message.reply("Uh-Oh! Either that list is non-existant or it's not on the seleted board!");
       }

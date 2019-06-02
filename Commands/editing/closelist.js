@@ -18,7 +18,7 @@ module.exports = class CloseList extends Command {
     }
     if(bid !== undefined){
       await this.client.trello.set.list.closed(user.trelloToken, bid.id, true)
-      message.reply(`Archived list \`${bid.name}\`.`)
+      message.reply(`Archived list "${bid.name}".`)
     }else{
       message.reply(`No list by the name of "${args.join(' ')}" was found!`)
     }

@@ -18,7 +18,7 @@ module.exports = class OpenList extends Command {
     }
     if(bid !== undefined){
       await this.client.trello.set.list.closed(user.trelloToken, bid.id, false)
-      message.reply(`Removed list \`${bid.name}\` from the archive.`)
+      message.reply(`Removed list "${bid.name}" from the archive.`)
     }else{
       message.reply(`No list by the name of "${args.join(' ')}" was found!`)
     }

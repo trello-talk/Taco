@@ -33,7 +33,7 @@ module.exports = class CardAttach extends Command {
       }
       if(url){
         await this.client.trello.add.attachment(user.trelloToken, args[0], url).then(() => {
-          message.reply("Added an attachment to card "+bid.name+" `("+args[0]+")`")
+          message.reply(`Added an attachment to card "${bid.name}". \`(${args[0]})\``)
         });
       }
     }else{

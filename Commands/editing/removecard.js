@@ -19,7 +19,7 @@ module.exports = class RemoveCard extends Command {
     });
     if(bid !== undefined){
       await this.client.trello.delete.card(user.trelloToken, args[0]);
-      message.reply(`Deleted card "${bid.name}" \`(${args[0]})\``)
+      message.reply(`Deleted card "${bid.name}". \`(${args[0]})\``)
     }else{
       message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
     }
