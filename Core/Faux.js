@@ -199,26 +199,24 @@ module.exports = class Faux extends Discord.Client {
       let pageVars = this.util.pageNumber(30, items.length),
         page = pageVars[0],
         maxPages = pageVars[1],
-        tableHeader,
         textTableRows = [],
         index = 1
       items.forEach(item => {
         textTableRows.push([index, displayFunc(item)])
         index++
       });
+      let splitRows = this.util.splitArray(textTableRows, 30)
       let makePage = () => {
-        let tableRows = textTableRows.slice((page-1)*30, 30);
-        tableHeader = ["-", `[${items.length} Items, Page (${page}/${maxPages})]`]
-        if(paginatable && items.length > 30) tableRows.unshift(tableHeader);
-        tableRows.push(['c', "- Cancel Prompt"])
-        return CodeBlock.apply(table(tableRows, { hsep: ': ' }), 'prolog');
+        return CodeBlock.apply(`======[${items.length} Items, Page (${page}/${maxPages})]======\n` +
+              table(splitRows[page - 1], { hsep: ': ' }) +
+              `\n\nc: Cancel Prompt`, 'prolog');
       }
       let promptContent = promptText + "\n" + makePage()
       let promptFooter = ""
       let queryComplete = false
       let promptMessage = await cxtMessage.channel.send(promptContent)
       if(paginatable && items.length > 30){
-        this.startPagination(cxtMessage, promptMessage, (e, r, q)=>{
+        this.startPagination(cxtMessage, promptMessage, async (e, r, q)=>{
           if(queryComplete) return q()
           if(e){
             if(!e.toString().startsWith("Error: Request timed out")) {
@@ -232,10 +230,9 @@ module.exports = class Faux extends Discord.Client {
             return;
           }
           if(r.emoji.name === "🛑"){
-            q().catch(e=>{
-              promptFooter += "\n" + e.toString()
-              promptMessage.edit(promptContent + promptFooter);
-            });
+            this.killPagination(cxtMessage)
+            await promptMessage.delete()
+            await cxtMessage.channel.send("Prompt cancelled.")
             return;
           }
           if(r.emoji.name === "◀") page--;
@@ -243,7 +240,7 @@ module.exports = class Faux extends Discord.Client {
           page = this.util.pageNumber(30, items.length, page)[0]
           promptContent = promptText + "\n" + makePage()
           r.remove(cxtMessage.author);
-          m.edit(promptContent + promptFooter);
+          promptMessage.edit(promptContent + promptFooter);
         });
       }
       try {
@@ -290,7 +287,7 @@ module.exports = class Faux extends Discord.Client {
           delete _this.pageProcesses[msg.channel.id][msg.author.id];
           cb(new Error(`Request timed out (${timeout}ms)`), null, (nd) => _this.quitPagination(msg, botmsg, nd));
         }, timeout);
-        cb(null, reaction, (nd) => this.quitPagination(msg, botmsg, nd));
+        cb(null, reaction, (nd) => _this.quitPagination(msg, botmsg, nd));
       },
       reject: function() { clearTimeout(timer); cb("Pagination was stopped by another paging process!", null, (nd) => _this.quitPagination(msg, botmsg, nd)); },
       stop: function() { clearTimeout(timer); },
