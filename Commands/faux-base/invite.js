@@ -2,7 +2,7 @@ const { Command } = require('faux-classes')
 
 module.exports = class Invite extends Command {
   get name() { return 'invite' }
-  get aliases() { return ['✉'] }
+  get aliases() { return ['✉', 'botinvite', 'botinv', 'inv'] }
   get cooldown() { return 0 }
 
   exec(message) {

@@ -3,6 +3,7 @@ const { Util } = require('faux-core')
 
 module.exports = class Eval extends Command {
   get name() { return 'eval' }
+  get aliases() { return ['evaluate'] }
 
   async exec(Message, args) {
     let message = Message

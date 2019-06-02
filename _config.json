@@ -28,6 +28,10 @@
     "trellotoken": "",
     "trellokey": ""
   },
+  "sharding": {
+    "count": "auto",
+    "delay": 7500
+  },
   "commands": "./Commands",
   "color_scheme": 4365262
 }

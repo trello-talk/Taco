@@ -12,7 +12,7 @@ const { Data, Util, Trello, CodeBlock } = require('faux-classes')
 
 module.exports = class Faux extends Discord.Client {
   get FAUX_VER() {
-    return '1.0.1-custom';
+    return '1.1.0-custom';
   }
 
   constructor({configPath, packagePath, mainDir} = {}) {

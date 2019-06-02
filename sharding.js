@@ -4,16 +4,16 @@ const config = require('./config.json')
 const pkg = require('./package.json')
 
 const manager = new Discord.ShardingManager(`${__dirname}/${pkg.main}`, {
-  token: config.discordToken
+  token: config.discordToken,
+  totalShards: config.sharding.count
 })
 
 const logPrefix = `${chalk.gray('[')}${chalk.yellow('SHARD MASTER')}${chalk.gray(']')}`
 
-manager.on('launch', shard =>  console.log(`${logPrefix} ${shard.id} launched`))
+manager.on('launch', shard =>  console.log(`${logPrefix} ${shard.id} (${shard.id + 1}/${manager.totalShards}) launched`))
 process.on('exit', code => console.log(`${logPrefix} ${chalk.red('Process is forcing a shut down!')} Exit code:`, code))
 
 console.log(`${logPrefix} Starting to spawn shards...`)
-manager.spawn().then(() => {
+manager.spawn(config.sharding.count, config.sharding.delay).then(() => {
   console.log(`${logPrefix} ${chalk.green('Finished launching shards!')}`)
 });
-

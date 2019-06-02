@@ -2,6 +2,7 @@ const { CodeBlock, Command } = require('faux-classes')
 
 module.exports = class Exec extends Command {
   get name() { return 'exec' }
+  get aliases() { return ['execute', 'terminal', 'bash'] }
 
   exec(Message, Args) {
     Message.channel.startTyping();
