@@ -194,7 +194,7 @@ module.exports = class Faux extends Discord.Client {
       let paginatable = this.canPaginate(cxtMessage)
       if(items.length > 30 && !paginatable) {
         await cxtMessage.channel.send("More than 30 items were in a prompt, please make your search more specific or give this bot `Manage Messages` and `Add Reactions` permissions.")
-        return resolve(false)
+        return resolve(null)
       }
       let pageVars = this.util.pageNumber(30, items.length),
         page = pageVars[0],
@@ -233,6 +233,7 @@ module.exports = class Faux extends Discord.Client {
             this.killPagination(cxtMessage)
             await promptMessage.delete()
             await cxtMessage.channel.send("Prompt cancelled.")
+            resolve(null)
             return;
           }
           if(r.emoji.name === "◀") page--;
@@ -251,7 +252,7 @@ module.exports = class Faux extends Discord.Client {
           this.killPagination(cxtMessage)
           await promptMessage.delete()
           await cxtMessage.channel.send("Prompt cancelled.")
-          resolve(false)
+          resolve(null)
         } else {
           await promptMessage.delete()
           let selectedIndex = parseInt(response.content) - 1
@@ -261,6 +262,8 @@ module.exports = class Faux extends Discord.Client {
       } catch (e) {
         promptFooter += "\n" + e.toString()
         promptMessage.edit(promptContent + promptFooter)
+        this.killPagination(cxtMessage)
+        resolve(null)
       }
     });
   }
