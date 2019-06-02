@@ -189,9 +189,9 @@ module.exports = class Faux extends Discord.Client {
   
   prompt(cxtMessage, items, displayFunc = i => i,
       promptText = "Type the number of the item you want to use.",
+      itemsPerPage = 30,
       timeout = 30000) {
     promptText += " Responding with anything else will cancel this prompt."
-    var itemsPerPage = 30;
     return new Promise(async resolve => {
       let paginatable = this.canPaginate(cxtMessage)
       if(items.length > itemsPerPage && !paginatable) {
@@ -209,14 +209,15 @@ module.exports = class Faux extends Discord.Client {
       });
       let splitRows = this.util.splitArray(textTableRows, itemsPerPage)
       let makePage = () => {
-        return CodeBlock.apply(`[${items.length} Items, Page (${page}/${maxPages})]\n\n` +
+        return CodeBlock.apply(
+              `[${items.length} Items, Page (${page}/${maxPages})]\n\n` +
               table(splitRows[page - 1], { hsep: ': ' }) +
               `\n\nc: Cancel Prompt`, 'prolog');
       }
       let promptContent = promptText + "\n" + makePage()
       let promptFooter = ""
       let queryComplete = false
-      let promptMessage = await cxtMessage.channel.send(promptContent)
+      let promptMessage = await cxtMessage.channel.send(promptContent + promptFooter)
       if(paginatable && items.length > itemsPerPage){
         this.startPagination(cxtMessage, promptMessage, async (e, r, q)=>{
           if(queryComplete) return q()
@@ -269,6 +270,80 @@ module.exports = class Faux extends Discord.Client {
       }
     });
   }
+  
+  async promptList(cxtMessage, items, displayFunc = i => i,
+      {
+        content = "",
+        header = "",
+        footer = "",
+        pluralName = "Items",
+        itemsPerPage = 30,
+        startPage = 1
+      }) {
+    let isEmbed = this.embed(cxtMessage)
+    let pageVars = this.util.pageNumber(itemsPerPage, items.length, startPage),
+      page = pageVars[0],
+      maxPages = pageVars[1];
+    let embed = {
+      color: this.config.color_scheme,
+      author: {
+        name: `${pluralName} (${items.length}, Page ${page}/${maxPages})`,
+        icon_url: this.config.icon_url
+      },
+      fields: [{
+        name: "List Prompt",
+        value: "[]"
+      }]
+    }
+    if(header) embed.description = header;
+    if(footer) embed.footer = { text: footer };
+    let splitRows = this.util.splitArray(items.map(i => displayFunc(i, false)), itemsPerPage)
+    let splitEmbedRows = this.util.splitArray(items.map(i => displayFunc(i, true)), itemsPerPage)
+    let makePage = () => {
+      embed.author.name = `${pluralName} (${items.length}, Page ${page}/${maxPages})`
+      embed.fields[0].value = splitEmbedRows[page - 1].join('\n')
+      return CodeBlock.apply(
+            `(•) ${pluralName} (${items.length}, Page (${page}/${maxPages})\n` +
+            header + "\n\n" + splitRows[page - 1].join('\n') +
+            footer, 'prolog');
+    }
+    let promptContent = content + "\n" + makePage() + footer;
+    let promptFooter = "";
+    let promptMessage = isEmbed ? await cxtMessage.channel.send("", { embed }) : await cxtMessage.channel.send(promptContent + promptFooter);
+    let updateMessage = () => {
+      embed.description = header + "\n" + promptFooter;
+      if(isEmbed) promptMessage.edit("", { embed });
+        else promptMessage.edit(promptContent + promptFooter);
+    }
+    if(this.canPaginate(cxtMessage) && items.length > itemsPerPage){
+      this.startPagination(cxtMessage, promptMessage, async (e, r, q)=>{
+        if(e){
+          if(!e.toString().startsWith("Error: Request timed out")) {
+            promptFooter += "\n" + e.toString()
+            updateMessage();
+          }
+          q().catch(e2=>{
+            promptFooter += "\n" + e2.toString()
+            updateMessage();
+          });
+          return;
+        }
+        if(r.emoji.name === "🛑"){
+          q().catch(e=>{
+            promptFooter += "\n" + e.toString()
+            updateMessage();
+          });
+          return;
+        }
+        if(r.emoji.name === "◀") page--;
+        if(r.emoji.name === "▶") page++;
+        page = this.util.pageNumber(itemsPerPage, items.length, page)[0]
+        promptContent = content + "\n" + makePage() + footer
+        r.remove(cxtMessage.author);
+        updateMessage();
+      });
+    }
+  }
 
 // PAGINATION
 
@@ -279,7 +354,7 @@ module.exports = class Faux extends Discord.Client {
     if (timeout >= 0) {
       timer = setTimeout(function() {
         delete _this.pageProcesses[msg.channel.id][msg.author.id];
-        cb(new Error(`Request timed out (${timeout}ms)`), null, (nd) => _this.quitPagination(msg, botmsg, nd));
+        cb(new Error(`Request timed out (${timeout}ms)`), null, () => _this.quitPagination(msg, botmsg));
       }, timeout);
     }
     if (this.pageProcesses[msg.channel.id][msg.author.id]) {
@@ -290,11 +365,11 @@ module.exports = class Faux extends Discord.Client {
         clearTimeout(timer);
         timer = setTimeout(function() {
           delete _this.pageProcesses[msg.channel.id][msg.author.id];
-          cb(new Error(`Request timed out (${timeout}ms)`), null, (nd) => _this.quitPagination(msg, botmsg, nd));
+          cb(new Error(`Request timed out (${timeout}ms)`), null, () => _this.quitPagination(msg, botmsg));
         }, timeout);
-        cb(null, reaction, (nd) => _this.quitPagination(msg, botmsg, nd));
+        cb(null, reaction, () => _this.quitPagination(msg, botmsg));
       },
-      reject: function() { clearTimeout(timer); cb("Pagination was stopped by another paging process!", null, (nd) => _this.quitPagination(msg, botmsg, nd)); },
+      reject: function() { clearTimeout(timer); cb("Pagination was stopped by another paging process!", null, () => _this.quitPagination(msg, botmsg)); },
       stop: function() { clearTimeout(timer); },
       id: botmsg.id
     };
@@ -304,17 +379,17 @@ module.exports = class Faux extends Discord.Client {
       await botmsg.react("▶")
     } catch (e) {
       console.log(e)
-      cb("I can't make reactions to the message!", null, (nd) => this.quitPagination(msg, botmsg, nd))
+      cb("I can't make reactions to the message!", null, () => this.quitPagination(msg, botmsg))
     }
   }
 
-  quitPagination(msg, botmsg, nodel){
+  quitPagination(msg, botmsg){
     return new Promise((resolve, reject) => {
       botmsg.clearReactions().then(()=>{
-        if(!nodel) this.killPagination(msg);
+        this.killPagination(msg);
         resolve();
       }).catch(()=>{
-        if(!nodel) this.killPagination(msg);
+        this.killPagination(msg);
         reject("I can't clear reactions!");
       })
     })
