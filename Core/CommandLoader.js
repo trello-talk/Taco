@@ -45,10 +45,10 @@ module.exports = class CommandLoader {
   }
 
   get(name){
-    let cmd = this.getAbs(name) || null
+    let cmd = this.getAbs(name.toLowerCase()) || null
     if(cmd) return cmd
     this.commands.forEach(c => {
-      if(c.aliases.includes(name)) cmd = c
+      if(c.aliases.includes(name.toLowerCase())) cmd = c
     })
     return cmd
   }
