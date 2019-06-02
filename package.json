@@ -7,10 +7,10 @@
     "start": "node sharding.js",
     "start-noshard": "node index.js"
   },
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Snazzah/TrelloBot.git"
-	},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Snazzah/TrelloBot.git"
+  },
   "author": "Snazzah",
   "license": "Apache-2.0",
   "dependencies": {
@@ -20,9 +20,9 @@
     "eventemitter3": "^3.1.0",
     "faux-classes": "./Classes",
     "faux-core": "./Core",
+    "fuzzy": "^0.1.3",
     "redis": "^2.8.0",
     "rethinkdb": "^2.3.3",
-    "text-table": "^0.2.0",
-    "fuzzy": "^0.1.3"
+    "text-table": "^0.2.0"
   }
 }
