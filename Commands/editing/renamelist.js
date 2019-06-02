@@ -19,12 +19,9 @@ module.exports = class RenameList extends Command {
       }
     }
     if(bid !== undefined){
-      if(bid.name !== cargs.join(" ")){
-        await this.client.trello.set.list.name(user.trelloToken, bid.id, cargs.join(" "))
-        message.reply(`Renamed list "${bid.name}" to "${cargs.join(" ")}".`)
-      }else{
-        message.reply(`Renamed list "${bid.name}" to "${cargs.join(" ")}".`);
-      }
+      if(bid.name !== cargs.join(" "))
+        await this.client.trello.set.list.name(user.trelloToken, bid.id, cargs.join(" "));
+      message.reply(`Renamed list "${bid.name}" to "${cargs.join(" ")}".`);
     }else{
       message.reply(`No list by the name of "${c.slice(c.length-1).join(' ')}" was found!`)
     }
