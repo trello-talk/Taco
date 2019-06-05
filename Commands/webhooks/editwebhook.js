@@ -80,11 +80,11 @@ module.exports = class EditWebhook extends Command {
             if(!webhook.bits.includes(bit.toLowerCase())) added.push(bit);
           });
           if(added.length === 0){
-            message.reply("Edited bits!\n\n**Current Bits**: "+webhook.bits.map(bit => `\`${toOrigin(bit)}\``).join(", ")+"\n\n`Nothing was added.`");
+            message.reply("Edited bits!\n\n**Current Bits**: "+webhook.bits.map(bit => `\`${this.toOrigin(bit)}\``).join(", ")+"\n\n`Nothing was added.`");
           }else{
             await this.client.data.set.webhook(message.guild.id, args[0], bits)
             let msg = "Edited bits!\n\n**Current Bits**: "+Object.keys(this.client.util.TrelloEvents).map(bit => `\`${bit}\``).join(", ");
-            msg += "\n\n**Added Bits**: "+added.map(bit => `\`${toOrigin(bit)}\``).join(", ");
+            msg += "\n\n**Added Bits**: "+added.map(bit => `\`${this.toOrigin(bit)}\``).join(", ");
             message.reply(msg);
           }
         }
