@@ -3,7 +3,7 @@ const { Command } = require('faux-classes')
 module.exports = class Lists extends Command {
   get name() { return 'lists' }
   get cooldown() { return 2 }
-  get permissions() { return ['auth'] }
+  get permissions() { return ['auth', 'board'] }
 
   async exec(message, args, {user}) {
     let body = await this.client.trello.get.lists(user.trelloToken, user.current)
