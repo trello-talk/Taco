@@ -5,27 +5,25 @@ module.exports = class WebBits extends Command {
   get cooldown() { return 0 }
   get aliases() { return ['bits'] }
 
-  async exec(message) {
-		if(this.client.embed(message)){
-			message.channel.send('', {
-				embed: {
-					color: this.client.config.color_scheme,
-					author: {
-						name: "Trello Webhook Bits",
-						icon_url: this.client.config.icon_url
-					},
-					description: Object.keys(this.client.util.TrelloEvents).map(event=>`**${event}** - Triggered when ${this.client.util.TrelloEvents[event]}`).join("\n")
-				}
-			});
-		}else{
-			message.channel.send("__**Webhook Bits**__\n"+Object.keys(this.client.util.TrelloEvents).map(event => {
-				return `**${event}** - Triggered when ${this.client.util.TrelloEvents[event]}`
-			}).join('\n'));
-		}
+  async exec(message, args) {
+    await this.client.promptList(message, Object.keys(this.client.util.TrelloEvents).sort(), (event, embed) => {
+      if(embed) {
+        return `**\`${event}\`** - ${this.client.util.TrelloEvents[event]}`
+      } else {
+        return `${event} - ${this.client.util.TrelloEvents[event]}`
+      }
+    }, {
+      header: "Use these bits to configure your webhooks using `" + this.client.config.prefix + "editwebhook`\n" + 
+        "Use `" + this.client.config.prefix + "webbits [page]` to iterate this list",
+      pluralName: "Trello Webhook Bits",
+      itemsPerPage: 10,
+      startPage: args[0]
+    });
   }
 
   get helpMeta() { return {
     category: 'Webhooks',
-    description: 'List webhook bits.'
+		description: 'List webhook bits.',
+		usage: '[page]'
   } }
 }

@@ -48,15 +48,15 @@ const StickerEmojis = {
 }
 
 const TrelloEvents = {
-  voteOnCard: "a card is voted on",
-  createCard: "a card is created",
+  voteOnCard: "a card has been voted on",
+  createCard: "a card has been created",
   updateCheckItemStateOnCard: "a checklist item has been changed",
-  deleteCard: "a card is deleted",
-  commentCard: "a card is commented on",
-  removeChecklistFromCard: "a checklist is added tn a card",
-  addChecklistToCard: "a checklist is removed from a card",
-  addLabelToCard: "a label is added to a card",
-  removeLabelFromCard: "a label is removed from a card",
+  deleteCard: "a card has been deleted",
+  commentCard: "a card has been commented on",
+  removeChecklistFromCard: "a checklist has been added tn a card",
+  addChecklistToCard: "a checklist has been removed from a card",
+  addLabelToCard: "a label has been added to a card",
+  removeLabelFromCard: "a label has been removed from a card",
   updateCard: "a card has been edited, such as it's name and description",
   createCheckItem: "a check item has been added to a checklist",
   deleteCheckItem: "a check item has been removed to a checklist",
@@ -64,7 +64,23 @@ const TrelloEvents = {
   makeAdminOfBoard: "a member has been made admin",
   makeNormalMemberOfBoard: "a member has been made normal member",
   createList: "a list has been created",
-  addAttachmentToCard: "an attachment has been added to a card"
+  addAttachmentToCard: "an attachment has been added to a card",
+  copyChecklist: "contents of a checklist has been copied to another (will also fire the createChecklist event)",
+  updateCustomFieldItem: "a custom field on a card has been updated",
+  deleteComment: "a comment has been deleted",
+  updateComment: "a comment has been updated",
+  addMemberToCard: "a member has been added to a card",
+  deleteAttachmentFromCard: "an attachment has been removed from a card",
+  removeMemberFromCard: "a member has been removed from a card",
+  enablePlugin: "a board plugin has been enabled",
+  disablePlugin: "a board plugin has been disabled",
+  enablePowerUp: "a board powerup has been enabled",
+  disablePowerUp: "a board powerup has been disabled",
+  createCustomField: "a custom field has been created",
+  deleteCustomField: "a custom field has been deleted",
+  updateCustomField: "a custom field has been updated",
+  copyCard: "a card has been duplicated",
+  updateChecklist: "a checklist has been renamed"
 }
 
 module.exports = (client) => { 

@@ -10,40 +10,24 @@ module.exports = class Webhooks extends Command {
     return Object.keys(this.client.util.TrelloEvents).filter(t => t.toLowerCase() == str.toLowerCase())[0];
   }
 
-  async exec(message) {
+  async exec(message, args) {
     let webhooks = await this.client.data.get.webhooksOf(message.guild.id)
     if(webhooks.length !== 0){
-      if(this.client.embed(message)){
-        let embed = {
-          color: this.client.config.color_scheme,
-          author: {
-            name: "Trello Webhooks",
-            icon_url: this.client.config.icon_url
-          },
-          fields: []
+      await this.client.promptList(message, webhooks, (webhook, embed) => {
+        let bits = webhook.bits.map(bit => embed ? `\`${this.toOrigin(bit)}\`` : this.toOrigin(bit)).join(", ");
+        if(webhook.bits.length === 0)
+          bits = embed ? "*\`[all]\`*" : "[all]";
+        if(embed) {
+          return `**Board \`${webhook.board}\`**\n-  Bits: ${bits}`
+        } else {
+          return `Board ${webhook.board}\n  Bits: ${bits}`
         }
-        webhooks.map(webhook => {
-          let bits = webhook.bits;
-          if(bits.length === 0){
-            bits = Object.keys(bits);
-          }
-          embed.fields.push({
-            name: "Board "+webhook.board,
-            value: "**Bits**: "+bits.map(bit => `\`${this.toOrigin(bit)}\``).join(", ")
-          });
-        });
-        message.channel.send('', { embed: embed });
-      }else{
-        let msg = `__**All Active Webhooks**__\n\n`;
-        msg += webhooks.map(webhook => {
-          let bits = webhook.bits;
-          if(bits.length === 0){
-            bits = Object.keys(bits);
-          }
-          return "__Board "+webhook.board+"__\n*Bits*: "+bits.map(bit => `\`${this.toOrigin(bit)}\``).join(", ");
-        }).join("\n\n");
-        message.channel.send(msg);
-      }
+      }, {
+        header: "Use `" + this.client.config.prefix + "webhooks [page]` to iterate this list",
+        pluralName: "Trello Webhooks",
+        itemsPerPage: 5,
+        startPage: args[0]
+      });
     }else{
       message.reply("Could not find any active webhooks. `"+this.client.config.prefix+"help addwebhook` to learn how to create one!");
     }
@@ -51,6 +35,7 @@ module.exports = class Webhooks extends Command {
 
   get helpMeta() { return {
     category: 'Webhooks',
-    description: 'List webhook bits.'
+    description: 'List webhook bits.',
+    usage: '[page]'
   } }
 }
