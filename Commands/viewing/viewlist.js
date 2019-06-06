@@ -30,7 +30,7 @@ module.exports = class ViewList extends Command {
       if(!result.cards.length){
         message.channel.send("```\nNo cards found.\n```");
       }else{
-        this.client.promptList(message, result.cards, (card, embed) => {
+        await this.client.promptList(message, result.cards, (card, embed) => {
           let emojis = (card.subscribed ? "🔔" : "")
           if(embed)
             return `\`${card.shortLink}\` ${card.name} ${emojis} ${card.labels.map(label => `**\`${label.name} (${label.color})\`**`).join(" ")}`;

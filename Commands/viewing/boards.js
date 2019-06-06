@@ -7,7 +7,7 @@ module.exports = class Boards extends Command {
 
   async exec(message, args, {user}) {
     let body = await this.client.trello.get.boards(user.trelloToken, user.trelloID)
-    this.client.promptList(message, body.boards, (board, embed) => {
+    await this.client.promptList(message, body.boards, (board, embed) => {
       let emojis = (board.subscribed ? "🔔" : "") + (board.starred ? "⭐" : "") + (board.pinned ? "📌" : "")
       let current = board.shortLink === user.current;
       if(embed) {

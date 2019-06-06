@@ -7,7 +7,7 @@ module.exports = class Lists extends Command {
 
   async exec(message, args, {user}) {
     let body = await this.client.trello.get.lists(user.trelloToken, user.current)
-    this.client.promptList(message, body, (list, embed) => {
+    await this.client.promptList(message, body, (list, embed) => {
       let emojis = (list.subscribed ? "🔔" : "")
       if(embed)
         return `${list.name} ${emojis} *(${list.cards.length} Cards)*`;
