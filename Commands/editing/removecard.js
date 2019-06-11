@@ -18,8 +18,18 @@ module.exports = class RemoveCard extends Command {
       }
     });
     if(bid !== undefined){
-      await this.client.trello.delete.card(user.trelloToken, args[0]);
-      message.reply(`Deleted card "${bid.name}". \`(${args[0]})\``)
+      try {
+        await message.reply(`Are you sure you want to delete the card "${bid.name}"? Type \`yes\` to confirm, anything else will cancel the deletion.`)
+        let nextMessage = await this.client.awaitMessage(message)
+        if (nextMessage.content == "yes") {
+          await this.client.trello.delete.card(user.trelloToken, args[0]);
+          message.reply(`Deleted card "${bid.name}". \`(${args[0]})\``)
+        } else {
+          await message.channel.send("Cancelled confirmation.")
+        }
+      } catch (e) {
+        await message.channel.send("Cancelled confirmation due to an interruption.")
+      }
     }else{
       message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
     }
