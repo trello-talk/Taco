@@ -18,6 +18,8 @@ module.exports = class ViewList extends Command {
 			listName = listName.replace(/\d+$/, "").replace(/\s*$/, "");
 		}
     let body = await this.client.trello.get.lists(user.trelloToken, user.current)
+    if(!body.length)
+      return message.reply("There are no found lists on the board. Check the archive with `T!listarchive`.");
     let query = await this.client.util.query(
       message, body, 
       listName, 
@@ -28,7 +30,7 @@ module.exports = class ViewList extends Command {
     let result = query.result;
     if(result !== null){
       if(!result.cards.length){
-        message.channel.send("```\nNo cards found.\n```");
+        message.reply("There were no found cards on that lists. You could check the archive with `T!cardarchive` or create one with `T!createcard`.");
       }else{
         await this.client.promptList(message, result.cards, (card, embed) => {
           let emojis = (card.subscribed ? "🔔" : "")

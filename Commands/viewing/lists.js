@@ -7,6 +7,8 @@ module.exports = class Lists extends Command {
 
   async exec(message, args, {user}) {
     let body = await this.client.trello.get.lists(user.trelloToken, user.current)
+    if(!body.length)
+      return message.reply("There are no found lists on the board. Check the archive with `T!listarchive`.");
     await this.client.promptList(message, body, (list, embed) => {
       let emojis = (list.subscribed ? "🔔" : "")
       if(embed)
