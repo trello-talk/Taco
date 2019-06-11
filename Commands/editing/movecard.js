@@ -9,6 +9,7 @@ module.exports = class MoveCard extends Command {
   async exec(message, args, {user}) {
     let body = await this.client.trello.get.cards(user.trelloToken, user.current)
     let card = undefined;
+    let listName = args.slice(1).join(' ');
     Object.keys(body).map((board)=>{
       board = body[board];
       if(board.shortLink == args[0]){
@@ -28,7 +29,7 @@ module.exports = class MoveCard extends Command {
       let result = query.result;
       if(result !== null){
         await this.client.trello.set.card.list(user.trelloToken, card.id, result.id)
-        message.reply(`Moved card "${card.name}" \`(${args[0]})\` to list "${args.slice(1).join(' ')}".`)
+        message.reply(`Moved card "${card.name}" \`(${args[0]})\` to list "${result.name}".`)
       }else{
         message.reply("Uh-Oh! Either that list is non-existant or it's not on the seleted board!");
       }
