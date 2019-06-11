@@ -194,7 +194,9 @@ module.exports = class Faux extends Discord.Client {
     promptText += " Responding with anything else will cancel this prompt."
     return new Promise(async resolve => {
       let paginatable = this.canPaginate(cxtMessage)
-      if(items.length > itemsPerPage && !paginatable) {
+      if(!items.length)
+        return resolve(null);
+      else if(items.length > itemsPerPage && !paginatable) {
         await cxtMessage.channel.send(`More than ${itemsPerPage} items were in a prompt, please make your search more specific or give this bot \`Manage Messages\` and \`Add Reactions\` permissions.`)
         return resolve(null)
       }
