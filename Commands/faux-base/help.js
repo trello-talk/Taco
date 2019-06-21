@@ -37,7 +37,7 @@ module.exports = class Help extends Command {
     } else {
       let embed = {
         color: this.client.config.color_scheme,
-        description: `${this.client.user.username} (Running [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: https://discord.gg/7WNmQzc\nPowered by [CurseHQ](https://discord.gg/ZsVjKwm)`,
+        description: `${this.client.user.username} (Running [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: https://discord.gg/7WNmQzc`,
         footer: {
           text: `\`${prefix}help [command]\` for more info`
         },
