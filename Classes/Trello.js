@@ -90,6 +90,17 @@ module.exports = (client) => { return {
 					}).catch(e=>reject({ errorCode: "statusfail", errorText: e, response: res, error: err }))
 				})
 			});
+		},
+		webhooks: function(token){
+			return new Promise((resolve,reject)=>{
+				request.get(`https://api.trello.com/1/tokens/${token}/webhooks?key=${client.apiKey("trellokey")}`)
+				.end((err, res)=>{
+					client.util.filterStatus(res).then(()=>{
+						if(err){reject({ errorCode: "err", errorText: client.util.filter(err), response:res, error:err })}
+						resolve(res.body)
+					}).catch(e=>reject({ errorCode: "statusfail", errorText: e, response: res, error: err }))
+				})
+			});
 		}
 	},
 	add: {
@@ -236,6 +247,17 @@ module.exports = (client) => { return {
 		card: function(token, id){
 			return new Promise((resolve,reject)=>{
 				request.delete(`https://api.trello.com/1/cards/${id}?key=${client.apiKey("trellokey")}&token=${token}`)
+				.end((err, res)=>{
+					client.util.filterStatus(res).then(()=>{
+						if(err){reject({ errorCode: "err", errorText: client.util.filter(err), response:res, error:err })}
+						resolve(res.body)
+					}).catch(e=>reject({ errorCode: "statusfail", errorText: e, response: res, error: err }))
+				})
+			});
+		},
+		webhook: function(token, id){
+			return new Promise((resolve,reject)=>{
+				request.delete(`https://api.trello.com/1/tokens/${token}/webhooks/${id}?key=${client.apiKey("trellokey")}`)
 				.end((err, res)=>{
 					client.util.filterStatus(res).then(()=>{
 						if(err){reject({ errorCode: "err", errorText: client.util.filter(err), response:res, error:err })}

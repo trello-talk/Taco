@@ -27,7 +27,7 @@ module.exports = class AddWebhook extends Command {
                 await this.client.data.add.webhook(message.guild.id, args[0], args[1], board.id, r.id);
                 resolve(message.reply("Added webhook "+body.name+" in board "+board.name+" `("+args[0]+")` Solved Code: `1`"));
               } catch (e) {
-                if(e.response && e.response.statusCode === 400){
+                if(e.error.status === 400){
                   // console.log(e.response)
                   try {
                     await this.client.data.add.webhook(message.guild.id, args[0], args[1], board.id);
