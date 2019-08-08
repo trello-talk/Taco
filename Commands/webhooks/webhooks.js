@@ -25,7 +25,7 @@ module.exports = class Webhooks extends Command {
       }, {
         header: "Use `" + this.client.config.prefix + "webhooks [page]` to iterate this list",
         pluralName: "Trello Webhooks",
-        itemsPerPage: 5,
+        itemsPerPage: 3,
         startPage: args[0]
       });
     }else{
