@@ -5,7 +5,7 @@ module.exports = class Auth extends Command {
   get cooldown() { return 0 }
 
   exec(message) {
-    message.channel.send(`Authenticate your Trello account with your Discord here: **<https://api.snazzah-is.cool/trello/auth>**`)
+    message.channel.send(`Authenticate your Trello account with your Discord here: **<${this.client.config.auth_url}>**`)
   }
 
   get helpMeta() { return {
