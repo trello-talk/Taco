@@ -1,7 +1,7 @@
 {
   "discordToken": "",
   "prefix": "T!",
-  "elevated": ["158049329150427136"],
+  "elevated": [""],
   "redis": {
     "prefix": "trello:",
 		"host": "",
@@ -33,5 +33,6 @@
     "delay": 7500
   },
   "commands": "./Commands",
-  "color_scheme": 4365262
+  "color_scheme": 4365262,
+  "auth_url": ""
 }
