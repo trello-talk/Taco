@@ -9,10 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Snazzah/TrelloBot.git"
+    "url": "https://github.com/Trello-Bot-Community/TrelloBot.git"
   },
-  "author": "Snazzah",
-  "license": "Apache-2.0",
+  "author": "Yamboy1",
+  "contributors": [
+    "Snazzah"
+  ],
+  "license": "GPL-3.0",
   "dependencies": {
     "chalk": "^2.4.1",
     "dbots": "^1.2.2",
