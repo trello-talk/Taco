@@ -6,7 +6,7 @@ module.exports = class ServerInvite extends Command {
   get aliases() { return ['support', 'supportserver'] }
 
   exec(message) {
-    message.channel.send(`Join the support server with any of these links!\n  • **<https://discord.gg/7WNmQzc>**\n  • **<https://discord.me/trello>**\n  • **<https://discord.io/trello>**\n  • **<https://invite.gg/trello>**`)
+    message.channel.send(`Join the support server with any of these links!\n  • **<https://discord.gg/BueAxTB>**`)
   }
 
   get helpMeta() { return {

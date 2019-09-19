@@ -21,11 +21,11 @@ module.exports = class Info extends Command {
                   + `**:clock: Uptime**: ${process.uptime() ? process.uptime().toString().toHHMMSS() : "???"}\n`
                   + `**:gear: Memory Usage**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
                   + `**:file_cabinet: Servers**: ${servers.formatNumber()}\n\n`
-                  + `**:globe_with_meridians: Website**: https://trello.snazzah-is.cool/\n`
+                  + `**:globe_with_meridians: Website**: https://trellobot.xyz/\n`
                   + `**${this.emojiEmbedFallback(message, "<:trello:230098361796001793>", ":blue_book:")} Trello Board**: https://trello.com/b/eXWMPIA9/discord-trello-bot\n`
-                  + `**${this.emojiEmbedFallback(message, "<:patreon:584291173934432256>", ":money_with_wings:")} Patreon**: https://patreon.com/Snazzah\n`,
+                  + `**${this.emojiEmbedFallback(message, "<:patreon:584291173934432256>", ":money_with_wings:")} Patreon**: **Coming soon**\n`,
       thumbnail: {
-        url: "https://raw.githubusercontent.com/Snazzah/Faux/master/Assets/icon_blackoutline_color.png"
+        url: "https://cdn.discordapp.com/avatars/620126394390675466/ee92bddcf57babd0e42a9fb0baf9e722.png?size=256"
       }
     }
 
