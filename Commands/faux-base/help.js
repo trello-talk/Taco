@@ -37,7 +37,7 @@ module.exports = class Help extends Command {
     } else {
       let embed = {
         color: this.client.config.color_scheme,
-        description: `${this.client.user.username} (Running [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: https://trellobot.xyz/invite`,
+        description: `${this.client.user.username} (Running [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: https://trellobot.xyz/server`,
         footer: {
           text: `\`${prefix}help [command]\` for more info`
         },
