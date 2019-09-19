@@ -23,7 +23,7 @@ module.exports = class Info extends Command {
                   + `**:file_cabinet: Servers**: ${servers.formatNumber()}\n\n`
                   + `**:globe_with_meridians: Website**: https://trellobot.xyz/\n`
                   + `**${this.emojiEmbedFallback(message, "<:trellologo:624184549001396225>", ":blue_book:")} Trello Board**: **Coming soon**\n`
-                  + `**${this.emojiEmbedFallback(message, "<:patreon:624184608937869322>", ":money_with_wings:")} Patreon**: **Coming soon**\n`,
+                  + `**${this.emojiEmbedFallback(message, "<:donorbox:624333324483297291>", ":money_with_wings:")} Donate**: **Coming soon**\n`,
       thumbnail: {
         url: "https://cdn.discordapp.com/avatars/620126394390675466/ee92bddcf57babd0e42a9fb0baf9e722.png?size=256"
       }
