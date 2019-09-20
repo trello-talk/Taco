@@ -6,7 +6,7 @@ module.exports = class Invite extends Command {
   get cooldown() { return 0 }
 
   exec(message) {
-    message.channel.send(`Invite me with any of these links!\n  • **<https://trellobot.xyz/invite>**\n  • **<https://discordapp.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot>**`)
+    message.channel.send(`Invite me with any of these links!\n${this.client.util.linkList(this.client.config.invites)}`)
   }
 
   get helpMeta() { return {

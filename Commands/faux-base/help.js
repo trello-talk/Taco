@@ -12,7 +12,7 @@ module.exports = class Help extends Command {
       if(!command) message.reply(`The command ${args[0]} was not found.`); else {
         let embed = {
           title: `${prefix}${command.name}`,
-          color: this.client.config.color_scheme,
+          color: this.client.config.embedColor,
           fields: [
             {name: "Usage", value: `${prefix}${command.name}${command.helpMeta.usage ? ` \`${command.helpMeta.usage}\`` : ''}`},
             {name: "Cooldown", value: `${command.cooldown} seconds`, inline: true},
@@ -36,8 +36,8 @@ module.exports = class Help extends Command {
       }
     } else {
       let embed = {
-        color: this.client.config.color_scheme,
-        description: `${this.client.user.username} (Running [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: https://trellobot.xyz/server`,
+        color: this.client.config.embedColor,
+        description: `${this.client.user.username} (Running [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: ${this.client.config.supportServers[0]}`,
         footer: {
           text: `\`${prefix}help [command]\` for more info`
         },

@@ -118,7 +118,7 @@ module.exports = (client) => {
       }
     },
     filter(text) {
-      return text.toString().replace(client.apiKey("trellokey"), "🔑").replace(client.apiKey("trellotoken"), "🔶")
+      return text.toString().replace(client.apiKey, "🔑").replace(client.apiToken, "🔶")
     },
     filterStatus(res) {
       return new Promise((resolve, reject) => {
@@ -248,6 +248,9 @@ module.exports = (client) => {
           result = promptResult;
         }
       return { results, result }
+    },
+    linkList(array) {
+      return array.reduce((acc, value) => `${acc}  • **<${value}>**\n`, "")
     }
   }
   return Util

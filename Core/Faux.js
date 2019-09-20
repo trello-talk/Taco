@@ -16,16 +16,16 @@ module.exports = class Faux extends Discord.Client {
   }
 
   constructor({configPath, packagePath, mainDir} = {}) {
-    let config = require(configPath || `${mainDir}/config.json`)
+    let config = require(configPath || `${mainDir}/Config/`)
     let pkg = require(packagePath || `${mainDir}/package.json`)
-    Object.assign(config.discord, {
+    Object.assign(config.clientOptions, {
       userAgent: { version: pkg.version }
     })
-    if(process.env.SHARDING_MANAGER) Object.assign(config.discord, {
+    if(process.env.SHARDING_MANAGER) Object.assign(config.clientOptions, {
       shardCount: parseInt(process.env.TOTAL_SHARD_COUNT),
       shardId: parseInt(process.env.SHARDS)
     })
-    super(config.discord)
+    super(config.clientOptions)
     this.dir = mainDir
     this.config = config
     this.pkg = pkg
@@ -70,9 +70,10 @@ module.exports = class Faux extends Discord.Client {
     this.cmds.reload()
     this.cmds.preloadAll()
     this.eventHandler = new EventHandler(this)
-    this.initPoster()
+    // this.initPoster()
   }
 
+/*
   initPoster(){
     if(!this.config.botlist || JSON.stringify(this.config.botlist) === '{}') return;
     this.poster = new dbots.Poster({
@@ -84,14 +85,17 @@ module.exports = class Faux extends Discord.Client {
     this.poster.post()
     this.poster.startInterval()
   }
-
+*/
   login() {
-    return super.login(this.config.discordToken)
+    return super.login(this.config.token)
   }
 
-  apiKey(name) {
-    if(!this.config.api || !this.config.api[name]) return
-    return this.config.api[name]
+  get apiKey(name) {
+    return this.config.trello.key;
+  }
+
+  get apiToken(name) {
+    return this.config.trello.token
   }
 
 // LOGGING
@@ -287,7 +291,7 @@ module.exports = class Faux extends Discord.Client {
       page = pageVars[0],
       maxPages = pageVars[1];
     let embed = {
-      color: this.config.color_scheme,
+      color: this.config.embedColor,
       author: {
         name: `${pluralName} (${items.length}, Page ${page}/${maxPages})`,
         icon_url: this.config.icon_url

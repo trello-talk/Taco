@@ -36,7 +36,7 @@ module.exports = class EventHandler {
         if(command.permissions.includes('embed') && !this.client.embed(Message)) return Message.reply("I need the permission `Embed Links` to use this command!")
         if(command.permissions.includes('elevated') && !this.client.elevated(Message)) return Message.reply("Only the elevated users of the bot can use this command!")
         if(command.permissions.includes('trello-perm') && !this.client.util.checkPerm(Message.author, Message.channel.guild)) return Message.reply("This command requires you to be the server owner or have a role named `Trello`!")
-        if(command.permissions.includes('auth') && user === null) return Message.reply(`You haven't authorized your Trello account with Discord! Please authorize here: ${this.client.config.auth_url}`)
+        if(command.permissions.includes('auth') && user === null) return Message.reply(`You haven't authorized your Trello account with Discord! Please authorize here: ${this.client.config.authURL}`)
         if(command.permissions.includes('board') && (user === null || user.current === null)) return Message.reply(`There is no board selected! Use \`${this.client.config.prefix}switch\` to select a board!`)
         this.client.stats.bumpStat('commands')
         this.client.stats.bumpCommandStat(command.name)
