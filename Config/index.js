@@ -6,5 +6,4 @@ module.exports = {
     ...logins,
     ...links,
     ...settings
-
-}
+};
