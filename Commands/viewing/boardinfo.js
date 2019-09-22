@@ -10,7 +10,7 @@ module.exports = class BoardInfo extends Command {
     let board = await this.client.trello.get.board(user.trelloToken, user.current)
     if(this.client.embed(message)){
       let embed = {
-        color: this.client.config.color_scheme,
+        color: this.client.config.embedColor,
         url: board.shortUrl,
         description: board.desc,
         author: {

@@ -40,6 +40,6 @@ module.exports = class ShardInfo extends Command {
 
   get helpMeta() { return {
     category: 'General',
-    description: 'Gives the stats every shard.'
+    description: 'Gives the stats for every shard.'
   } }
 }

@@ -13,10 +13,10 @@ module.exports = class Info extends Command {
   async exec(message) {
     let servers = await this.client.serverCount()
     let embed = {
-      color: this.client.config.color_scheme,
+      color: this.client.config.embedColor,
       title: `Information about ${this.client.user.username}.`,
       description: 'This bot is using [Faux](https://github.com/Snazzah/Faux)\n\n'
-                  + `**:computer: Version** ${this.client.pkg.version}\n`
+                  + `**:computer: ${this.client.user.username} Version** ${this.client.pkg.version}\n`
                   + `**:computer: Faux Version** ${this.client.FAUX_VER}\n`
                   + `**:clock: Uptime**: ${process.uptime() ? process.uptime().toString().toHHMMSS() : "???"}\n`
                   + `**:gear: Memory Usage**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
@@ -25,7 +25,7 @@ module.exports = class Info extends Command {
                   + `**${this.emojiEmbedFallback(message, "<:trellologo:624184549001396225>", ":blue_book:")} Trello Board**: **Coming soon**\n`
                   + `**${this.emojiEmbedFallback(message, "<:patreon:625323800048828453>", ":money_with_wings:")} Donate**: **Coming soon**\n`,
       thumbnail: {
-        url: "https://cdn.discordapp.com/avatars/620126394390675466/ee92bddcf57babd0e42a9fb0baf9e722.png?size=256"
+        url: this.client.config.iconURL
       }
     }
 

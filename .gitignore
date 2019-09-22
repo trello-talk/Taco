@@ -58,4 +58,4 @@ typings/
 .env
 
 # TrelloBot
-config.json
+Config/

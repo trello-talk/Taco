@@ -8,7 +8,7 @@ module.exports = class Me extends Command {
   async exec(message, args, {user}) {
     let body = await this.client.trello.get.boards(user.trelloToken, user.trelloID)
     let embed = {
-      color: this.client.config.color_scheme,
+      color: this.client.config.embedColor,
       description: `**ID:** \`${body.id}\`\n` +
                   `**Initials:** ${body.initials}\n` +
                   `**Member Type:** ${this.client.util.capFirst(body.memberType)}\n` +

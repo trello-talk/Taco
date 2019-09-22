@@ -18,7 +18,7 @@ module.exports = class Card extends Command {
     let util = this.client.util
     let layout = util.layout
     let embed = {
-      color: this.client.config.color_scheme,
+      color: this.client.config.embedColor,
       url: body.shortUrl,
       description: "**Board**: ["+body.board.name+"]("+body.board.shortUrl+")",
       author: {
