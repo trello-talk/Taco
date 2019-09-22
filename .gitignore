@@ -58,6 +58,4 @@ typings/
 .env
 
 # TrelloBot
-Config/general.js
-Config/settings.js
-Config/logins.js
+Config/
