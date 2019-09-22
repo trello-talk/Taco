@@ -8,6 +8,6 @@ module.exports = {
     },
     sharding: {
         totalShards: "auto",
-        delay:       7500
+        delay:        7500
     }
 };
