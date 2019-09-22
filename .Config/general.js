@@ -4,5 +4,6 @@ module.exports = {
     elevated:    [""],
     commands:     "./Commands",
     debug:        false,
-    embedColor:   4365262
+    embedColor:   4365262,
+    webhookURL: ""
 };
