@@ -3,6 +3,6 @@ module.exports = {
     prefix:       "T!",
     elevated:    [""],
     commands:     "./Commands",
-    debug:       false,
-    embedColor:  4365262
+    debug:        false,
+    embedColor:   4365262
 };
