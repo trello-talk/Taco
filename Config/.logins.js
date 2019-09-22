@@ -16,4 +16,4 @@ module.exports = {
         password: "",
         database: "Trello"
     }
-}
+};

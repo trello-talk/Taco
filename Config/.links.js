@@ -10,4 +10,4 @@ module.exports = {
     iconURL:         "https://example.com/icon.png",
     authURL:         "https://auth.example.com/trello/auth"
 
-}
+};

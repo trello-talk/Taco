@@ -5,3 +5,4 @@ module.exports = {
     commands:     "./Commands",
     debug:       false,
     embedColor:  4365262
+};

@@ -10,4 +10,4 @@ module.exports = {
         totalShards: "auto",
         delay:       7500
     }
-}
+};
