@@ -90,11 +90,11 @@ module.exports = class Faux extends Discord.Client {
     return super.login(this.config.token)
   }
 
-  get apiKey(name) {
+  get apiKey() {
     return this.config.trello.key;
   }
 
-  get apiToken(name) {
+  get apiToken() {
     return this.config.trello.token
   }
 
