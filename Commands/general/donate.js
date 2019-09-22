@@ -6,7 +6,7 @@ module.exports = class Donate extends Command {
   get aliases() { return ['patreon', 'paypal'] }
 
   exec(message) {
-    message.channel.send(`Support development by donating!${this.client.util.linkList(this.client.config.donate)}`)
+    message.channel.send(`Support development by donating!\n${this.client.util.linkList(this.client.config.donate)}`)
   }
 
   get helpMeta() { return {
