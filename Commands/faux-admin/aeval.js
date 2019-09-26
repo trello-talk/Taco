@@ -2,15 +2,15 @@ const { CodeBlock, Command } = require('faux-classes')
 const { Util } = require('faux-core')
 const { inspect } = util = require("util")
 
-module.exports = class Eval extends Command {
-  get name() { return 'eval' }
-  get aliases() { return ['evaluate'] }
+module.exports = class AsyncEval extends Command {
+  get name() { return 'aeval' }
+  get aliases() { return ['aevaluate', 'asynceval', 'asyncevaluate'] }
 
   async exec(Message, args, {user}) {
     let message = Message
     try{
       let start = new Date().getTime()
-      let response = eval(args.join(" "))
+      let response = await eval(`(async () => \{${args.join(" ")}\})()`);
       let msg = CodeBlock.apply(response, 'js')
       let time = new Date().getTime() - start
       Message.channel.send(`Time taken: ${(time/1000)} seconds\n${msg}`)
@@ -24,6 +24,6 @@ module.exports = class Eval extends Command {
 
   get helpMeta() { return {
     category: 'Admin',
-    description: 'eval hell yeah',
+    description: 'eval hell yeah\n\nNOTE: Due to the added async IIFE wrapper in this command, it is necessary to use the return statment to return a result\ne.g. `T!aevil return 1`',
   } }
 }
