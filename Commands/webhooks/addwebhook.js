@@ -25,12 +25,12 @@ module.exports = class AddWebhook extends Command {
               try {
                 let r = await this.client.trello.add.webhook(user.trelloToken, board.id);
                 await this.client.data.add.webhook(message.guild.id, args[0], args[1], board.id, r.id);
-                resolve(message.reply("Added webhook "+body.name+" in board "+board.name+" `("+args[0]+")`"));
+                resolve(message.reply(`Added webhook ${body.name} in board ${board.name} \`(${args[0]})\``));
               } catch (e) {
                 if(e.error.status === 400){
-                  // console.log(e.response)
+                  console.log(e.response)
                   try {
-                    resolve(message.reply("An error occurred while adding webhook "+body.name+" in board "+board.name+" `("+args[0]+")"));
+                    resolve(message.reply(`An error occurred while adding webhook ${body.name} in board ${board.name} \`(${args[0]})\``));
                   } catch(e) {
                     reject(e);
                   }
@@ -38,7 +38,7 @@ module.exports = class AddWebhook extends Command {
               }
             } else {
               await this.client.data.add.webhook(message.guild.id, args[0], args[1], board.id);
-              resolve(message.reply("A webhook for board "+board.name+" `("+args[0]+")` already exists"));
+              resolve(message.reply(`A webhook for board ${board.name} \`(${args[0]})\` already exists`));
             }
           }).catch(e => {
             if(e.errorCode === "statusfail"){
