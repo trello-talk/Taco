@@ -7,7 +7,7 @@ module.exports = class Eval extends Command {
   get name() { return 'eval' }
   get aliases() { return ['evaluate'] }
 
-  async exec(Message, args) {
+  async exec(Message, args, {user}) {
     let message = Message
     try{
       let start = new Date().getTime()
