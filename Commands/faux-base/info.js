@@ -21,9 +21,9 @@ module.exports = class Info extends Command {
                   + `**:clock: Uptime**: ${process.uptime() ? process.uptime().toString().toHHMMSS() : "???"}\n`
                   + `**:gear: Memory Usage**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
                   + `**:file_cabinet: Servers**: ${servers.formatNumber()}\n\n`
-                  + `**:globe_with_meridians: Website**: ${this.client.config.website}/\n`
-                  + `**${this.emojiEmbedFallback(message, "<:trellologo:624184549001396225>", ":blue_book:")} Trello Board**: **${this.client.config.trelloBoard}**\n`
-                  + `**${this.emojiEmbedFallback(message, "<:patreon:625323800048828453>", ":money_with_wings:")} Donate**: **${this.client.config.donate[0]}**\n`,
+                  + `**:globe_with_meridians: Website**: ${this.client.config.website}\n`
+                  + `**${this.emojiEmbedFallback(message, "<:trellologo:624184549001396225>", ":blue_book:")} Trello Board**: ${this.client.config.trelloBoard}\n`
+                  + `**${this.emojiEmbedFallback(message, "<:patreon:625323800048828453>", ":money_with_wings:")} Donate**: ${this.client.config.donate[0]}\n`,
       thumbnail: {
         url: this.client.config.iconURL
       }
