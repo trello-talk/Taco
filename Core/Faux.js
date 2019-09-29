@@ -70,22 +70,23 @@ module.exports = class Faux extends Discord.Client {
     this.cmds.reload()
     this.cmds.preloadAll()
     this.eventHandler = new EventHandler(this)
-    // this.initPoster()
+    this.initPoster()
   }
 
-/*
   initPoster(){
-    if(!this.config.botlist || JSON.stringify(this.config.botlist) === '{}') return;
+    if(!this.config.botlists || JSON.stringify(this.config.botlists) === "{}") return;
     this.poster = new dbots.Poster({
       client: this,
-      apiKeys: this.config.botlist,
-      clientLibrary: 'discord.js'
+      apiKeys: this.config.botlists,
+      clientLibrary: "discord.js"
     });
 
-    this.poster.post()
-    this.poster.startInterval()
+    this.poster.post();
+    this.poster.startInterval();
+
+    this.log(chalk.green("Initialized dbots poster"));
   }
-*/
+
   login() {
     return super.login(this.config.token)
   }
