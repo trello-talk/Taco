@@ -353,7 +353,7 @@ module.exports = class Faux extends Discord.Client {
 
 // PAGINATION
 
-  async startPagination(msg, botmsg, cb, timeout = 10000) {
+  async startPagination(msg, botmsg, cb, timeout = 30000) {
     let _this = this
     if (!this.pageProcesses.hasOwnProperty(msg.channel.id)) this.pageProcesses[msg.channel.id] = {};
     let timer;
