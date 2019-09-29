@@ -1,4 +1,4 @@
-module.exports = (client) => { return {
+	module.exports = (client) => { return {
 	get: {
 		server: function(id){
 			return client.rdb.r.table("servers").get(id).default(null).run(client.rdb.conn);

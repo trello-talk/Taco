@@ -120,35 +120,25 @@ module.exports = (client) => {
     filter(text) {
       return text.toString().replace(client.apiKey, "🔑").replace(client.apiToken, "🔶")
     },
-    filterStatus(res) {
-      return new Promise((resolve, reject) => {
-        switch(res.status){
-          case 404:
-            reject("Not Found")
-          break;
-          case 400:
-            reject("Bad Request")
-          break;
-          case 401:
-            reject("Unauthorized")
-          break;
-          case 422:
-            reject("Unprocessable Entity")
-          break;
-          case 419:
-            reject("Ratelimited")
-          break;
-          case 200:
-            resolve()
-          break;
-          case 500:
-            reject("Server Error")
-          break;
-          default:
-            reject("Unknown")
-          break;
-        }
-      });
+    async filterStatus(res) {
+      switch(res.status){
+        case 404:
+          throw "Not Found";
+        case 400:
+          throw "Bad Request";
+        case 401:
+          throw "Unauthorized";
+        case 422:
+          throw "Unprocessable Entity";
+        case 419:
+          throw "Ratelimited";
+        case 200:
+          return;
+        case 500:
+          throw "Server Error";
+        default:
+          return "unknown";
+      }
     },
     sendError(message, e) {
         message.channel.stopTyping();
@@ -251,6 +241,17 @@ module.exports = (client) => {
     },
     linkList(array) {
       return array.reduce((acc, value) => `${acc}  • **<${value}>**\n`, "")
+    },
+    getBoardId(boards, input) {
+      if (!input.startsWith) return null;
+
+      const board = boards.find(board => input.startsWith(board.shortLink) || input.startsWith(board.shortUrl));
+      
+      if (board === null || board === undefined) return null
+      else return board.shortLink;
+    },
+    getCardId(...args) {
+      return this.getBoardId(...args);
     }
   }
   return Util
