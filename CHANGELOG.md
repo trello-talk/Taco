@@ -1,7 +1,12 @@
 # CHANGELOG.md
 
-## Unreleased
+
+## v6.3.0
 - Change changelog order 😅
+- `exec` now returns both STDOUT/STDERR together, i.e. for a `git pull` commmand
+- Typo fixed in `info`
+- Fix `remwebhook` crashing on an invalid board
+- [DEV] Update command format to support multiple usages
 
 ## v6.2.0
 - `addwebhook` now allows a trello board url instead of a short link (board id)
