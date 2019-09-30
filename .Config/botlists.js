@@ -2,6 +2,6 @@
 
 module.exports = {
     discordbotsorg: "",
-    discordbotsgg:  "",
-    carbon:         "",
+    // discordbotsgg: "",
+    // discordbotlist: ""
 }
