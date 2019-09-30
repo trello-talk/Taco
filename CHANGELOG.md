@@ -1,5 +1,8 @@
 # CHANGELOG.md
 
+## v6.3.1
+- Hotfix for incorrect usage for `addwebhook`
+
 ## v6.3.0
 - NOTE: I apologise that these commits are a bit messed up, I didn't understand how git rebase worked
 - Change changelog order 😅
