@@ -8,8 +8,7 @@ module.exports = class AddWebhook extends Command {
   get argRequirement() { return 2 }
 
   async exec(message, args, {user}) {
-    let { boards } = await this.client.trello.get.boards(user.trelloToken, user.trelloID)
-    const boardId = this.client.util.getBoardId(boards, args[0]);
+    const boardId = await this.client.util.getBoardId(user, args[0]);
     if (boardId === null) return message.channel.send("You don't have access to that board!");
 
     const webhookBoard = await this.client.data.get.webhookBoard(boardId);

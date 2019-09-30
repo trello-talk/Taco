@@ -9,16 +9,18 @@ module.exports = class RemoveWebhook extends Command {
 
   async exec(message, args, {user}) {
     try {
-      const { webhookId } = await this.client.data.get.webhookBoard(args[0])
-      const internalWebhooks = await this.client.trello.get.webhooks(user.trelloToken)
+      const boardId = await this.client.util.getBoardId(user, args[0]);
+      const { webhookId = undefined } = await this.client.data.get.webhookBoard(boardId) || {}
+      if (webhookId === undefined) throw 404;
 
+      const internalWebhooks = await this.client.trello.get.webhooks(user.trelloToken)
       const webhook = internalWebhooks.find(webhook => webhook.id === webhookId);
-      if (!webhook || !webhook.id) throw 404;
+      if (webhook === undefined) throw 404;
 
       await this.client.trello.delete.webhook(user.trelloToken, webhook.id)
-      await this.client.data.delete.webhook(message.guild.id, args[0])
+      await this.client.data.delete.webhook(message.guild.id, boardId)
 
-      message.reply(`Deleted webhook for board \`${args[0]}\`.`);
+      message.reply(`Deleted webhook for board \`${boardId}\`.`);
     } catch (e) {
       if(e === 404){
         message.reply("Could not find webhook.");

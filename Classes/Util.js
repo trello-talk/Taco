@@ -242,13 +242,14 @@ module.exports = (client) => {
     linkList(array) {
       return array.reduce((acc, value) => `${acc}  • **<${value}>**\n`, "")
     },
-    getBoardId(boards, input) {
+    async getBoardId(user, input) {
       if (!input.startsWith) return null;
 
+      let { boards = [] } = await client.trello.get.boards(user.trelloToken, user.trelloID);
       const board = boards.find(board => input.startsWith(board.shortLink) || input.startsWith(board.shortUrl));
       
-      if (board === null || board === undefined) return null
-      else return board.shortLink;
+      if (board === undefined) return null;
+      return board.shortLink;
     },
     getCardId(...args) {
       return this.getBoardId(...args);
