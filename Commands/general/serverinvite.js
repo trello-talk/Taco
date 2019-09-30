@@ -6,7 +6,7 @@ module.exports = class ServerInvite extends Command {
   get aliases() { return ['support', 'supportserver'] }
 
   exec(message) {
-    message.channel.send(`Join the support server with any of these links!\n${this.client.util.linkLists(this.client.config.supportServers)}`)
+    message.channel.send(`Join the support server with any of these links!\n${this.client.util.linkList(this.client.config.supportServers)}`)
   }
 
   get helpMeta() { return {
