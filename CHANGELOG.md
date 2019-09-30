@@ -1,12 +1,14 @@
 # CHANGELOG.md
 
-
 ## v6.3.0
+- NOTE: I apologise that these commits are a bit messed up, I didn't understand how git rebase worked
 - Change changelog order 😅
 - `exec` now returns both STDOUT/STDERR together, i.e. for a `git pull` commmand
 - Typo fixed in `info`
 - Fix `remwebhook` crashing on an invalid board
 - [DEV] Update command format to support multiple usages
+- Botlist support is here!! 🤖🤖
+- `unhandledRejection` errors are now logged to console
 
 ## v6.2.0
 - `addwebhook` now allows a trello board url instead of a short link (board id)
