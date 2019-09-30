@@ -29,6 +29,6 @@ module.exports = class OpenList extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Removes a list from the archive.',
-    usage: "<listName>"
+    usage: ["<listName>"]
   } }
 }

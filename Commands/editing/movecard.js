@@ -41,6 +41,6 @@ module.exports = class MoveCard extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Moves a card to the given list.',
-    usage: "<cardID> <listName>"
+    usage: ["<cardID> <listName>"]
   } }
 }

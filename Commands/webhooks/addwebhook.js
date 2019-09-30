@@ -46,6 +46,6 @@ module.exports = class AddWebhook extends Command {
     category: 'Webhooks',
     description: 'Sets a webhook to a board. You can only use boards you own.\nUse this link seen here: https://i.imgur.com/KrHHKDi.png',
     image: "https://i.imgur.com/KrHHKDi.png",
-    usage: "<boardID> <webhookURL>"
+    usage: ["<boardID> <channel>", "<boardID> <webhookURL>"]
   } }
 }

@@ -24,6 +24,6 @@ module.exports = class SubscribeCard extends Command {
   get helpMeta() { return {
     category: 'User Management',
     description: '(Un)subscribes to a card.',
-    usage: "<cardID>"
+    usage: ["<cardID>"]
   } }
 }

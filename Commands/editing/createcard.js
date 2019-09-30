@@ -30,6 +30,6 @@ module.exports = class CreateCard extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Creates a card.',
-    usage: "<listName> | <cardName>"
+    usage: ["<listName> | <cardName>"]
   } }
 }

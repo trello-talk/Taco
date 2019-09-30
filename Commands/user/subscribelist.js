@@ -30,6 +30,6 @@ module.exports = class SubscribeList extends Command {
   get helpMeta() { return {
     category: 'User Management',
     description: '(Un)subscribes to a list in the selected board.',
-    usage: "<listName>"
+    usage: ["<listName>"]
   } }
 }

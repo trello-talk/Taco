@@ -44,6 +44,6 @@ module.exports = class CardAttach extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Adds an attachment to a card. Uses URLs and attachments with the message.',
-    usage: "<cardID> [url]"
+    usage: ["<cardID> [url]"]
   } }
 }

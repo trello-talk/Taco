@@ -25,13 +25,15 @@ module.exports = class EventHandler {
 
     if(!Message.content.match(Util.prefixRegex(this.client))) return
     try {
-      let args = Util.stripPrefix(Message).split(' ')
-      let cname = args.splice(0, 1)[0]
-      let command = this.client.cmds.get(cname)
+      let { prefix } = this.client.config;
+      let args = Util.stripPrefix(Message).split(' ');
+      let cname = args.splice(0, 1)[0];
+      let command = this.client.cmds.get(cname);
+      let { usage = [""] } = command.helpMeta;
       if(!command) return
       if(await this.client.cmds.processCooldown(Message, cname)) {
         let user = await this.client.data.get.user(Message.author.id)
-        if(args.length < command.argRequirement) return Message.reply(`You didn't supply enough arguments!\nUsage: \`${this.client.config.prefix}${cname} ${command.helpMeta.usage || ""}\``)
+        if(args.length < command.argRequirement) return Message.reply(`You didn't supply enough arguments!\nUsage: \`${usage.reduce((acc,x,i) => `${acc}${i > 0 ? "` or `" : "" }${prefix}${cname} ${x}`, "")}\``)
         if(command.permissions.includes('attach') && !this.client.attach(Message)) return Message.reply("I need the permission `Attach Files` to use this command!")
         if(command.permissions.includes('embed') && !this.client.embed(Message)) return Message.reply("I need the permission `Embed Links` to use this command!")
         if(command.permissions.includes('elevated') && !this.client.elevated(Message)) return Message.reply("Only the elevated users of the bot can use this command!")

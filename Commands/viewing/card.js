@@ -105,6 +105,6 @@ module.exports = class Card extends Command {
   get helpMeta() { return {
     category: 'Viewing',
     description: 'Shows info about that card.',
-    usage: "<cardID>"
+    usage: ["<cardID>"]
   } }
 }

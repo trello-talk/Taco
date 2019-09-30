@@ -26,6 +26,6 @@ module.exports = class Lists extends Command {
   get helpMeta() { return {
     category: 'Viewing',
     description: 'Lists all the lists in the current board.',
-    usage: "[page]"
+    usage: ["[page]"]
   } }
 }

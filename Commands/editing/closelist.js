@@ -29,6 +29,6 @@ module.exports = class CloseList extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Archives a list.',
-    usage: "<listName>"
+    usage: ["<listName>"]
   } }
 }

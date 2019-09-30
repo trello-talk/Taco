@@ -22,6 +22,6 @@ module.exports = class ListArchive extends Command {
   get helpMeta() { return {
     category: 'Viewing',
     description: 'Lists all the archived lists in the current board.',
-    usage: "[page]"
+    usage: ["[page]"]
   } }
 }

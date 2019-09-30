@@ -12,7 +12,7 @@ module.exports = class RemoveWebhook extends Command {
       const boardId = await this.client.util.getBoardId(user, args[0]);
       const { webhookId = undefined } = await this.client.data.get.webhookBoard(boardId) || {}
       if (webhookId === undefined) throw 404;
-
+      
       const internalWebhooks = await this.client.trello.get.webhooks(user.trelloToken)
       const webhook = internalWebhooks.find(webhook => webhook.id === webhookId);
       if (webhook === undefined) throw 404;
@@ -31,6 +31,6 @@ module.exports = class RemoveWebhook extends Command {
   get helpMeta() { return {
     category: 'Webhooks',
     description: 'Deletes a webhook from a board.',
-    usage: "<boardID>"
+    usage: ["<boardID> <channel|webhookID"]
   } }
 }

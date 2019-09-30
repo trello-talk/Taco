@@ -16,6 +16,6 @@ module.exports = class Command {
   get helpMeta() { return {
     category: 'Misc',
     description: "???",
-    usage: "???"
+    usage: ["???"]
   } }
 }

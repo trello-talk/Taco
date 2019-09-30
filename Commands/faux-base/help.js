@@ -8,13 +8,15 @@ module.exports = class Help extends Command {
   exec(message, args) {
     const prefix = this.client.config.prefix
     if(args[0]){
-      let command = this.client.cmds.get(args[0])
+      let command = this.client.cmds.get(args[0]);
+      let { usage = undefined } = command.helpMeta;
       if(!command) message.reply(`The command ${args[0]} was not found.`); else {
         let embed = {
           title: `${prefix}${command.name}`,
           color: this.client.config.embedColor,
           fields: [
-            {name: "Usage", value: `${prefix}${command.name}${command.helpMeta.usage ? ` \`${command.helpMeta.usage}\`` : ''}`},
+            {name: "Usage", value: usage ? usage.reduce((acc,x) => `${acc}\n${prefix}${command.name} \`${x}\``,"") : prefix + command.nameb},
+            //{name: "Usage", value: `${prefix}${command.name}${command.helpMeta.usage ? ` \`${command.helpMeta.usage}\`` : ''}`},
             {name: "Cooldown", value: `${command.cooldown} seconds`, inline: true},
           ],
           description: command.helpMeta.description
@@ -68,6 +70,6 @@ module.exports = class Help extends Command {
   get helpMeta() { return {
     category: 'General',
     description: 'Shows the help message and gives information on commands',
-    usage: '[command]'
+    usage: ["[command]"]
   } }
 }

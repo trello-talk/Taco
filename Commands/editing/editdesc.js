@@ -28,6 +28,6 @@ module.exports = class EditDesc extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Edits a card\'s description.',
-    usage: "<cardID> [description]"
+    usage: ["<cardID> [description]"]
   } }
 }

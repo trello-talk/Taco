@@ -26,6 +26,6 @@ module.exports = class CardArchive extends Command {
   get helpMeta() { return {
     category: 'Viewing',
     description: 'Lists all the archived cards in the current board.',
-    usage: "[page]"
+    usage: ["[page]"]
   } }
 }

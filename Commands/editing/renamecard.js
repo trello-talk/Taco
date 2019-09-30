@@ -28,6 +28,6 @@ module.exports = class RenameCard extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Renames a card.',
-    usage: "<cardID> <name>"
+    usage: ["<cardID> <name>"]
   } }
 }

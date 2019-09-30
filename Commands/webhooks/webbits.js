@@ -24,6 +24,6 @@ module.exports = class WebBits extends Command {
   get helpMeta() { return {
     category: 'Webhooks',
 		description: 'List webhook bits.',
-		usage: '[page]'
+		usage: ["[page]"]
   } }
 }

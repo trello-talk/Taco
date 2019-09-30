@@ -28,6 +28,6 @@ module.exports = class CloseCard extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Archives a card.',
-    usage: "<cardID>"
+    usage: ["<cardID>"]
   } }
 }

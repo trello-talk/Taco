@@ -15,6 +15,6 @@ module.exports = class AddList extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Adds a list to the board.',
-    usage: "<listName>"
+    usage: ["<listName>"]
   } }
 }

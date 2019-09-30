@@ -56,6 +56,6 @@ module.exports = class ViewList extends Command {
   get helpMeta() { return {
     category: 'Viewing',
     description: 'Lists all cards in that list.',
-    usage: "<listName> [page]"
+    usage: ["<listName> [page]"]
   } }
 }

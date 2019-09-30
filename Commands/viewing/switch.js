@@ -20,6 +20,6 @@ module.exports = class Switch extends Command {
   get helpMeta() { return {
     category: 'Viewing',
     description: 'Selects the board. View boards with the `boards` command.',
-    usage: "<boardID>"
+    usage: ["<boardID>"]
   } }
 }

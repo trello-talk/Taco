@@ -36,6 +36,6 @@ module.exports = class Webhooks extends Command {
   get helpMeta() { return {
     category: 'Webhooks',
     description: 'List webhook bits.',
-    usage: '[page]'
+    usage: ["[page]"]
   } }
 }

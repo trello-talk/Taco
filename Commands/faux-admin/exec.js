@@ -28,7 +28,7 @@ module.exports = class Exec extends Command {
 
   get helpMeta() { return {
     category: 'Admin',
-    usage: '<command>',
+    usage: ["<command>"],
     description: 'Utilize child_process.exec',
   } }
 }

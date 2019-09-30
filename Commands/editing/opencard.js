@@ -28,6 +28,6 @@ module.exports = class OpenCard extends Command {
   get helpMeta() { return {
     category: 'Editing',
     description: 'Removes a card from the archive.',
-    usage: "<cardID>"
+    usage: ["<cardID>"]
   } }
 }

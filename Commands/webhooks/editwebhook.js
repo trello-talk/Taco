@@ -95,6 +95,6 @@ module.exports = class EditWebhook extends Command {
   get helpMeta() { return {
     category: 'Webhooks',
     description: 'Edits a webhook\'s bits. Bits are listed in \`webbits\` command.\nExample: \`T!editwebhook 1xqRFnNl -commentCard -voteOnCard +createCard +updateCard +deleteCard\`',
-    usage: "<boardID> <webhookBits|all>"
+    usage: ["<boardID> <webhookBits|all>"]
   } }
 }
