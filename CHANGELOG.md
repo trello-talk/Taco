@@ -1,6 +1,7 @@
 # CHANGELOG.md
 
-## Unreleased
+
+## v6.3.0
 - Change changelog order 😅
 - `exec` now returns both STDOUT/STDERR together, i.e. for a `git pull` commmand
 - Typo fixed in `info`
