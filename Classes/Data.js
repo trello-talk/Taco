@@ -19,6 +19,25 @@
 				});
 			});
 		},
+		webhooksEdit: function(id, muted){
+			return new Promise((resolve, reject) => {
+				client.rdb.r.table("webhooks").run(client.rdb.conn, (err, data) => {
+					if (err) { reject(err) }
+					data.each(async (err, row) => {
+						if (err) { reject(err) }
+						if (row.id !== id) return;
+						for (let item of Object.keys(row)) {
+							if (!row[item].bits) return;
+							row[item] = { muted: muted };
+							client.rdb.r.table("webhooks").get(row.id).update(row).run(client.rdb.conn, (err2, data2) => {
+								if(err2){ reject(err2); }
+								resolve(data2);
+							});
+						}
+					})
+				});
+			});
+		},
 		webhooksOf: function(id){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").run(client.rdb.conn, (err, data) => {
@@ -78,7 +97,7 @@
 					if(data === null){
 						let table = { id: bid, modelId: mid};
 						if(wid) table.webhookId = wid;
-						table[id] = { webhook: url, bits: [] }
+						table[id] = { webhook: url, bits: [], muted: false }
 						client.rdb.r.table("webhooks").insert(table).run(client.rdb.conn, (err2, data2) => {
 							if(err2){ reject(err2); }
 							resolve(data2);
@@ -143,6 +162,20 @@
 					if(data === null){ reject(404); }
 					let table = {};
 					table[id] = { bits: bits }
+					client.rdb.r.table("webhooks").get(bid).update(table).run(client.rdb.conn, (err2, data2) => {
+						if(err2){ reject(err2); }
+						resolve(data2);
+					});
+				});
+			});
+		},
+		webhookMute: function(id, bid, muted){
+			return new Promise((resolve, reject) => {
+				client.rdb.r.table("webhooks").get(bid).default(null).run(client.rdb.conn, (err, data) => {
+					if(err){ reject(err); }
+					if(data === null){ reject(404); }
+					let table = {};
+					table[id] = { muted: muted }
 					client.rdb.r.table("webhooks").get(bid).update(table).run(client.rdb.conn, (err2, data2) => {
 						if(err2){ reject(err2); }
 						resolve(data2);
