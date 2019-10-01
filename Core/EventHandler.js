@@ -29,8 +29,8 @@ module.exports = class EventHandler {
       let args = Util.stripPrefix(Message).split(' ');
       let cname = args.splice(0, 1)[0];
       let command = this.client.cmds.get(cname);
-      let { usage = [""] } = command.helpMeta;
       if(!command) return
+      let { usage = [""] } = command.helpMeta;
       if(await this.client.cmds.processCooldown(Message, cname)) {
         let user = await this.client.data.get.user(Message.author.id)
         if(args.length < command.argRequirement) return Message.reply(`You didn't supply enough arguments!\nUsage: \`${usage.reduce((acc,x,i) => `${acc}${i > 0 ? "` or `" : "" }${prefix}${cname} ${x}`, "")}\``)
