@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## v6.4.0
+- Comment out botlists by default, this means that you don't get 401 unauthorized errors by not filling in the config
+- Fix a couple of bugs around the multiple usages ability
+- Fix `serverivite` command crashing when it was run
+- Add mute/unmute feature (See more info in our discord support server: https://trellobot.xyz/server)
+
 ## v6.3.1
 - Hotfix for incorrect usage for `addwebhook`
 
