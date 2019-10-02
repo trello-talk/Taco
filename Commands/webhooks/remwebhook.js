@@ -31,6 +31,6 @@ module.exports = class RemoveWebhook extends Command {
   get helpMeta() { return {
     category: 'Webhooks',
     description: 'Deletes a webhook from a board.',
-    usage: ["<boardID> <channel|webhookID"]
+    usage: ["<boardID>"]
   } }
 }
