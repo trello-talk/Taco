@@ -1,0 +1,14 @@
+{
+    "maxerr"        : 100,
+    "freeze"        : false,
+    "quotmark"      : true,
+    "strict"        : false,
+    "varstmt"       : true,
+    "eqnull"        : true,
+    "esversion"     : 6,
+    "multistr"      : false,
+    "shadow"        : true,
+    "browser"       : false,
+    "mocha"         : false,
+    "node"          : true
+}
