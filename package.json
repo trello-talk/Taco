@@ -20,7 +20,7 @@
     "chalk": "^2.4.1",
     "dbots": "^1.2.2",
     "discord.js": "^11.5.1",
-    "eventemitter3": "^3.1.0",
+    "eventemitter3": "^4.0.0",
     "execa": "^2.0.4",
     "faux-classes": "./Classes",
     "faux-core": "./Core",
