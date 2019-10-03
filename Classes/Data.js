@@ -1,9 +1,9 @@
-	module.exports = (client) => { return {
+	module.exports = client => ({
 	get: {
-		server: function(id){
+		server(id){
 			return client.rdb.r.table("servers").get(id).default(null).run(client.rdb.conn);
 		},
-		servers: function(){
+		servers(){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("servers").run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -11,7 +11,7 @@
 				});
 			});
 		},
-		webhooks: function(){
+		webhooks(){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -19,7 +19,7 @@
 				});
 			});
 		},
-		webhooksEdit: function(id, muted){
+		webhooksEdit(id, muted){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").run(client.rdb.conn, (err, data) => {
 					if (err) { reject(err) }
@@ -38,7 +38,7 @@
 				});
 			});
 		},
-		webhooksOf: function(id){
+		webhooksOf(id){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -58,18 +58,18 @@
 				});
 			});
 		},
-		webhook: function(id, bid){
+		webhook(id, bid){
 			return client.rdb.r.table("webhooks").get(bid)(id).default(null).run(client.rdb.conn);
 		},
-		webhookBoard: function(bid){
+		webhookBoard(bid){
 			return client.rdb.r.table("webhooks").get(bid).default(null).run(client.rdb.conn);
 		},
-		user: function(id){
+		user(id){
 			return client.rdb.r.table("users").get(id).default(null).run(client.rdb.conn);
 		}
 	},
 	add: {
-		board: function(id, bid){
+		board(id, bid){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("servers").get(id).default(null).run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -87,10 +87,10 @@
 				});
 			});
 		},
-		server: function(data){
+		server(data){
 			return client.rdb.r.table("servers").insert(data).run(client.rdb.conn);
 		},
-		webhook: function(id, bid, url, mid, wid){
+		webhook(id, bid, url, mid, wid){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").get(bid).default(null).run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -116,17 +116,17 @@
 		}
 	},
 	setup: {
-		server: function(id, c){
+		server(id, c){
 			return client.rdb.r.table("servers").insert({ id: id, boards: [ c ], current: c }).run(client.rdb.conn);
 		}
 	},
 	delete: {
-		board: function(id, bid){
+		board(id, bid){
             return client.rdb.r.table("servers")
                 .get(id).update({ boards: client.rdb.r.row('boards')
                 .difference([ bid ]) }).default(null).run(client.rdb.conn);
 		},
-		webhook: function(id, bid){
+		webhook(id, bid){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").get(bid).default(null).run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -149,13 +149,13 @@
 		}
 	},
 	set: {
-		server: function(id, data){
+		server(id, data){
 			return client.rdb.r.table("servers").get(id).update(data).run(client.rdb.conn);
 		},
-		user: function(id, data){
+		user(id, data){
 			return client.rdb.r.table("users").get(id).update(data).run(client.rdb.conn);
 		},
-		webhook: function(id, bid, bits){
+		webhook(id, bid, bits){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").get(bid).default(null).run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -169,7 +169,7 @@
 				});
 			});
 		},
-		webhookMute: function(id, bid, muted){
+		webhookMute(id, bid, muted){
 			return new Promise((resolve, reject) => {
 				client.rdb.r.table("webhooks").get(bid).default(null).run(client.rdb.conn, (err, data) => {
 					if(err){ reject(err); }
@@ -184,4 +184,4 @@
 			});
 		}
 	}
-}}
+}})
