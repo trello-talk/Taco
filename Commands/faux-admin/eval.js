@@ -1,3 +1,4 @@
+/* jshint evil: true */
 const { CodeBlock, Command } = require('faux-classes')
 const { Util } = require('faux-core')
 const { inspect } = util = require("util")
