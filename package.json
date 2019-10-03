@@ -29,7 +29,7 @@
     "redis": "^2.8.0",
     "rethinkdb": "^2.3.3",
     "text-table": "^0.2.0"
-  }
+  },
   "devDependencies": {
     "jshint": "^2.6.0"
   }
