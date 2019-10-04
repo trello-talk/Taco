@@ -1,9 +1,12 @@
-const { CodeBlock, Command } = require('faux-classes')
+const { CodeBlock, Command } = require("faux-classes");
 const { command: exec } = require("execa");
 
 module.exports = class Exec extends Command {
-  get name() { return 'exec' }
-  get aliases() { return ['execute', 'terminal', 'bash'] }
+
+  get name() { return "exec"; }
+  get aliases() { return ["execute", "terminal", "bash"]; }
+  get permissions() { return ["elevated"]; }
+  get listed() { return false; }
 
   async exec(message, args) {
     message.channel.startTyping();
@@ -23,12 +26,11 @@ module.exports = class Exec extends Command {
     }
   }
 
-  get permissions() { return ['elevated'] }
-  get listed() { return false }
-
-  get helpMeta() { return {
-    category: 'Admin',
-    usage: ["<command>"],
-    description: 'Utilize child_process.exec',
-  } }
-}
+  get helpMeta() {
+    return {
+      category: "Admin",
+      usage: ["<command>"],
+      description: "Utilize child_process.exec"
+    };
+  }
+};

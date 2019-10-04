@@ -1,9 +1,10 @@
 module.exports = {
-    token:        "",
-    prefix:       "T!",
-    elevated:    [""],
-    commands:     "./Commands",
-    debug:        false,
-    embedColor:   4365262,
-    webhookURL: ""
+  token: "",
+  prefix: "T!",
+  elevated: [""],
+  commands: "./Commands",
+  debug: false,
+  embedColor: 4365262,
+  webhookURL: "",
+  webhookBetaURL: ""
 };

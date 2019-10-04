@@ -1,4 +1,4 @@
 module.exports = {
-  Faux: require('./Faux'),
-  Util: require('./Util')
-}
+  Faux: require("./Faux"),
+  Util: require("./Util")
+};
