@@ -1,4 +1,4 @@
-# Trello Bot (Taco) 
+# Trello Bot (Taco)
 
 <a href="https://top.gg/bot/620126394390675466">
   <img src="https://top.gg/api/widget/620126394390675466.svg" alt="Taco" align="right"/>
@@ -8,10 +8,7 @@
 
 ## Introduction
 
-The Trello Bot Is Back!
-
-- [Invite here](https://trellobot.xyz/bot)
-- [Support Server](https://trellobot.xyz/server)
+The Trello Bot Is Back! [[Invite here](https://trellobot.xyz/bot)] [[Support Server](https://trellobot.xyz/server)]
 
 - Manage Your Trello Boards, See Board Activity, Manage Your Webhooks, Use Multiple Boards Per Server, And More!
 - Simple Web-based Authentication To Get You Started As Soon As Possible!
@@ -32,6 +29,6 @@ Taco is the name of the Trello mascot.
 
 - Why are there no selfhosting instructions yet?
 
-We're currently not going to add selfhosting instructions until we're sure that the bot is stable. However, if you really need to selfhost this bot now, you can message me on Discord (Yamboy1#3959), and I can help you set it up. Please note that until version 7.0.0 is released, this bot is currently in beta and lots of things are still likely to change, so please check the changelogs before updating your bot to a new version.
+We're currently not going to add selfhosting instructions until we're sure that the bot is stable. However, if you really need to selfhost this bot now, you can message Yamboy1#3959 on the Support Server, and he can help you set it up. Please note that until version 7.0.0 is released, this bot is currently in beta and lots of things are still likely to change, so please check the changelogs before updating your bot to a new version.
 
 *Trello, Taco The Husky and the Trello Logo are trademarks of Trello, Inc. and are not assosiated with this project*
