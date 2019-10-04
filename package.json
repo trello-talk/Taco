@@ -21,7 +21,7 @@
     "dbots": "^1.2.2",
     "discord.js": "^11.5.1",
     "eventemitter3": "^3.1.0",
-    "execa": "^2.0.4",
+    "execa": "^2.0.5",
     "faux-classes": "./Classes",
     "faux-core": "./Core",
     "fuzzy": "^0.1.3",
