@@ -23,9 +23,9 @@ Coming soon™
 
 The original Trello Bot (Trello#5300) has now been shutdown. This is the continuation of that project.
 
-- Why is the bot called Taco?
+- Why is the bot called Taco, but the repository is called TrelloBot
 
-Taco is the name of the Trello mascot.
+Taco is the name of our "official" hosted copy. This repository is the code used for the bot and can be used to selfhost TrelloBot yourself.
 
 - Why are there no selfhosting instructions yet?
 
