@@ -10,7 +10,7 @@ module.exports = class EditDesc extends Command {
 
   async exec(message, args, { user }) {
     let body = await this.client.trello.get.cards(user.trelloToken, user.current);
-    let bid = undefined;
+    let bid;
     Object.keys(body).map((board) => {
       board = body[board];
       if (board.shortLink == args[0]) {

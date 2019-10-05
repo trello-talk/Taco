@@ -8,7 +8,7 @@ module.exports = class MoveCard extends Command {
   get argRequirement() { return 2; }
   async exec(message, args, { user }) {
     let body = await this.client.trello.get.cards(user.trelloToken, user.current);
-    let card = undefined;
+    let card;
     let listName = args.slice(1).join(" ");
     Object.keys(body).map((board) => {
       board = body[board];

@@ -10,7 +10,13 @@ module.exports = class Boards extends Command {
     let body = await this.client.trello.get.boards(user.trelloToken, user.trelloID);
     if (!body.boards.length)
       return message.reply("There are no found boards that you manage. You can create a board via Trello.");
-    await this.client.promptList(message, body.boards, (board, embed) => {
+    await this.client.promptList(message, body.boards, {
+      header: "Use `" + this.client.config.prefix + "switch <boardID>` to switch between boards\n" +
+        "Use `" + this.client.config.prefix + "boards [page]` to iterate this list",
+      pluralName: "Trello Boards",
+      itemsPerPage: 15,
+      startPage: args[0]
+    }, (board, embed) => {
       let emojis = (board.subscribed ? "🔔" : "") + (board.starred ? "⭐" : "") + (board.pinned ? "📌" : "");
       let current = board.shortLink === user.current;
       if (embed) {
@@ -22,16 +28,10 @@ module.exports = class Boards extends Command {
           return `> ${board.shortLink}: ${board.name} (Current) ${emojis}`;
         else return `${board.shortLink}: ${board.name} ${emojis}`;
       }
-    }, {
-      header: "Use `" + this.client.config.prefix + "switch <boardID>` to switch between boards\n" +
-        "Use `" + this.client.config.prefix + "boards [page]` to iterate this list",
-      pluralName: "Trello Boards",
-      itemsPerPage: 15,
-      startPage: args[0]
     });
   }
 
-  sget helpMeta() {
+  get helpMeta() {
     return {
       category: "Viewing",
       description: "Lists all of your boards.",

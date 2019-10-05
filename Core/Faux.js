@@ -281,15 +281,14 @@ module.exports = class Faux extends Discord.Client {
     });
   }
 
-  async promptList(cxtMessage, items, displayFunc = i => i,
-                   {
-                     content = "",
-                     header = "",
-                     footer = "",
-                     pluralName = "Items",
-                     itemsPerPage = 30,
-                     startPage = 1
-                   }) {
+  async promptList(cxtMessage, items, {
+        content = "",
+        header = "",
+        footer = "",
+        pluralName = "Items",
+        itemsPerPage = 30,
+        startPage = 1
+      }, displayFunc = i => i) {
     let isEmbed = this.embed(cxtMessage);
     let pageVars = this.util.pageNumber(itemsPerPage, items.length, startPage),
       page = pageVars[0],
@@ -410,8 +409,8 @@ module.exports = class Faux extends Discord.Client {
 
   killPagination(message) {
     return new Promise((resolve, reject) => {
-      if (this.pageProcesses.hasOwnProperty(message.channel.id)
-        && this.pageProcesses[message.channel.id].hasOwnProperty(message.author.id)) {
+      if (this.pageProcesses.hasOwnProperty(message.channel.id) &&
+        this.pageProcesses[message.channel.id].hasOwnProperty(message.author.id)) {
         this.pageProcesses[message.channel.id][message.author.id].stop();
         delete this.pageProcesses[message.channel.id][message.author.id];
       }

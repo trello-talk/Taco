@@ -10,17 +10,17 @@ module.exports = class Lists extends Command {
     let body = await this.client.trello.get.lists(user.trelloToken, user.current);
     if (!body.length)
       return message.reply("There are no found lists on the board. Check the archive with `T!listarchive`.");
-    await this.client.promptList(message, body, (list, embed) => {
-      let emojis = (list.subscribed ? "🔔" : "");
-      if (embed)
-        return `${list.name} ${emojis} *(${list.cards.length} Cards)*`;
-      else return `${list.name} ${emojis} (${list.cards.length} Cards)`;
-    }, {
+    await this.client.promptList(message, body, {
       header: "Use `" + this.client.config.prefix + "viewlist <listName>` to see all cards in that list\n" +
         "Use `" + this.client.config.prefix + "lists [page]` to iterate this list",
       pluralName: "Trello Lists",
       itemsPerPage: 15,
       startPage: args[0]
+    }, (list, embed) => {
+      let emojis = (list.subscribed ? "🔔" : "");
+      if (embed)
+        return `${list.name} ${emojis} *(${list.cards.length} Cards)*`;
+      else return `${list.name} ${emojis} (${list.cards.length} Cards)`;
     });
   }
 

@@ -11,7 +11,7 @@ module.exports = class Help extends Command {
     if (args[0]) {
       let command = this.client.cmds.get(args[0]);
       if (!command) return;
-      let { usage = undefined } = command.helpMeta;
+      let { usage } = command.helpMeta;
       if (!command) message.reply(`The command ${args[0]} was not found.`); else {
         let embed = {
           title: `${prefix}${command.name}`,

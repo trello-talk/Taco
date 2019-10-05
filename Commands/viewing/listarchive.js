@@ -11,13 +11,13 @@ module.exports = class ListArchive extends Command {
     let body = await this.client.trello.get.listsArchived(user.trelloToken, user.current);
     if (!body.length)
       return message.reply("There are no found cards in the archive.");
-    await this.client.promptList(message, body, list => list.name, {
+    await this.client.promptList(message, body, {
       header: "Use `" + this.client.config.prefix + "openlist <listName>` to unarchive that list\n" +
         "Use `" + this.client.config.prefix + "listarchive [page]` to iterate this list",
       pluralName: "Trello Archived Lists",
       itemsPerPage: 15,
       startPage: args[0]
-    });
+    }, list => list.name);
   }
 
   get helpMeta() {

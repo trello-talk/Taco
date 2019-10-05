@@ -14,7 +14,12 @@ module.exports = class Webhooks extends Command {
   async exec(message, args) {
     let webhooks = await this.client.data.get.webhooksOf(message.guild.id);
     if (webhooks.length !== 0) {
-      await this.client.promptList(message, webhooks, (webhook, embed) => {
+      await this.client.promptList(message, webhooks, {
+        header: "Use `" + this.client.config.prefix + "webhooks [page]` to iterate this list",
+        pluralName: "Trello Webhooks",
+        itemsPerPage: 3,
+        startPage: args[0]
+      }, (webhook, embed) => {
         let bits = webhook.bits.map(bit => embed ? `\`${this.toOrigin(bit)}\`` : this.toOrigin(bit)).join(", ");
         if (webhook.bits.length === 0)
           bits = embed ? "*\`[all]\`*" : "[all]";
@@ -23,11 +28,6 @@ module.exports = class Webhooks extends Command {
         } else {
           return `Board ${webhook.board}\n  Bits: ${bits}`;
         }
-      }, {
-        header: "Use `" + this.client.config.prefix + "webhooks [page]` to iterate this list",
-        pluralName: "Trello Webhooks",
-        itemsPerPage: 3,
-        startPage: args[0]
       });
     } else {
       message.reply("Could not find any active webhooks. `" + this.client.config.prefix + "help addwebhook` to learn how to create one!");

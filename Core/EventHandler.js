@@ -15,8 +15,8 @@ module.exports = class EventHandler {
     if (Message.channel.type !== "dm" && !Message.channel.permissionsFor(this.client.user).has("SEND_MESSAGES")) return;
     if (Message.channel.type === "dm" && !this.client.elevated(Message)) return Message.reply("You can't use commands in Private Messages.");
 
-    if (this.client.awaitedMessages.hasOwnProperty(Message.channel.id)
-      && this.client.awaitedMessages[Message.channel.id].hasOwnProperty(Message.author.id)) {
+    if (this.client.awaitedMessages.hasOwnProperty(Message.channel.id) &&
+      this.client.awaitedMessages[Message.channel.id].hasOwnProperty(Message.author.id)) {
       if (this.client.awaitedMessages[Message.channel.id][Message.author.id].callback(Message)) {
         this.client.awaitedMessages[Message.channel.id][Message.author.id].resolve(Message);
         return;

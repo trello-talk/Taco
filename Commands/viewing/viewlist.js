@@ -33,7 +33,13 @@ module.exports = class ViewList extends Command {
       if (!result.cards.length) {
         message.reply("There were no found cards on that lists. You could check the archive with `T!cardarchive` or create one with `T!createcard`.");
       } else {
-        await this.client.promptList(message, result.cards, (card, embed) => {
+        await this.client.promptList(message, result.cards, {
+          header: "Use `" + this.client.config.prefix + "card <cardID>` to see card information\n" +
+            "Use `" + this.client.config.prefix + "viewlist " + result.name + " [page]` to iterate this list",
+          pluralName: "Trello Lists",
+          itemsPerPage: 10,
+          startPage: args[0]
+        }, (card, embed) => {
           let emojis = (card.subscribed ? "🔔" : "");
           if (embed)
             return `\`${card.shortLink}\` ${card.name} ${emojis} ${card.labels.map(label => `**\`${label.name} (${label.color})\`**`).join(" ")}`;
@@ -43,12 +49,6 @@ module.exports = class ViewList extends Command {
               l += "{" + this.client.util.layout.cardLabels(card.labels).join(", ") + "}";
             return `${card.shortLink}: ${card.name} ${emojis} ${l}`;
           }
-        }, {
-          header: "Use `" + this.client.config.prefix + "card <cardID>` to see card information\n" +
-            "Use `" + this.client.config.prefix + "viewlist " + result.name + " [page]` to iterate this list",
-          pluralName: "Trello Lists",
-          itemsPerPage: 10,
-          startPage: args[0]
         });
       }
     }

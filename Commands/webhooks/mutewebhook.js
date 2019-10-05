@@ -12,7 +12,7 @@ module.exports = class MuteWebhook extends Command {
     try {
       const boardId = await this.client.util.getBoardId(user, args[0]);
       if (boardId === null) return message.channel.send("You don't have access to that board!");
-      const { webhookId = undefined } = await this.client.data.get.webhookBoard(boardId) || {};
+      const { webhookId } = await this.client.data.get.webhookBoard(boardId) || {};
       if (webhookId === undefined) return message.channel.send("You don't have a webhook connected to that board!");
 
       await this.client.data.set.webhookMute(message.guild.id, args[0], true);

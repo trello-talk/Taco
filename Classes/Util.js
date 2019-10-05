@@ -100,17 +100,17 @@ module.exports = (client) => {
         return members.map(member => member.fullName);
       },
       stickers(stickers) {
-        var arr = [];
-        for (var a in stickers) {
+        let arr = [];
+        for (let a in stickers) {
           if (!StickerEmojis[stickers[a].image]) return;
           arr.push(StickerEmojis[stickers[a].image]);
         }
-        var obj = {};
-        for (var i = 0, j = arr.length; i < j; i++) {
+        let obj = {};
+        for (let i = 0, j = arr.length; i < j; i++) {
           obj[arr[i]] = (obj[arr[i]] || 0) + 1;
         }
-        var obj2 = [];
-        for (var emoji in obj) {
+        let obj2 = [];
+        for (let emoji in obj) {
           amt = obj[emoji];
           obj2.push(emoji + " " + amt);
         }
@@ -179,18 +179,18 @@ module.exports = (client) => {
     titleCase(str) {
       words = str.toLowerCase().split(" ");
 
-      for (var i = 0; i < words.length; i++) {
-        var letters = words[i].split("");
+      for (let i = 0; i < words.length; i++) {
+        let letters = words[i].split("");
         letters[0] = letters[0].toUpperCase();
         words[i] = letters.join("");
       }
       return words.join(" ");
     },
     toHHMMSS(str) {
-      var sec_num = parseInt(str, 10); // don't forget the second param
-      var hours = Math.floor(sec_num / 3600);
-      var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-      var seconds = sec_num - (hours * 3600) - (minutes * 60);
+      let sec_num = parseInt(str, 10); // don't forget the second param
+      let hours = Math.floor(sec_num / 3600);
+      let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+      let seconds = sec_num - (hours * 3600) - (minutes * 60);
 
       if (hours < 10) {
         hours = "0" + hours;
@@ -201,7 +201,7 @@ module.exports = (client) => {
       if (seconds < 10) {
         seconds = "0" + seconds;
       }
-      var time = hours + ":" + minutes + ":" + seconds;
+      let time = hours + ":" + minutes + ":" + seconds;
       return time;
     },
     splitArray(array, chunk) {

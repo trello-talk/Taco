@@ -25,6 +25,12 @@ module.exports = (client) => ({
     },
     webhooksEdit(id, muted) {
       return new Promise((resolve, reject) => {
+        let respond = (err2, data2) => {
+          if (err2) {
+            reject(err2);
+          }
+          resolve(data2);
+        };
         client.rdb.r.table("webhooks").run(client.rdb.conn, (err, data) => {
           if (err) {
             reject(err);
@@ -37,12 +43,7 @@ module.exports = (client) => ({
             for (let item of Object.keys(row)) {
               if (!row[item].bits) return;
               row[item] = { muted: muted };
-              client.rdb.r.table("webhooks").get(row.id).update(row).run(client.rdb.conn, (err2, data2) => {
-                if (err2) {
-                  reject(err2);
-                }
-                resolve(data2);
-              });
+              client.rdb.r.table("webhooks").get(row.id).update(row).run(client.rdb.conn, respond);
             }
           });
         });
@@ -56,7 +57,7 @@ module.exports = (client) => ({
           }
           resolve(data.toArray().map(webhook => {
             if (webhook[id] !== undefined) {
-              return { board: webhook["id"], id: id, bits: webhook[id].bits };
+              return { board: webhook.id, id: id, bits: webhook[id].bits };
             } else {
               return undefined;
             }

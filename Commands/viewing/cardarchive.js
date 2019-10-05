@@ -11,16 +11,16 @@ module.exports = class CardArchive extends Command {
     let body = await this.client.trello.get.cardsArchived(user.trelloToken, user.current);
     if (!body.length)
       return message.reply("There are no found cards in the archive.");
-    await this.client.promptList(message, body, (card, embed) => {
-      if (embed)
-        return `\`${card.shortLink}\` ${card.name}`;
-      else return `${card.shortLink}: ${card.name}`;
-    }, {
+    await this.client.promptList(message, body, {
       header: "Use `" + this.client.config.prefix + "opencard <cardID>` to unarchive that card\n" +
         "Use `" + this.client.config.prefix + "cardarchive [page]` to iterate this list",
       pluralName: "Trello Archived Cards",
       itemsPerPage: 15,
       startPage: args[0]
+    }, (card, embed) => {
+      if (embed)
+        return `\`${card.shortLink}\` ${card.name}`;
+      else return `${card.shortLink}: ${card.name}`;
     });
   }
 
