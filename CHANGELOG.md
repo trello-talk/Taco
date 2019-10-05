@@ -1,5 +1,8 @@
 # CHANGELOG.md
 
+## Unreleased
+- Fix `undefined` usage in help command
+
 ## v6.4.1
 - Fix `remwebhook` command usage
 - Fix `remwebhook` erroring if the internal webhook was deleted but our the webhook was still in our database
