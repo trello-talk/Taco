@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node sharding.js",
     "start-noshard": "node index.js",
-    "lint": "jshint ."
+    "lint": "jshint . --exclude node_modules,WIP"
   },
   "repository": {
     "type": "git",

@@ -5,7 +5,7 @@
     "strict"        : false,
     "varstmt"       : true,
     "eqnull"        : true,
-    "esversion"     : 6,
+    "esversion"     : 8,
     "multistr"      : false,
     "shadow"        : true,
     "browser"       : false,
