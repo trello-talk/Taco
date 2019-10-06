@@ -19,8 +19,9 @@ module.exports = class ClearAuth extends Command {
       if (messages.first().content.toLowerCase() !== 'yes') {
         return message.channel.send('Cancelled!');
       }
-    } catch {
+    } catch(error) {
       return message.channel.send('Cancelled!');
+      console.log('Error occured during clearauth command: \n', error);
     }
     await this.client.data.delete.user(userId);
     await message.channel.send('Auth cleared!');
