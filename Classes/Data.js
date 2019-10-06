@@ -184,6 +184,9 @@ module.exports = (client) => ({
           }
         });
       });
+    },
+    user(id) {
+      return client.rdb.r.table("users").get(id).delete().run(client.rdb.conn);
     }
   },
   set: {
