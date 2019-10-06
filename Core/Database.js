@@ -34,33 +34,68 @@ module.exports = class Database extends EventEmitter {
 
   _p(k) { return (this.client.config.redis.prefix || "") + k; }
 
-  async hget(key, hashkey) {
-      return this.redis.HGET(this._p(key), hashkey);
+  hget(key, hashkey) {
+    return new Promise((resolve, reject) => {
+      this.redis.HGET(this._p(key), hashkey, (err, value) => {
+        if (err) reject(err);
+        resolve(value);
+      });
+    });
   }
 
-  async hset(key, hashkey, value) {
-      return this.redis.HSET(this._p(key), hashkey, value)
+  hset(key, hashkey, value) {
+    return new Promise((resolve, reject) => {
+      this.redis.HSET(this._p(key), hashkey, value, (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
   }
 
-  async incr(key) {
-      return this.redis.incr(this._p(key))
+  incr(key) {
+    return new Promise((resolve, reject) => {
+      this.redis.incr(this._p(key), (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
   }
 
-  async get(key) {
-      return this.redis.get(this._p(key))
+  get(key) {
+    return new Promise((resolve, reject) => {
+      this.redis.get(this._p(key), function (err, reply) {
+        if (err) reject(err);
+        resolve(reply);
+      });
+    });
   }
 
-  async expire(key, ttl) {
-      return this.redis.expire(key, ttl)
+  expire(key, ttl) {
+    return new Promise((resolve, reject) => {
+      this.redis.expire(key, ttl, (err, value) => {
+        if (err) reject(err);
+        resolve(value);
+      });
+    });
   }
 
 
-  async exists(key) {
-      return (await this.redis.exists(key)) === 1;
+  exists(key) {
+    return new Promise((resolve, reject) => {
+      this.redis.exists(key, (err, value) => {
+        if (err) reject(err);
+        resolve(value === 1);
+      });
+    });
   }
 
-  async set(key, value) {
-    return this.redis.set(key, value)
+  set(key, value) {
+    return new Promise((resolve, reject) => {
+      this.redis.set(key, value, (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
   }
 
   async reconnect() {
