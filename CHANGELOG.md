@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Fix `undefined` usage in help command
+- Add `clearauth` command so that people can switch between accounts easier
 
 ## v6.4.1
 - Fix `remwebhook` command usage
