@@ -1,6 +1,6 @@
 # CHANGELOG.md
 
-## Unreleased
+## v6.5.0
 - Fix `undefined` usage in help command
 - Add `clearauth` command so that people can switch between accounts easier
 
@@ -9,7 +9,7 @@
 - Fix `remwebhook` erroring if the internal webhook was deleted but our the webhook was still in our database
 
 ## v6.4.0
-- Comment out botlists by default, this means that you don't get 401 unauthorized errors by not filling in the config
+- Comment out botliskts by default, this means that you don't get 401 unauthorized errors by not filling in the config
 - Fix a couple of bugs around the multiple usages ability
 - Fix `serverivite` command crashing when it was run
 - Add mute/unmute feature (See more info in our discord support server: https://trellobot.xyz/server)
