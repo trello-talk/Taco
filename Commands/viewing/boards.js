@@ -31,7 +31,7 @@ module.exports = class Boards extends Command {
     });
   }
 
-  sget helpMeta() {
+  get helpMeta() {
     return {
       category: "Viewing",
       description: "Lists all of your boards.",
