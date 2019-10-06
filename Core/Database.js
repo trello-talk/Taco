@@ -1,5 +1,8 @@
 const redis = require("redis");
 const chalk = require("chalk");
+const bluebird = require("bluebird")
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
 const { EventEmitter } = require("eventemitter3");
 
 module.exports = class Database extends EventEmitter {
