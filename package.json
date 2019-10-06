@@ -18,6 +18,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "chalk": "^2.4.1",
+    "bluebird": "^3.7.0",
     "dbots": "^1.2.2",
     "discord.js": "^11.5.1",
     "eventemitter3": "^3.1.0",
