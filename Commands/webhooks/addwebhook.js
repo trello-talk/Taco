@@ -16,8 +16,8 @@ module.exports = class AddWebhook extends Command {
     const trelloBoard = await this.client.trello.get.board(user.trelloToken, boardId);
     if (webhookBoard !== null) return message.reply(`A webhook for board ${trelloBoard.name} \`(${boardId})\` already exists`);
 
-    const webhookRegex = /^(?<webhookUrl>https:\/\/((canary|ptb)?\.)?discordapp\.com\/api\/webhooks\/(?<webhookId>\d+)\/(?<webhookToken>[A-Za-z0-9_\-]+))\/?(?<extra>.*)$/;
-    const { groups: { webhookId, webhookToken, webhookUrl, extra } } = args[1].match(webhookRegex) || { groups: {} };
+    const webhookRegex = /^(https:\/\/((canary|ptb)?\.)?discordapp\.com\/api\/webhooks\/(\d+)\/([A-Za-z0-9_\-]+))\/?(.*)$/;
+    const [, webhookUrl,,, webhookId, webhookToken, extra ] = args[1].match(webhookRegex) || [];
 
     if (webhookUrl === undefined) return message.reply("That link is not a webhook!");
     if (extra !== "") await message.channel.send(`Ignoring \`/${extra}\` `);
