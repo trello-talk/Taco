@@ -1,5 +1,8 @@
 # CHANGELOG.md
 
+## v6.5.1
+- Fix `addwebhook` for node v8 LTS
+
 ## v6.5.0
 - Fix `undefined` usage in help command
 - Add `clearauth` command so that people can switch between accounts easier
