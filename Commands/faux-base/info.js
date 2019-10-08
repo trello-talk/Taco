@@ -6,7 +6,7 @@ module.exports = class Info extends Command {
   get permissions() { return ["embed"]; }
 
   emojiEmbedFallback(message, customEmojiId, fallback) {
-    if (this.client.emojis.has(customEmojiId))
+    if (this.client.emoji(message) && this.client.emojis.has(customEmojiId))
       return `${this.client.emojis.get(customEmojiId)}`;
     else return `${fallback}`;
   }
