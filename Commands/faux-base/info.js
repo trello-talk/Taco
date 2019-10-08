@@ -5,10 +5,10 @@ module.exports = class Info extends Command {
   get aliases() { return ["ℹ"]; }
   get permissions() { return ["embed"]; }
 
-  emojiEmbedFallback(message, customEmoji, fallbackEmoji) {
-    if (this.client.emoji(message))
-      return customEmoji;
-    else fallbackEmoji;
+  emojiEmbedFallback(message, customEmojiId, fallback) {
+    if (this.client.emojis.has(customEmojiId))
+      return `${this.client.emojis.get(customEmojiId)}`;
+    else return `${fallback}`;
   }
   async exec(message) {
     let servers = await this.client.serverCount();
@@ -22,13 +22,12 @@ module.exports = class Info extends Command {
         + `**:gear: Memory Usage**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
         + `**:file_cabinet: Servers**: ${servers.formatNumber()}\n\n`
         + `**:globe_with_meridians: Website**: ${this.client.config.website}\n`
-        + `**${this.emojiEmbedFallback(message, "<:trellologo:624184549001396225>", ":blue_book:")} Trello Board**: ${this.client.config.trelloBoard}\n`
-        + `**${this.emojiEmbedFallback(message, "<:patreon:625323800048828453>", ":money_with_wings:")} Donate**: ${this.client.config.donate[0]}\n`,
+        + `**${this.emojiEmbedFallback(message, "624184549001396225", ":blue_book:")} Trello Board**: ${this.client.config.trelloBoard}\n`
+        + `**${this.emojiEmbedFallback(message, "625323800048828453", ":money_with_wings:")} Donate**: ${this.client.config.donate[0]}\n`,
       thumbnail: {
         url: this.client.config.iconURL
       }
     };
-
     message.channel.send("", { embed });
   }
 
