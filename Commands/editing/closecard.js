@@ -22,7 +22,7 @@ module.exports = class CloseCard extends Command {
       await this.client.trello.set.card.closed(user.trelloToken, bid.id, true);
       message.reply(`Archived card "${bid.name}". \`(${bid.shortLink})\``);
     } else {
-      message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
+      message.reply("Uh-Oh! Either that card ID is non-existent or it's not on the selected board!");
     }
   }
 

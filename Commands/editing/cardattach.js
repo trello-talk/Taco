@@ -38,7 +38,7 @@ module.exports = class CardAttach extends Command {
         });
       }
     } else {
-      message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
+      message.reply("Uh-Oh! Either that card ID is non-existent or it's not on the selected board!");
     }
   }
 

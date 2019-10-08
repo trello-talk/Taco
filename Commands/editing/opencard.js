@@ -22,7 +22,7 @@ module.exports = class OpenCard extends Command {
       await this.client.trello.set.card.closed(user.trelloToken, bid.id, false);
       message.reply(`Removed card "${bid.name}" \`(${bid.shortLink})\` from the archive.`);
     } else {
-      message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
+      message.reply("Uh-Oh! Either that card ID is non-existent or it's not on the selected board!");
     }
   }
 

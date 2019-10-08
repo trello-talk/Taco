@@ -22,7 +22,7 @@ module.exports = class EditDesc extends Command {
       await this.client.trello.set.card.description(user.trelloToken, args[0], args.slice(1).join(" "));
       message.reply(`${args.slice(1).join(" ") == "" ? "Removed" : "Edited"} description of card "${bid.name}". \`${bid.shortLink}\``);
     } else {
-      message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
+      message.reply("Uh-Oh! Either that card ID is non-existent or it's not on the selected board!");
     }
   }
 

@@ -31,10 +31,10 @@ module.exports = class MoveCard extends Command {
         await this.client.trello.set.card.list(user.trelloToken, card.id, result.id);
         message.reply(`Moved card "${card.name}" \`(${args[0]})\` to list "${result.name}".`);
       } else {
-        message.reply("Uh-Oh! Either that list is non-existant or it's not on the seleted board!");
+        message.reply("Uh-Oh! Either that list is non-existent or it's not on the selected board!");
       }
     } else {
-      message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
+      message.reply("Uh-Oh! Either that card ID is non-existent or it's not on the selected board!");
     }
   }
 

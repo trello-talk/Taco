@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Fix emoji fallback in `info` command
+- Fix some typos
 
 ## v6.5.1
 - Fix `addwebhook` for node v8 LTS

@@ -32,7 +32,7 @@ module.exports = class RemoveCard extends Command {
         await message.channel.send("Cancelled confirmation due to an interruption.");
       }
     } else {
-      message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
+      message.reply("Uh-Oh! Either that card ID is non-existent or it's not on the selected board!");
     }
   }
 

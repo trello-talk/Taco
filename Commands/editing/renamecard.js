@@ -22,7 +22,7 @@ module.exports = class RenameCard extends Command {
       await this.client.trello.set.card.name(user.trelloToken, args[0], args.slice(1).join(" "));
       message.reply(`Renamed card "${bid.name}" \`(${args[0]})\` to "${args.slice(1).join(" ")}".`);
     } else {
-      message.reply("Uh-Oh! Either that card ID is non-existant or it's not on the seleted board!");
+      message.reply("Uh-Oh! Either that card ID is non-existent or it's not on the selected board!");
     }
   }
 
