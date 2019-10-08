@@ -3,6 +3,7 @@
 ## Unreleased
 - Fix emoji fallback in `info` command
 - Fix some typos
+- \[SELFHOSTING\] The `website`, `trelloBoard`, and `donate` configs are now optional, and if they are left empty, they will be ignored by the bot, for example in the `info` or `donate` commands
 
 ## v6.5.1
 - Fix `addwebhook` for node v8 LTS

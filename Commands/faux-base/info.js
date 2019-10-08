@@ -12,6 +12,9 @@ module.exports = class Info extends Command {
   }
   async exec(message) {
     let servers = await this.client.serverCount();
+    let hasWebsite = !!this.client.config.website;
+    let hasTrelloBoard = this.client.config.trelloBoard;
+    let hasDonationLinks = Array.isArray(this.client.config.donate) && this.client.config.donate[0];
     let embed = {
       color: this.client.config.embedColor,
       title: `Information about ${this.client.user.username}.`,
@@ -21,9 +24,9 @@ module.exports = class Info extends Command {
         + `**:clock: Uptime**: ${process.uptime() ? process.uptime().toString().toHHMMSS() : "???"}\n`
         + `**:gear: Memory Usage**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
         + `**:file_cabinet: Servers**: ${servers.formatNumber()}\n\n`
-        + `**:globe_with_meridians: Website**: ${this.client.config.website}\n`
-        + `**${this.emojiEmbedFallback(message, "624184549001396225", ":blue_book:")} Trello Board**: ${this.client.config.trelloBoard}\n`
-        + `**${this.emojiEmbedFallback(message, "625323800048828453", ":money_with_wings:")} Donate**: ${this.client.config.donate[0]}\n`,
+        + (hasWebsite ? `**:globe_with_meridians: Website**: ${this.client.config.website}\n` : "")
+        + (hasTrelloBoard ? `**${this.emojiEmbedFallback(message, "624184549001396225", ":blue_book:")} Trello Board**: ${this.client.config.trelloBoard}\n` : "")
+        + (hasDonationLinks ? `**${this.emojiEmbedFallback(message, "625323800048828453", ":money_with_wings:")} Donate**: ${this.client.config.donate[0]}\n` : ""),
       thumbnail: {
         url: this.client.config.iconURL
       }
