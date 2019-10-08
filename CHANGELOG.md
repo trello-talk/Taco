@@ -1,6 +1,6 @@
 # CHANGELOG.md
 
-## Unreleased
+## 6.6.0
 - Fix emoji fallback in `info` command
 - Fix some typos
 - \[SELFHOSTING\] The `website`, `trelloBoard`, and `donate` configs are now optional, and if they are left empty, they will be ignored by the bot, for example in the `info` or `donate` commands
