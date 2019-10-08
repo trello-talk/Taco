@@ -1,5 +1,8 @@
 # CHANGELOG.md
 
+## Unreleased
+- Fix emoji fallback in `info` command
+
 ## v6.5.1
 - Fix `addwebhook` for node v8 LTS
 
