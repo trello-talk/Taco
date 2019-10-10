@@ -36,7 +36,7 @@ module.exports = class ViewList extends Command {
         await this.client.promptList(message, result.cards, (card, embed) => {
           let emojis = (card.subscribed ? "🔔" : "");
           if (embed)
-            return `\`${card.shortLink}\` ${card.name} ${emojis} ${card.labels.map(label => `**\`${label.name} (${label.color})\`**`).join(" ")}`;
+            return `\`${card.shortLink}\` ${card.name} ${emojis} ${card.labels.map(label => `**\`${label.name || "Unnamed Label"}}  (${label.color || "No Color"})\`**`).join(" ")}`;
           else {
             let l = "";
             if (card.labels.length)
@@ -51,7 +51,7 @@ module.exports = class ViewList extends Command {
           startPage: args[0]
         });
       }
-    }
+    } else message.reply("Uh-Oh! Either that list is non-existent or it's not on the selected board!");
   }
 
   get helpMeta() {

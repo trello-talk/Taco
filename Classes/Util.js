@@ -88,10 +88,10 @@ module.exports = (client) => {
     StickerEmojis, TrelloEvents,
     layout: {
       cardLabels(labels) {
-        return labels.map(label => "[" + label.name + "][" + Util.capFirst(label.color) + "]");
+        return labels.map(label => "[" + (label.name || "Unnamed Label") + "][" + Util.capFirst(label.color || "No Color") + "]");
       },
       cardLabelsEmbed(labels) {
-        return labels.map(label => label.name + ", Color: " + Util.capFirst(label.color));
+        return labels.map(label => (label.name || "Unnamed Lavel") + ", Color: " + Util.capFirst(label.color || "No Color"));
       },
       attachments(atchmts) {
         return atchmts.map(atchmt => atchmt.url);
