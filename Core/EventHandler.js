@@ -19,7 +19,6 @@
 
 const Util = require("./Util");
 const config = require("../Config/")
-const self = "bot_id_here"
 
 module.exports = class EventHandler {
   constructor(client) {
@@ -31,6 +30,9 @@ module.exports = class EventHandler {
   }
 
   async onMessage(Message) {
+   
+   const self = "bot_id_here"
+   
     this.client.stats.bumpStat("messages");
     if (Message.author.bot) return;
     if (Message.channel.type !== "dm" && !Message.channel.permissionsFor(this.client.user).has("SEND_MESSAGES")) return;
