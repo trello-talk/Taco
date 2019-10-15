@@ -18,6 +18,8 @@
 */
 
 const Util = require("./Util");
+const config = require("../Config/")
+const self = "bot_id_here"
 
 module.exports = class EventHandler {
   constructor(client) {
@@ -33,6 +35,7 @@ module.exports = class EventHandler {
     if (Message.author.bot) return;
     if (Message.channel.type !== "dm" && !Message.channel.permissionsFor(this.client.user).has("SEND_MESSAGES")) return;
     if (Message.channel.type === "dm" && !this.client.elevated(Message)) return Message.reply("You can't use commands in Private Messages.");
+    if (Message.content.match("<@${self}") || Message.content.match("<@!{self}>")) return Message.reply(`if you don't know my prefix is \`${config.prefix}\`.`)
 
     if (this.client.awaitedMessages.hasOwnProperty(Message.channel.id)
       && this.client.awaitedMessages[Message.channel.id].hasOwnProperty(Message.author.id)) {
