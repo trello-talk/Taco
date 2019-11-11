@@ -41,7 +41,7 @@ module.exports = class Help extends Command {
               value: usage ? usage.reduce((acc, x) => `${acc}\n${prefix}${command.name} \`${x}\``, "") : prefix + command.name
             },
             //{name: "Usage", value: `${prefix}${command.name}${command.helpMeta.usage ? ` \`${command.helpMeta.usage}\`` : ''}`},
-            { name: "Cooldown", value: `${command.cooldown} seconds`, inline: true }
+            { name: "Cooldown", value: `${command.cooldown} seconds`, inline: false }
           ],
           description: command.helpMeta.description
         };
