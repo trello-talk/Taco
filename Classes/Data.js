@@ -184,23 +184,12 @@ module.exports = (client) => ({
           if (data === null) {
             reject(404);
           }
-          let table = data;
-          delete table[id];
-          if (Object.keys(table).length <= 3) {
-            client.rdb.r.table("webhooks").get(bid).delete().run(client.rdb.conn, (err2, data2) => {
-              if (err2) {
-                reject(err2);
-              }
-              resolve(data2);
+          client.rdb.r.table("webhooks").get(bid).delete().run(client.rdb.conn, (err2, data2) => {
+            if (err2) {
+              reject(err2);
+            }
+            resolve(data2);
             });
-          } else {
-            client.rdb.r.table("webhooks").get(bid).replace(table).run(client.rdb.conn, (err2, data2) => {
-              if (err2) {
-                reject(err2);
-              }
-              resolve(data2);
-            });
-          }
         });
       });
     },
