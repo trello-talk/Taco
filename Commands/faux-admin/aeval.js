@@ -44,7 +44,7 @@ module.exports = class AsyncEval extends Command {
   get helpMeta() {
     return {
       category: "Admin",
-      description: "eval hell yeah\n\nNOTE: Due to the added async IIFE wrapper in this command, it is necessary to use the return statment to return a result\ne.g. `T!aevil return 1`"
+      description: "eval hell yeah\n\nNOTE: Due to the added async IIFE wrapper in this command, it is necessary to use the return statment to return a result\ne.g. `T!aeval return 1`"
     };
   }
 };
