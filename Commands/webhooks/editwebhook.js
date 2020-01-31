@@ -36,7 +36,7 @@ module.exports = class EditWebhook extends Command {
       message.channel.send("You don't have access to that board!");
     } else {
       let webhook = await this.client.data.get.webhook(message.guild.id, args[0]);
-      if (webhook === null) {
+      if (!webhook) {
         message.reply("You don't have a webhook connected to that board!");
       } else {
         if (args[1] !== "all") {
