@@ -1,32 +1,35 @@
 {
-  "name": "trello-bot",
-  "version": "6.6.0",
-  "description": "Manage Trello boards in Discord",
-  "main": "index.js",
+  "name": "discordvid2",
+  "version": "2.0.0",
+  "description": "The objectively best Discord video downloader bot",
+  "main": "src/bot.js",
   "scripts": {
-    "start": "node sharding.js",
-    "start-noshard": "node index.js"
+    "start": "node src/bot.js"
+  },
+  "dependencies": {
+    "abort-controller": "^3.0.0",
+    "cheerio": "^1.0.0-rc.3",
+    "config": "latest",
+    "dbots": "github:dbots-pkg/dbots.js#master",
+    "eris": "^0.11.2",
+    "eventemitter3": "^4.0.0",
+    "file-type": "^13.1.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs-extra": "^8.1.0",
+    "mustache": "^4.0.0",
+    "node-fetch": "^2.3.0",
+    "redis": "^2.8.0",
+    "require-reload": "^0.2.2",
+    "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "jshint": "^2.10.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Trello-Bot-Community/TrelloBot.git"
+    "url": "git+https://github.com/Snazzah/DiscordVid2.git"
   },
-  "author": "Yamboy1",
-  "contributors": [
-    "Snazzah"
-  ],
-  "license": "GPL-3.0",
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "dbots": "^1.2.2",
-    "discord.js": "^11.5.1",
-    "eventemitter3": "^3.1.0",
-    "execa": "^2.0.4",
-    "faux-classes": "./Classes",
-    "faux-core": "./Core",
-    "fuzzy": "^0.1.3",
-    "redis": "^2.8.0",
-    "rethinkdb": "^2.3.3",
-    "text-table": "^0.2.0"
-  }
+  "author": "Snazzah <suggesttosnazzy@gmail.com>",
+  "license": "MIT"
 }

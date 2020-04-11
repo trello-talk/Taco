@@ -1,9 +1,0 @@
-{
-	"apps": [
-		{
-			"name": "TrelloBot",
-			"script": "npm",
-			"args": "start"
-		}
-	]
-}

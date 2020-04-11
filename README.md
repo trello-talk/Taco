@@ -1,34 +1,29 @@
-# Trello Bot (Taco)
+# DiscordVid2
+A port of T-P0ser's [@this__vid3](https://github.com/T-P0ser/this__vid3/) Twitter bot to Discord.
 
-<a href="https://top.gg/bot/620126394390675466">
-  <img src="https://top.gg/api/widget/620126394390675466.svg" alt="Taco" align="right"/>
-</a>
+If you don't want to self-host (or you just need the invite), then [click here](https://invite.snaz.in/discordvid2).
 
-![Discord Shield](https://discordapp.com/api/guilds/617911034555924502/widget.png?style=shield) [![Discord Bots](https://top.gg/api/widget/servers/620126394390675466.svg?rightcolor=7289DA)](https://top.gg/bot/620126394390675466) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+## Installation
+You need [Node.JS](https://nodejs.org/) v10 (use [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md)) or newer along with [NPM](https://npmjs.com). 
+You also need [Redis](https://redis.io/topics/quickstart) (for cooldowns) and also FFmpeg and frei0r-plugins for the video stuffs. 
 
-## Introduction
+```
+sudo apt install ffmpeg frei0r-plugins
+```
 
-The Trello Bot Is Back! [[Invite here](https://trellobot.xyz/bot)] [[Support Server](https://trellobot.xyz/server)]
+Clone this repo somewhere, `npm i` to install dependencies, and `npm start` to run!
 
-- Manage Your Trello Boards, See Board Activity, Manage Your Webhooks, Use Multiple Boards Per Server, And More!
-- Simple Web-based Authentication To Get You Started As Soon As Possible!
-- Friendly Support Staff Available To Assist With Any Issues You May Encounter!
+## Configs are your friend.
+Make sure to copy and paste `config/_default.json` into `config/default.json`. Most of the values are prefilled, but here is what you need to know (or do):
+- Fill in the `discordToken` field with the token of your bot.
+- Replace the user ID in `owner` with your own. (I wouldn't want to mess your stuff up.)
+- If you want to parse Twitter URLs make sure to fill in the `twitter` consumer token and secret. [(Get them here)](https://developer.twitter.com/en/apps)
+- If you have set up Redis on the same system as your bot, you don't need to deal with `redis` all that much, but if you have a different setup, make sure that's filled.
+- Any colons in any of the strings of `video` will result in the text being cut off. So maybe don't do that.
+- You can change `cachePath` if you want, but you don't need to.
 
-## Selfhosting
-Coming soon™
+## Credits
 
-
-## FAQs
-- What happened to the original Trello Bot?
-
-The original Trello Bot (Trello#5300) has now been shutdown. This is the continuation of that project.
-
-- Why is the bot called Taco, but the repository is called TrelloBot
-
-Taco is the name of our "official" hosted copy. This repository is the code used for the bot and can be used to selfhost TrelloBot yourself.
-
-- Why are there no selfhosting instructions yet?
-
-We're currently not going to add selfhosting instructions until we're sure that the bot is stable. However, if you really need to selfhost this bot now, you can message Yamboy1#3959 or Coolguy3289#2290 on the Support Server, and they can help you set it up. Please note that until version 7.0.0 is released, this bot is currently in beta and lots of things are still likely to change, so please check the changelogs before updating your bot to a new version.
-
-*Trello, Taco The Husky and the Trello Logo are trademarks of Trello, Inc. and are not assosiated with this project*
+@this_vid by [shalvah](https://twitter.com/theshalvah).  
+[@this_vid2](https://github.com/TheEssem/this_vid2) by [TheEssem](https://twitter.com/TheEssem).  
+[@this_vid3](https://github.com/T-P0ser/this__vid3) by [T-P0ser](https://github.com/T-P0ser). 
