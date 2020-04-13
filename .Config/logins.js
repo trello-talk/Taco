@@ -9,11 +9,10 @@ module.exports = {
     password: "",
     prefix: "trello:"
   },
-  rethink: {
-    host: "localhost",
-    port: 28015,
-    user: "",
-    password: "",
-    database: "Trello"
-  }
+  pg: {
+    user: "postgres",
+    host: "127.0.0.1",
+    database: "trello",
+    password: ""
+  },
 };

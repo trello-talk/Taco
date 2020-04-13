@@ -1,11 +1,11 @@
 const redis = require('redis');
-const config = require('config').get('redis');
 const { EventEmitter } = require('eventemitter3');
 const logger = require('./logger')('[REDIS]');
 
 module.exports = class Database extends EventEmitter {
-  constructor() {
+  constructor(client) {
     super();
+    this.client = client;
     this.reconnectAfterClose = true;
     logger.info('Initialized');
   }
@@ -30,7 +30,7 @@ module.exports = class Database extends EventEmitter {
     });
   }
 
-  _p(k) { return (config.get('prefix') || '') + k; }
+  _p(k) { return (this.client.config.prefix || '') + k; }
 
   hget(key, hashkey) {
     return new Promise((resolve, reject) => {

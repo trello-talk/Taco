@@ -1,34 +1,28 @@
 {
-  "name": "discordvid2",
-  "version": "2.0.0",
-  "description": "The objectively best Discord video downloader bot",
+  "name": "trello-bot",
+  "version": "7.0.0",
+  "description": "Manage Trello boards in Discord",
   "main": "src/bot.js",
   "scripts": {
     "start": "node src/bot.js"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
-    "cheerio": "^1.0.0-rc.3",
-    "config": "latest",
     "dbots": "github:dbots-pkg/dbots.js#master",
     "eris": "^0.11.2",
     "eventemitter3": "^4.0.0",
-    "file-type": "^13.1.0",
-    "fluent-ffmpeg": "^2.1.2",
-    "fs-extra": "^8.1.0",
-    "mustache": "^4.0.0",
     "node-fetch": "^2.3.0",
     "redis": "^2.8.0",
     "require-reload": "^0.2.2",
+    "sequelize": "^5.21.6",
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "eslint": "^6.5.1",
-    "jshint": "^2.10.2"
+    "eslint": "^6.5.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Snazzah/DiscordVid2.git"
+    "url": "git+https://github.com/trello-talk/TrelloBot.git"
   },
   "author": "Snazzah <suggesttosnazzy@gmail.com>",
   "license": "MIT"

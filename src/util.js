@@ -1,6 +1,3 @@
-const mustache = require('mustache');
-const config = require('config');
-
 exports.keyValueForEach = (obj, func) => Object.keys(obj).map(key => func(key, obj[key]));
 
 exports.sliceKeys = (obj, f) => {
@@ -10,6 +7,19 @@ exports.sliceKeys = (obj, f) => {
   });
   return newObject;
 };
+
+exports.toHHMMSS = string => {
+  const sec_num = parseInt(string, 10);
+  let hours   = Math.floor(sec_num / 3600);
+  let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+  let seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+  if (hours   < 10) {hours   = "0"+hours;}
+  if (minutes < 10) {minutes = "0"+minutes;}
+  if (seconds < 10) {seconds = "0"+seconds;}
+  const time = hours+':'+minutes+':'+seconds;
+  return time;
+}
 
 exports.formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
@@ -26,16 +36,12 @@ exports.Random = {
   shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
   },
-  prompt(prompts, context) {
-    return mustache.render(exports.Random.array(prompts), context);
-  },
-  id() {
-    return Math.random().toString(36).substring(2, 15);
-  },
 };
 
 exports.Prefix = {
-  regex(client, prefixes = config.get('prefixes')) {
+  regex(client, prefixes = null) {
+    if(!prefixes)
+      prefixes = client.config.prefixes;
     return new RegExp(`^((?:<@!?${client.user.id}>|${prefixes.map(prefix => exports.Escape.regex(prefix)).join('|')})\\s?)(\\n|.)`, 'i');
   },
   strip(message, client, prefixes) {
@@ -46,8 +52,6 @@ exports.Prefix = {
 exports.Regex = {
   escape: /[-/\\^$*+?.()|[\]{}]/g,
   url: /https?:\/\/(-\.)?([^\s/?.#-]+\.?)+(\/[^\s]*)?/gi,
-  spoiler: /\|\|\s*?([^|]+)\s*?\|\|/gi,
-  twitter: /https?:\/\/twitter\.com\/\w+\/status\/(\d{17,19})(?:\/(?:video\/(\d))?)?/,
 };
 
 exports.Escape = {

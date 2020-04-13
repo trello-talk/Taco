@@ -1,8 +1,8 @@
 module.exports = {
   token: "",
-  prefix: "T!",
+  prefixes: ["T!", "trello"],
   elevated: [""],
-  commands: "./Commands",
+  commandsPath: "./src/commands",
   debug: false,
   embedColor: 4365262,
   webhookURL: "",

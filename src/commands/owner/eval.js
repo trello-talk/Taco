@@ -1,7 +1,6 @@
 /* jshint evil: true */
 const Command = require('../../structures/Command');
 const Util = require('../../util');
-const config = require('config');
 
 module.exports = class Eval extends Command {
   get name() { return 'eval'; }
@@ -13,7 +12,7 @@ module.exports = class Eval extends Command {
 
   // eslint-disable-next-line no-unused-vars
   async exec(message, { args }) {
-    if(message.author.id !== config.get('owner')) return;
+    if(!this.client.config.elevated.includes(message.author.id)) return;
     try {
       const start = Date.now();
       const result = eval(Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' '));
@@ -25,6 +24,7 @@ module.exports = class Eval extends Command {
   }
 
   get metadata() { return {
+    category: 'Developer',
     description: 'Do a thing.',
     usage: '<code>',
   }; }

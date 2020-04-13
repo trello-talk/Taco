@@ -1,5 +1,4 @@
 const Command = require('../structures/Command');
-const config = require('config');
 const Util = require('../util');
 
 module.exports = class Info extends Command {
@@ -14,20 +13,38 @@ module.exports = class Info extends Command {
     return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
   }
 
+  emojiEmbedFallback(message, customEmojiId, fallback) {
+    if (this.canUseEmojis(message) && this.client.guilds.has('617911034555924502')) {
+      const emoji = this.client.guilds.get('617911034555924502').emojis.find(e => e.id == customEmojiId);
+      return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
+    } else return fallback;
+  }
+
   async exec(message) {
-    const videoCount = parseInt(await this.client.db.get('videos:total'));
-    return this.client.createMessage(message.channel.id,
-      `> ${this.canUseEmojis(message) ? '<:DiscordVid2:667610979248504833> ' : ''}**DiscordVid2 *(v${this.client.pkg.version})*** is a port of the twitter account @this\\_\\_vid3 (which is a port of @this\\_vid2)\n` +
-      '> The objectively best Discord video downloader bot.\n> \n' +
-      `> Videos over **${config.get('video.duration')}** seconds are cut off.\n` +
-      `> Media can be found past **${config.get('pastMessagesLimit')}** messages.\n` +
-      `> Requests can be dropped if they take longer than **${config.get('requestTimeout') / 1000}** seconds.\n` +
-      `> I have created **${Util.formatNumber(videoCount)}** videos.\n> \n` +
-      '> GitHub: <https://github.com/Snazzah/DiscordVid2>\n' +
-      '> @this\\_\\_vid3 Source: <https://github.com/T-P0ser/this__vid3>\n');
+    let servers = this.client.guilds.size;
+    let hasWebsite = !!this.client.config.website;
+    let hasTrelloBoard = this.client.config.trelloBoard;
+    let hasDonationLinks = Array.isArray(this.client.config.donate) && this.client.config.donate[0];
+    let embed = {
+      color: this.client.config.embedColor,
+      title: `Information about ${this.client.user.username}.`,
+      description: "This bot is using a modified version of [Faux](https://github.com/Snazzah/Faux)\n\n"
+        + `**:computer: ${this.client.user.username} Version** ${this.client.pkg.version}\n`
+        + `**:clock: Uptime**: ${process.uptime() ? Util.toHHMMSS(process.uptime().toString()) : "???"}\n`
+        + `**:gear: Memory Usage**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
+        + `**:file_cabinet: Servers**: ${Util.toHHMMSS(servers)}\n\n`
+        + (hasWebsite ? `**:globe_with_meridians: Website**: ${this.client.config.website}\n` : "")
+        + (hasTrelloBoard ? `**${this.emojiEmbedFallback(message, "624184549001396225", ":blue_book:")} Trello Board**: ${this.client.config.trelloBoard}\n` : "")
+        + (hasDonationLinks ? `**${this.emojiEmbedFallback(message, "625323800048828453", ":money_with_wings:")} Donate**: ${this.client.config.donate[0]}\n` : ""),
+      thumbnail: {
+        url: this.client.config.iconURL
+      }
+    };
+    return this.client.createMessage(message.channel.id, { embed });
   }
 
   get metadata() { return {
+    category: 'General',
     description: 'Get information about the bot.',
   }; }
 };

@@ -5,26 +5,25 @@ const EventHandler = require('./events');
 const CommandLoader = require('./commandloader');
 const logger = require('./logger')('[DISCORD]');
 const posterLogger = require('./logger')('[POSTER]');
-const fs = require('fs');
 const path = require('path');
-const config = require('config');
 
-class DiscordVid2 extends Eris.Client {
-  constructor({ packagePath, mainDir } = {}) {
+class TrelloBot extends Eris.Client {
+  constructor({ configPath, packagePath, mainDir } = {}) {
     // Initialization
-    const pkg = require(packagePath || `${mainDir}/package.json`);
-    const discordConfig = JSON.parse(JSON.stringify(config.get('discord')));
-    super(config.get('discordToken'), discordConfig);
+    let config = require(configPath || `${mainDir}/Config/`);
+    const pkg = require(packagePath || `${mainDir}/package.json`);;
+    super(config.token, config.discordConfig);
     this.dir = mainDir;
     this.pkg = pkg;
     this.logger = logger;
+    this.config = config;
     this.typingIntervals = new Map();
 
     // Events
     this.on('ready', () => logger.info('All shards ready.'));
     this.on('disconnect', () => logger.info('All Shards Disconnected.'));
     this.on('reconnecting', () => logger.warn('Reconnecting'));
-    if(config.get('debug')) this.on('debug', message => logger.debug(message));
+    if(config.debug) this.on('debug', message => logger.debug(message));
 
     // Shard Events
     this.on('connect', id => logger.info(`Shard ${id} connected.`));
@@ -47,16 +46,7 @@ class DiscordVid2 extends Eris.Client {
       process.exit(0);
     });
 
-    // Create cache folder if not already
-    const cachePath = path.join(this.dir, config.get('cachePath'));
-    fs.access(cachePath, fs.constants.F_OK, err => {
-      if(err) {
-        logger.info('Cache folder does not exist, creating folder.');
-        fs.mkdirSync(cachePath);
-      } else logger.info('Cache folder exists, skipping');
-    });
-
-    process.env.LOGGER_DEBUG = config.get('debug');
+    process.env.LOGGER_DEBUG = config.debug;
 
     logger.info('Client initialized');
   }
@@ -67,26 +57,24 @@ class DiscordVid2 extends Eris.Client {
 
   async start() {
     this.db = new Database(this);
-    await this.db.connect(config.get('redis'));
+    await this.db.connect(this.config.redis);
     await this.connect();
     await this.waitTill('ready');
     this.editStatus('online', {
-      name: 'videos using DiscordVid2',
+      name: `boards scroll by me | ${this.config.prefixes[0]}help`,
       type: 3,
     });
-    this.stats = new Stats(this);
-    this.stats.init();
-    this.cmds = new CommandLoader(this, path.join(this.dir, config.get('commandsPath')), config.get('debug'));
+    this.cmds = new CommandLoader(this, path.join(this.dir, this.config.commandsPath), this.config.debug);
     this.cmds.reload();
     this.cmds.preloadAll();
     this.eventHandler = new EventHandler(this);
-    if(Object.keys(config.get('botlist')).length) await this.initPoster();
+    if(Object.keys(this.config.botlists).length) await this.initPoster();
   }
 
   initPoster() {
     this.poster = new dbots.Poster({
       client: this,
-      apiKeys: config.get('botlist'),
+      apiKeys: this.config.botlists,
       clientLibrary: 'eris',
       useSharding: false,
       voiceConnections: () => 0,
@@ -143,9 +131,9 @@ class DiscordVid2 extends Eris.Client {
   }
 }
 
-const DVid2 = new DiscordVid2({ mainDir: path.join(__dirname, '..'), packagePath: '../package.json' });
-DVid2.start().catch(e => {
-  DVid2.logger.error('Failed to start bot! Exiting in 10 seconds...');
+const Bot = new TrelloBot({ mainDir: path.join(__dirname, '..') });
+Bot.start().catch(e => {
+  Bot.logger.error('Failed to start bot! Exiting in 10 seconds...');
   console.error(e);
   setTimeout(() => process.exit(0), 10000);
 });

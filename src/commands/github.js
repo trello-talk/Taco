@@ -9,10 +9,11 @@ module.exports = class GitHUb extends Command {
   }; }
 
   exec(message) {
-    return this.client.createMessage(message.channel.id, 'Here is the link to my source code!\n:arrow_forward:  <https://github.com/Snazzah/DiscordVid2>');
+    return this.client.createMessage(message.channel.id, 'Here is the link to my source code!\n:arrow_forward:  <https://github.com/trello-talk/TrelloBot>');
   }
 
   get metadata() { return {
+    category: 'General',
     description: 'Sends the bot\'s open source link.',
   }; }
 };

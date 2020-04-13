@@ -1,5 +1,4 @@
 const Command = require('../structures/Command');
-const config = require('config');
 const Util = require('../util');
 
 module.exports = class Help extends Command {
@@ -14,32 +13,73 @@ module.exports = class Help extends Command {
     return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
   }
 
-  async exec(message, { args }) {
-    const commands = this.client.cmds.commands.filter(c => {
-      if(!c.options.listed && message && message.author.id !== config.get('owner')) return false;
-      return true;
-    });
-    const prefixes = [...config.get('prefixes'), `@${this.client.user.username}#${this.client.user.discriminator}`];
+  exec(message, { args }) {
+    const prefixes = [...this.client.config.prefixes, `@${this.client.user.username}#${this.client.user.discriminator}`];
+    const prefix = prefixes[0]
+    if (args[0]) {
+      let command = this.client.cmds.get(args[0]);
+      if (!command) return;
+      let { usage = undefined } = command.metadata;
+      if (!command) message.reply(`The command ${args[0]} was not found.`); else {
+        let embed = {
+          title: `${prefix}${command.name}`,
+          color: this.client.config.embedColor,
+          fields: [
+            { name: "Usage",
+              value: `${prefix}${command.name}${usage ? ` \`${usage}\`` : ''}` }
+          ],
+          description: command.metadata.description
+        };
 
-    if(args[0]) {
-      const command = this.client.cmds.get(args[0], message);
-      if(!command)
-        return message.channel.send(':stop_sign: That command couldn\'t be found!');
-      return this.client.createMessage(message.channel.id,
-        `> ${this.canUseEmojis(message) ? '<:DiscordVid2:667610979248504833> ' : ''}${this.client.user.mention} **${command.name}**\n` +
-        `> ${command.metadata.description}\n> \n` +
-        `> **Usage:** \`${Util.Random.array(prefixes)} ${command.name}${command.metadata.usage ? ' ' + command.metadata.usage : ''}\`\n` +
-        (command.options.aliases.length ? `> **Aliases:** ${command.options.aliases.map(v => '`' + v + '`').join(', ')}\n` : '') +
-        (command.metadata.note ? `> **Note:** ${command.metadata.note}` : ''));
-    } else return this.client.createMessage(message.channel.id,
-      `> ${this.canUseEmojis(message) ? '<:DiscordVid2:667610979248504833> ' : ''}**DiscordVid2** Commands\n> \n` +
-      `> **Prefixes:** ${prefixes.map(v => '`' + v + '`').join(', ')}\n` +
-      `> **Commands:** ${commands.map(v => '`' + v.name + '`').join(', ')}\n> \n` +
-      `> \`${Util.Random.array(prefixes)} help [command]\` for more info`);
+        if (command.options.cooldown)
+          embed.fields.push({ name: "Cooldown", value: `${command.options.cooldown} seconds`, inline: false });
+
+        if (command.options.aliases.length !== 0) embed.fields.push({
+          name: "Aliases",
+          value: command.options.aliases.map(a => `\`${prefix}${a}\``).join(", ")
+        });
+        if (command.metadata.image)
+          embed.image = { url: command.metadata.image };
+        if (command.metadata.extra) {
+          Util.keyValueForEach(command.metadata.extra, (k, v) => {
+            let o = { name: k, value: v };
+            if (Array.isArray(command.Extra[Extra])) o.value = `${v.join(", ")}`;
+            embed.fields.push(o);
+          });
+        }
+        return this.client.createMessage(message.channel.id, { embed });
+      }
+    } else {
+      let embed = {
+        color: this.client.config.embedColor,
+        description: `${this.client.user.username} (Running Modified [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: ${this.client.config.supportServers[0]}`,
+        footer: {
+          text: `\`${prefix}help [command]\` for more info`
+        },
+        fields: []
+      };
+
+      let helpobj = {};
+      this.client.cmds.commands.forEach(v => {
+        if (!v.listed && !this.client.config.elevated.includes(message.author.id)) return;
+        let string = `${prefix}${v.name}`;
+        if (helpobj[v.metadata.category]) helpobj[v.metadata.category].push(string);
+        else helpobj[v.metadata.category] = [string];
+      });
+      Util.keyValueForEach(helpobj, (k, v) => {
+        embed.fields.push({
+          name: `**${k}**`,
+          value: "```" + v.join(", ") + "```",
+          inline: true
+        });
+      });
+      return this.client.createMessage(message.channel.id, { embed });
+    }
   }
 
   get metadata() { return {
-    description: 'Get some help on a command.',
+    category: 'General',
+    description: 'Shows the help message and gives information on commands.',
     usage: '[command]',
   }; }
 };

@@ -1,5 +1,3 @@
-const config = require('config');
-
 module.exports = class Command {
   constructor(client) {
     this.client = client;
@@ -7,7 +5,7 @@ module.exports = class Command {
   }
 
   _preload() {
-    if(!this.preload() && config.get('debug')) this.client.cmds.logger.info('Preloading command', this.name);
+    if(!this.preload() && this.client.config.debug) this.client.cmds.logger.info('Preloading command', this.name);
   }
 
   preload() {
@@ -16,8 +14,6 @@ module.exports = class Command {
 
   async _exec(message, Extra) {
     if(!this.cooldownAbs || await this.client.cmds.processCooldown(message, this)) {
-      this.client.stats.bumpStat('commands');
-      this.client.stats.bumpCommandStat(this.name);
       await this.exec(message, Extra);
     } else {
       const cd = await this.client.db.hget(`cooldowns:${message.author.id}`, this.name);
@@ -47,6 +43,7 @@ module.exports = class Command {
 
   get metadata() {
     return {
+      category: 'Misc.',
       description: '???',
       usage: '',
     };

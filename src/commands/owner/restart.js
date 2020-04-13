@@ -1,5 +1,4 @@
 const Command = require('../../structures/Command');
-const config = require('config');
 
 module.exports = class Restart extends Command {
   get name() { return 'restart'; }
@@ -10,13 +9,14 @@ module.exports = class Restart extends Command {
   }; }
 
   async exec(message) {
-    if(message.author.id !== config.get('owner')) return;
+    if(!this.client.config.elevated.includes(message.author.id)) return;
     await this.client.createMessage(message.channel.id, 'Restarting shard...');
     await this.client.dieGracefully();
     process.exit(0);
   }
 
   get metadata() { return {
+    category: 'Developer',
     description: 'Restarts the bot.',
   }; }
 };

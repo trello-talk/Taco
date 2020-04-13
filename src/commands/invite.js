@@ -9,10 +9,11 @@ module.exports = class Invite extends Command {
   }; }
 
   exec(message) {
-    return this.client.createMessage(message.channel.id, 'Here is the link to invite me to other servers!\n:arrow_forward:  <https://invite.snaz.in/discordvid2>');
+    return this.client.createMessage(message.channel.id, 'Here is the link to invite me to other servers!\n:arrow_forward:  <https://trellobot.xyz/bot>');
   }
 
   get metadata() { return {
+    category: 'General',
     description: 'Sends the bot invite link.',
   }; }
 };

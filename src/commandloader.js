@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const config = require('config');
 const logger = require('./logger')('[COMMANDS]');
 const reload = require('require-reload')(require);
 
@@ -47,7 +46,7 @@ module.exports = class CommandLoader {
 
   get(name, message = null) {
     const cmds = this.commands.filter(c => {
-      if(!c.options.listed && message && message.author.id !== config.get('owner')) return false;
+      if(!c.options.listed && message && !this.client.config.elevated.includes(message.author.id)) return false;
       return true;
     });
     let cmd = cmds.find(c => c.name === name);
@@ -68,7 +67,7 @@ module.exports = class CommandLoader {
   }
 
   async processCooldown(message, command) {
-    if(message.author.id === config.get('owner')) return true;
+    if(message.author.id === this.client.config.owner) return true;
     const now = Date.now() - 1;
     const cooldown = command.cooldownAbs;
     let userCD = await this.client.db.hget(`cooldowns:${message.author.id}`, command.name) || 0;
