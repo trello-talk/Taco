@@ -6,5 +6,6 @@ module.exports = {
   debug: false,
   embedColor: 4365262,
   webhookURL: "",
-  webhookBetaURL: ""
+  webhookBetaURL: "",
+  sudoID: "620126394390675466"
 };

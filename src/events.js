@@ -12,6 +12,14 @@ module.exports = class Events {
     // Check to see if bot can send messages
     if(message.channel.type !== 1 && !message.channel.permissionsOf(this.client.user.id).has('sendMessages')) return;
 
+    // Don't parse if Taco is in the guild
+    if(this.client.config.sudoID &&
+      this.client.user.id !== this.client.config.sudoID &&
+      message.channel.guild) {
+      const sudoBot = await message.channel.guild.members.has(this.client.config.sudoID)
+      if(sudoBot) return;
+    }
+
     // Command parsing
     const args = Util.Prefix.strip(message, this.client).split(' ');
     const commandName = args.splice(0, 1)[0];
