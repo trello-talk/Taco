@@ -8,7 +8,7 @@ on:
 
 jobs:
   update:
-    name: Lint code
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
