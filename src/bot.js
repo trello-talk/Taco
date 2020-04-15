@@ -101,12 +101,17 @@ class TrelloBot extends Eris.Client {
     console.log(e.response.data);
   }
 
-  async dieGracefully() {
-    logger.info('Slowly dying...');
-    super.disconnect();
-    // await this.waitTill('disconnect');
-    await this.db.disconnect();
-    logger.info('It\'s all gone...');
+  dieGracefully() {
+    return new Promise(resolve => {
+      logger.info('Slowly dying...');
+      this.waitTill('disconnect')
+        .then(() => this.db.disconnect())
+        .then(() => {
+          logger.info('It\'s all gone...');
+          resolve();
+        });
+      super.disconnect();
+    });
   }
 
   // Typing
