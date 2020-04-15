@@ -13,10 +13,17 @@ module.exports = class Help extends Command {
     return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
   }
 
+  canEmbed(message) {
+    return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
+  }
+
   exec(message, { args }) {
+    if(!this.canEmbed(message))
+      return this.client.createMessage(message.channel.id, 'I need to be able to embed links in order to display help commands!');
+
     const prefixes = [...this.client.config.prefixes, `@${this.client.user.username}#${this.client.user.discriminator}`];
-    const prefix = prefixes[0]
-    if (args[0]) {
+    const prefix = prefixes[0];
+    if (args[0]) { // Display help on a command
       let command = this.client.cmds.get(args[0]);
       if (!command) return;
       let { usage = undefined } = command.metadata;
@@ -31,15 +38,21 @@ module.exports = class Help extends Command {
           description: command.metadata.description
         };
 
+        // Cooldown
         if (command.options.cooldown)
           embed.fields.push({ name: "Cooldown", value: `${command.options.cooldown} seconds`, inline: false });
 
+        // Aliases
         if (command.options.aliases.length !== 0) embed.fields.push({
           name: "Aliases",
           value: command.options.aliases.map(a => `\`${prefix}${a}\``).join(", ")
         });
+
+        // Image
         if (command.metadata.image)
           embed.image = { url: command.metadata.image };
+
+        // Extras
         if (command.metadata.extra) {
           Util.keyValueForEach(command.metadata.extra, (k, v) => {
             let o = { name: k, value: v };
@@ -49,7 +62,7 @@ module.exports = class Help extends Command {
         }
         return this.client.createMessage(message.channel.id, { embed });
       }
-    } else {
+    } else { // Display general help command
       let embed = {
         color: this.client.config.embedColor,
         description: `${this.client.user.username} (Running Modified [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: ${this.client.config.supportServers[0]}`,
@@ -59,14 +72,17 @@ module.exports = class Help extends Command {
         fields: []
       };
 
-      let helpobj = {};
+      // Populate categories
+      let categories = {};
       this.client.cmds.commands.forEach(v => {
         if (!v.listed && !this.client.config.elevated.includes(message.author.id)) return;
         let string = `${prefix}${v.name}`;
-        if (helpobj[v.metadata.category]) helpobj[v.metadata.category].push(string);
-        else helpobj[v.metadata.category] = [string];
+        if (categories[v.metadata.category])
+          categories[v.metadata.category].push(string);
+        else categories[v.metadata.category] = [string];
       });
-      Util.keyValueForEach(helpobj, (k, v) => {
+      // List categories
+      Util.keyValueForEach(categories, (k, v) => {
         embed.fields.push({
           name: `**${k}**`,
           value: "```" + v.join(", ") + "```",

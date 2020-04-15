@@ -20,7 +20,14 @@ module.exports = class Info extends Command {
     } else return fallback;
   }
 
+  canEmbed(message) {
+    return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
+  }
+
   async exec(message) {
+    if(!this.canEmbed(message))
+      return this.client.createMessage(message.channel.id, 'I need to be able to embed links in order to display bot information!');
+
     let servers = this.client.guilds.size;
     let hasWebsite = !!this.client.config.website;
     let hasTrelloBoard = this.client.config.trelloBoard;
