@@ -26,8 +26,10 @@ module.exports = (prefix = '') => {
       format.align(),
       format.printf(
         info => {
-          if(!process.env.LOGGER_DEBUG && info.level === 'debug') return;
-          return `${prefix} ${new Date(info.timestamp).toTimeString().split(' ')[0]} ${info.level.toUpperCase()}: ${info.message}${
+          if (!process.env.LOGGER_DEBUG && info.level === 'debug') return;
+          return `${prefix} ${
+            new Date(info.timestamp).toTimeString().split(' ')[0]
+          } ${info.level.toUpperCase()}: ${info.message}${
             info[Symbol.for('splat')] ? ': ' +
                 info[Symbol.for('splat')].map(v => util.inspect(v)).join(' ')
               : ''

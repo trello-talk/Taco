@@ -23,7 +23,8 @@ class Command {
   }
 
   _preload() {
-    if(!this.preload() && this.client.config.debug) this.client.cmds.logger.info('Preloading command', this.name);
+    if (!this.preload() && this.client.config.debug)
+      this.client.cmds.logger.info('Preloading command', this.name);
   }
 
   preload() {
@@ -31,11 +32,12 @@ class Command {
   }
 
   async _exec(message, Extra) {
-    if(!this.cooldownAbs || await this.client.cmds.processCooldown(message, this)) {
+    if (!this.cooldownAbs || await this.client.cmds.processCooldown(message, this)) {
       await this.exec(message, Extra);
     } else {
       const cd = await this.client.db.hget(`cooldowns:${message.author.id}`, this.name);
-      message.reply(`:watch: This command needs to cool down! *(${Math.ceil(this.cooldownAbs - (Date.now() - cd))})*`);
+      message.reply(
+        `:watch: This command needs to cool down! *(${Math.ceil(this.cooldownAbs - (Date.now() - cd))})*`);
     }
   }
 
@@ -66,6 +68,6 @@ class Command {
       usage: '',
     };
   }
-};
+}
 
 module.exports = Command;

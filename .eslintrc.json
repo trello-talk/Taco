@@ -7,7 +7,7 @@
   "extends": "eslint:recommended",
   "globals": {},
   "parserOptions": {
-    "ecmaVersion": 8,
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
   "rules": {

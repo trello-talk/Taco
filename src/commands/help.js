@@ -28,7 +28,8 @@ module.exports = class Help extends Command {
   }; }
 
   canUseEmojis(message) {
-    return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
+    return message.channel.type === 1 ||
+      message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
   }
 
   canEmbed(message) {
@@ -36,21 +37,23 @@ module.exports = class Help extends Command {
   }
 
   exec(message, { args }) {
-    if(!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id, 'I need to be able to embed links in order to display help commands!');
+    if (!this.canEmbed(message))
+      return this.client.createMessage(message.channel.id,
+        'I need to be able to embed links in order to display help commands!');
 
-    const prefixes = [...this.client.config.prefixes, `@${this.client.user.username}#${this.client.user.discriminator}`];
+    const prefixes = [...this.client.config.prefixes,
+      `@${this.client.user.username}#${this.client.user.discriminator}`];
     const prefix = prefixes[0];
     if (args[0]) { // Display help on a command
-      let command = this.client.cmds.get(args[0]);
+      const command = this.client.cmds.get(args[0]);
       if (!command) return;
-      let { usage = undefined } = command.metadata;
+      const { usage = undefined } = command.metadata;
       if (!command) message.reply(`The command ${args[0]} was not found.`); else {
-        let embed = {
+        const embed = {
           title: `${prefix}${command.name}`,
           color: this.client.config.embedColor,
           fields: [
-            { name: "Usage",
+            { name: 'Usage',
               value: `${prefix}${command.name}${usage ? ` \`${usage}\`` : ''}` }
           ],
           description: command.metadata.description
@@ -58,12 +61,15 @@ module.exports = class Help extends Command {
 
         // Cooldown
         if (command.options.cooldown)
-          embed.fields.push({ name: "Cooldown", value: `${command.options.cooldown} seconds`, inline: false });
+          embed.fields.push({
+            name: 'Cooldown',
+            value: `${command.options.cooldown} seconds`, inline: false
+          });
 
         // Aliases
         if (command.options.aliases.length !== 0) embed.fields.push({
-          name: "Aliases",
-          value: command.options.aliases.map(a => `\`${prefix}${a}\``).join(", ")
+          name: 'Aliases',
+          value: command.options.aliases.map(a => `\`${prefix}${a}\``).join(', ')
         });
 
         // Image
@@ -73,15 +79,15 @@ module.exports = class Help extends Command {
         // Extras
         if (command.metadata.extra) {
           Util.keyValueForEach(command.metadata.extra, (k, v) => {
-            let o = { name: k, value: v };
-            if (Array.isArray(command.Extra[Extra])) o.value = `${v.join(", ")}`;
+            const o = { name: k, value: v };
+            if (Array.isArray(v)) o.value = `${v.join(', ')}`;
             embed.fields.push(o);
           });
         }
         return this.client.createMessage(message.channel.id, { embed });
       }
     } else { // Display general help command
-      let embed = {
+      const embed = {
         color: this.client.config.embedColor,
         description: `${this.client.user.username} (Running Modified [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: ${this.client.config.supportServers[0]}`,
         footer: {
@@ -91,10 +97,10 @@ module.exports = class Help extends Command {
       };
 
       // Populate categories
-      let categories = {};
+      const categories = {};
       this.client.cmds.commands.forEach(v => {
         if (!v.listed && !this.client.config.elevated.includes(message.author.id)) return;
-        let string = `${prefix}${v.name}`;
+        const string = `${prefix}${v.name}`;
         if (categories[v.metadata.category])
           categories[v.metadata.category].push(string);
         else categories[v.metadata.category] = [string];
@@ -103,7 +109,7 @@ module.exports = class Help extends Command {
       Util.keyValueForEach(categories, (k, v) => {
         embed.fields.push({
           name: `**${k}**`,
-          value: "```" + v.join(", ") + "```",
+          value: '```' + v.join(', ') + '```',
           inline: true
         });
       });

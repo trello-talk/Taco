@@ -28,8 +28,8 @@ const path = require('path');
 class TrelloBot extends Eris.Client {
   constructor({ configPath, packagePath, mainDir } = {}) {
     // Initialization
-    let config = require(configPath || `${mainDir}/Config/`);
-    const pkg = require(packagePath || `${mainDir}/package.json`);;
+    const config = require(configPath || `${mainDir}/Config/`);
+    const pkg = require(packagePath || `${mainDir}/package.json`);
     super(config.token, config.discordConfig);
     this.dir = mainDir;
     this.pkg = pkg;
@@ -41,7 +41,7 @@ class TrelloBot extends Eris.Client {
     this.on('ready', () => logger.info('All shards ready.'));
     this.on('disconnect', () => logger.info('All Shards Disconnected.'));
     this.on('reconnecting', () => logger.warn('Reconnecting'));
-    if(config.debug) this.on('debug', message => logger.debug(message));
+    if (config.debug) this.on('debug', message => logger.debug(message));
 
     // Shard Events
     this.on('connect', id => logger.info(`Shard ${id} connected.`));
@@ -86,7 +86,7 @@ class TrelloBot extends Eris.Client {
     this.cmds.reload();
     this.cmds.preloadAll();
     this.eventHandler = new EventHandler(this);
-    if(Object.keys(this.config.botlists).length) await this.initPoster();
+    if (Object.keys(this.config.botlists).length) await this.initPoster();
   }
 
   initPoster() {
@@ -115,7 +115,9 @@ class TrelloBot extends Eris.Client {
   }
 
   onPostFail(e, auto = false) {
-    posterLogger.error(`Failed to ${auto ? 'auto-post' : 'post'} in ${e.response.config.url}! (${e.request.method}, ${e.response.status})`);
+    posterLogger.error(`Failed to ${
+      auto ? 'auto-post' : 'post'
+    } in ${e.response.config.url}! (${e.request.method}, ${e.response.status})`);
     console.log(e.response.data);
   }
 
@@ -135,7 +137,7 @@ class TrelloBot extends Eris.Client {
   // Typing
 
   async startTyping(channel) {
-    if(this.isTyping(channel)) return;
+    if (this.isTyping(channel)) return;
     await channel.sendTyping();
     this.typingIntervals.set(channel.id, setInterval(() => {
       channel.sendTyping().catch(() => this.stopTyping(channel));
@@ -147,7 +149,7 @@ class TrelloBot extends Eris.Client {
   }
 
   stopTyping(channel) {
-    if(!this.isTyping(channel)) return;
+    if (!this.isTyping(channel)) return;
     const interval = this.typingIntervals.get(channel.id);
     clearInterval(interval);
     this.typingIntervals.delete(channel.id);

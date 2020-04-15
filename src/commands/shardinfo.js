@@ -17,7 +17,6 @@
 */
 
 const Command = require('../structures/Command');
-const Util = require('../util');
 
 module.exports = class ShardInfo extends Command {
   get name() { return 'shardinfo'; }
@@ -32,21 +31,23 @@ module.exports = class ShardInfo extends Command {
   }
 
   async exec(message) {
-    if(!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id, 'I need to be able to embed links in order to display bot shard information!');
+    if (!this.canEmbed(message))
+      return this.client.createMessage(message.channel.id,
+        'I need to be able to embed links in order to display bot shard information!');
 
-    const serverMap = {}
+    const serverMap = {};
     this.client.guilds.map(guild => {
       const shardID = guild.shard.id;
       if (serverMap[shardID])
         serverMap[shardID] += 1;
       else serverMap[shardID] = 1;
     });
-    let embed = {
+    const embed = {
       color: this.client.config.embedColor,
       title: `Information about ${this.client.user.username}'s Shards`,
-      description: this.client.shards.map(
-        shard => `**\`${shard.id}:\`** ${shard.status.toUpperCase()}, ${shard.latency}ms, ${serverMap[shard.id]} guilds`
+      description: this.client.shards.map(shard =>
+        `**\`${shard.id}:\`** ${shard.status.toUpperCase()}, ` +
+        `${shard.latency}ms, ${serverMap[shard.id]} guilds`
       ).join('\n'),
       thumbnail: {
         url: this.client.config.iconURL

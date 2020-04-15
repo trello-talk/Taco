@@ -28,8 +28,9 @@ module.exports = class Donate extends Command {
 
   exec(message) {
     if (!Array.isArray(this.client.config.donate) || !this.client.config.donate[0])
-      return this.client.createMessage(message.channel.id, "The bot owner hasn't supplied any donation links!");
-    return this.client.createMessage(message.channel.id, `Support development by donating!\n` +
+      return this.client.createMessage(message.channel.id,
+        'The bot owner hasn\'t supplied any donation links!');
+    return this.client.createMessage(message.channel.id, 'Support development by donating!\n' +
       this.client.config.donate.map(inv => `\`▶\` <${inv}>`).join('\n'));
   }
 

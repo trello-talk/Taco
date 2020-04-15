@@ -27,7 +27,8 @@ module.exports = class GitHUb extends Command {
   }; }
 
   exec(message) {
-    return this.client.createMessage(message.channel.id, 'Here is the link to my source code!\n\`▶\` <https://github.com/trello-talk/TrelloBot>');
+    return this.client.createMessage(message.channel.id,
+      'Here is the link to my source code!\n`▶` <https://github.com/trello-talk/TrelloBot>');
   }
 
   get metadata() { return {

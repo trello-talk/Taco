@@ -27,7 +27,8 @@ module.exports = class Auth extends Command {
   }; }
 
   exec(message) {
-    return this.client.createMessage(message.channel.id, `Authorize your Trello account with your Discord here: **<${this.client.config.authURL}>**`);
+    return this.client.createMessage(message.channel.id,
+      `Authorize your Trello account with your Discord here: **<${this.client.config.authURL}>**`);
   }
 
   get metadata() { return {

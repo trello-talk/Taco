@@ -27,7 +27,8 @@ module.exports = class Reload extends Command {
   }; }
 
   canUseEmojis(message) {
-    return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
+    return message.channel.type === 1 ||
+      message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
   }
 
   emojiEmbedFallback(message, customEmojiId, fallback) {
@@ -38,11 +39,13 @@ module.exports = class Reload extends Command {
   }
 
   async exec(message) {
-    if(!this.client.config.elevated.includes(message.author.id)) return;
-    const sentMessage = await this.client.createMessage(message.channel.id, `${this.emojiEmbedFallback(message, '632444546961375232', ':recycle:')} Reloading commands...`);
+    if (!this.client.config.elevated.includes(message.author.id)) return;
+    const sentMessage = await this.client.createMessage(message.channel.id,
+      `${this.emojiEmbedFallback(message, '632444546961375232', ':recycle:')} Reloading commands...`);
     this.client.cmds.reload();
     this.client.cmds.preloadAll();
-    return sentMessage.edit(`${this.emojiEmbedFallback(message, '632444546684551183', ':white_check_mark:')} Reloaded commands.`);
+    const reloadEmoji = this.emojiEmbedFallback(message, '632444546684551183', ':white_check_mark:');
+    return sentMessage.edit(`${reloadEmoji} Reloaded commands.`);
   }
 
   get metadata() { return {

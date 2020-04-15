@@ -33,12 +33,13 @@ module.exports = class Exec extends Command {
   }
 
   async exec(message) {
-    if(!this.client.config.elevated.includes(message.author.id)) return;
+    if (!this.client.config.elevated.includes(message.author.id)) return;
     await this.client.startTyping(message.channel);
     exec(Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' '), (err, stdout, stderr) => {
       this.client.stopTyping(message.channel);
-      if(err) return this.client.createMessage(message.channel.id, this.codeBlock(err, 'js'));
-      return this.client.createMessage(message.channel.id, (stderr ? this.codeBlock(`STDOUT Error: ${stderr}`, 'js') + '\n' : '') + this.codeBlock(stdout));
+      if (err) return this.client.createMessage(message.channel.id, this.codeBlock(err, 'js'));
+      const stdErrBlock = (stderr ? this.codeBlock(stderr, 'js') + '\n' : '');
+      return this.client.createMessage(message.channel.id, stdErrBlock + this.codeBlock(stdout));
     });
   }
 

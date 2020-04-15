@@ -35,16 +35,16 @@ module.exports = class CommandLoader {
     files.map(file => {
       const filePath = path.join(folderPath, file);
       const stat = fs.lstatSync(filePath);
-      if(stat.isSymbolicLink()) {
+      if (stat.isSymbolicLink()) {
         const realPath = fs.readlinkSync(filePath);
-        if(stat.isFile() && file.endsWith('.js')) {
+        if (stat.isFile() && file.endsWith('.js')) {
           this.load(realPath);
-        } else if(stat.isDirectory()) {
+        } else if (stat.isDirectory()) {
           this.iterateFolder(realPath);
         }
-      } else if(stat.isFile() && file.endsWith('.js'))
+      } else if (stat.isFile() && file.endsWith('.js'))
         this.load(filePath);
-      else if(stat.isDirectory())
+      else if (stat.isDirectory())
         this.iterateFolder(filePath);
     });
   }
@@ -64,19 +64,20 @@ module.exports = class CommandLoader {
 
   get(name, message = null) {
     const cmds = this.commands.filter(c => {
-      if(!c.options.listed && message && !this.client.config.elevated.includes(message.author.id)) return false;
+      if (!c.options.listed && message &&
+        !this.client.config.elevated.includes(message.author.id)) return false;
       return true;
     });
     let cmd = cmds.find(c => c.name === name);
-    if(cmd) return cmd;
+    if (cmd) return cmd;
     cmds.forEach(c => {
-      if(c.options.aliases.includes(name)) cmd = c;
+      if (c.options.aliases.includes(name)) cmd = c;
     });
     return cmd;
   }
 
   preload(name) {
-    if(!this.get(name)) return;
+    if (!this.get(name)) return;
     this.get(name)._preload();
   }
 
@@ -85,12 +86,12 @@ module.exports = class CommandLoader {
   }
 
   async processCooldown(message, command) {
-    if(message.author.id === this.client.config.owner) return true;
+    if (message.author.id === this.client.config.owner) return true;
     const now = Date.now() - 1;
     const cooldown = command.cooldownAbs;
     let userCD = await this.client.db.hget(`cooldowns:${message.author.id}`, command.name) || 0;
-    if(userCD) userCD = parseInt(userCD);
-    if(userCD + cooldown > now) return false;
+    if (userCD) userCD = parseInt(userCD);
+    if (userCD + cooldown > now) return false;
     await this.client.db.hset(`cooldowns:${message.author.id}`, command.name, now);
     return true;
   }
