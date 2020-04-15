@@ -4,7 +4,9 @@
   "description": "Manage Trello boards in Discord",
   "main": "src/bot.js",
   "scripts": {
-    "start": "node src/bot.js"
+    "start": "node src/bot.js",
+    "eslint": "eslint ./src",
+    "eslint:fix": "eslint ./src --fix"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
