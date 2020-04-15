@@ -1,4 +1,4 @@
-const Command = require('../structures/Command');
+const Command = require('../../structures/Command');
 
 module.exports = class GitHUb extends Command {
   get name() { return 'github'; }
@@ -9,7 +9,7 @@ module.exports = class GitHUb extends Command {
   }; }
 
   exec(message) {
-    return this.client.createMessage(message.channel.id, 'Here is the link to my source code!\n:arrow_forward:  <https://github.com/trello-talk/TrelloBot>');
+    return this.client.createMessage(message.channel.id, 'Here is the link to my source code!\n\`▶\` <https://github.com/trello-talk/TrelloBot>');
   }
 
   get metadata() { return {

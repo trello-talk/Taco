@@ -3,8 +3,16 @@ module.exports = {
   clientOptions: {
     autoReconnect: true,
     disableEveryone: true, // Whether the bot should be able to ping @everyone
-    disabledEvents: ["TYPING_START", "TYPING_STOP"],
-    maxCachedMessages: 250
+    maxCachedMessages: 250,
+    intents: [
+      "guilds",
+      "guildEmojis",
+      "guildWebhooks",
+      "guildMessages",
+      "guildMessageReactions",
+      "directMessages",
+      "directMessageReactions"
+    ] // 13865 - Intent Raw.
   },
   sharding: {
     totalShards: "auto",
