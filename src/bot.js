@@ -24,6 +24,7 @@ const CommandLoader = require('./commandloader');
 const logger = require('./logger')('[DISCORD]');
 const posterLogger = require('./logger')('[POSTER]');
 const path = require('path');
+const Airbrake = require('@airbrake/node');
 
 class TrelloBot extends Eris.Client {
   constructor({ configPath, packagePath, mainDir } = {}) {
@@ -36,6 +37,8 @@ class TrelloBot extends Eris.Client {
     this.logger = logger;
     this.config = config;
     this.typingIntervals = new Map();
+    if (config.airbrake)
+      this.airbrake = new Airbrake.Notifier(config.airbrake);
 
     // Events
     this.on('ready', () => logger.info('All shards ready.'));

@@ -7,5 +7,13 @@ module.exports = {
   embedColor: 4365262,
   webhookURL: "",
   webhookBetaURL: "",
-  sudoID: "620126394390675466"
+  sudoID: "620126394390675466",
+  // Airbrake is not required
+  airbrake: {
+    projectId: '',
+    projectKey: '',
+    reporter: 'xhr',
+    host: 'https://myerrbit.com',
+    environment: 'production',
+  }
 };
