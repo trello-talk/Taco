@@ -17,6 +17,7 @@
 */
 
 const logger = require('./logger')('[EVENTS]');
+const ArgumentInterpreter = require('./structures/ArgumentInterpreter');
 const Util = require('./util');
 
 module.exports = class Events {
@@ -40,7 +41,8 @@ module.exports = class Events {
     }
 
     // Command parsing
-    const args = Util.Prefix.strip(message, this.client).split(' ');
+    const argInterpretor = new ArgumentInterpreter(Util.Prefix.strip(message, this.client));
+    const args = argInterpretor.parseAsStrings();
     const commandName = args.splice(0, 1)[0];
     const command = this.client.cmds.get(commandName, message);
     if (!message.content.match(Util.Prefix.regex(this.client)) || !command) return;
@@ -48,8 +50,17 @@ module.exports = class Events {
     try {
       await command._exec(message, { args });
     } catch (e) {
-      logger.error(`The '${command.name}' command failed.`);
-      console.log(e);
+      if (this.client.airbrake) {
+        this.client.airbrake.notify({
+          error: e,
+          context: {
+            command: command.name
+          }
+        });
+      } else {
+        logger.error(`The '${command.name}' command failed.`);
+        console.log(e);
+      }
       this.client.createMessage(message.channel.id,
         ':fire: An error occurred while processing that command!');
       this.client.stopTyping(message.channel);

@@ -38,7 +38,16 @@ class TrelloBot extends Eris.Client {
     this.config = config;
     this.typingIntervals = new Map();
     if (config.airbrake)
-      this.airbrake = new Airbrake.Notifier(config.airbrake);
+      this.airbrake = new Airbrake.Notifier({
+        ...config.airbrake,
+        keysBlacklist: [
+          config.token,
+          config.redis.password,
+          config.pg.password,
+          config.trello.token,
+        ],
+        version: pkg.version
+      });
 
     // Events
     this.on('ready', () => logger.info('All shards ready.'));
