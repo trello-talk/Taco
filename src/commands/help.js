@@ -46,9 +46,10 @@ module.exports = class Help extends Command {
     const prefix = prefixes[0];
     if (args[0]) { // Display help on a command
       const command = this.client.cmds.get(args[0]);
-      if (!command) return;
-      const { usage = undefined } = command.metadata;
-      if (!command) message.reply(`The command ${args[0]} was not found.`); else {
+      if (!command)
+        this.client.createMessage(message.channel.id,`The command \`${args[0]}\` was not found.`);
+      else {
+        const { usage = undefined } = command.metadata;
         const embed = {
           title: `${prefix}${command.name}`,
           color: this.client.config.embedColor,
