@@ -12,7 +12,6 @@ module.exports = {
   airbrake: {
     projectId: '',
     projectKey: '',
-    reporter: 'xhr',
     host: 'https://myerrbit.com',
     environment: 'production',
   }

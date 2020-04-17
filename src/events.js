@@ -51,7 +51,7 @@ module.exports = class Events {
       await command._exec(message, { args });
     } catch (e) {
       if (this.client.airbrake) {
-        this.client.airbrake.notify({
+        await this.client.airbrake.notify({
           error: e,
           context: {
             command: command.name
