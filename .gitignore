@@ -3,3 +3,4 @@ config/default.json
 assets/video/thumbnail
 Config
 cache
+package-lock.json
