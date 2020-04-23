@@ -28,6 +28,7 @@ module.exports = class Events {
 
   async onMessage(message) {
     if (message.author.bot || message.author.system) return;
+
     // Check to see if bot can send messages
     if (message.channel.type !== 1 &&
       !message.channel.permissionsOf(this.client.user.id).has('sendMessages')) return;
@@ -40,6 +41,9 @@ module.exports = class Events {
       if (sudoBot) return;
     }
 
+    // TODO: Use database and stuff for localization
+    const _ = this.client.locale.createModule();
+
     // Command parsing
     const argInterpretor = new ArgumentInterpreter(Util.Prefix.strip(message, this.client));
     const args = argInterpretor.parseAsStrings();
@@ -48,7 +52,7 @@ module.exports = class Events {
     if (!message.content.match(Util.Prefix.regex(this.client)) || !command) return;
 
     try {
-      await command._exec(message, { args });
+      await command._exec(message, { args, _ });
     } catch (e) {
       if (this.client.airbrake) {
         await this.client.airbrake.notify({

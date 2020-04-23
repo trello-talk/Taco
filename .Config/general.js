@@ -8,6 +8,8 @@ module.exports = {
   webhookURL: "",
   webhookBetaURL: "",
   sudoID: "620126394390675466",
+  sourceLocale: 'en_US',
+  localePath: "./locale/bot",
   // Airbrake is not required
   airbrake: {
     projectId: '',

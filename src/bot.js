@@ -21,6 +21,7 @@ const dbots = require('dbots');
 const Database = require('./database');
 const EventHandler = require('./events');
 const CommandLoader = require('./commandloader');
+const LocaleHandler = require('./localehandler');
 const logger = require('./logger')('[DISCORD]');
 const posterLogger = require('./logger')('[POSTER]');
 const path = require('path');
@@ -98,6 +99,8 @@ class TrelloBot extends Eris.Client {
     this.cmds.reload();
     this.cmds.preloadAll();
     this.eventHandler = new EventHandler(this);
+    this.locale = new LocaleHandler(this, path.join(this.dir, this.config.localePath), this.config.debug);
+    this.locale.reload();
     if (Object.keys(this.config.botlists).length) await this.initPoster();
   }
 
