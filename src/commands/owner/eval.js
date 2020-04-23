@@ -44,8 +44,6 @@ module.exports = class Eval extends Command {
   }
 
   get metadata() { return {
-    category: 'Developer',
-    description: 'Do a thing.',
-    usage: '<code>',
+    category: 'categories.dev',
   }; }
 };

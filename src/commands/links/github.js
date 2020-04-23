@@ -32,7 +32,6 @@ module.exports = class GitHUb extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Sends the bot\'s open source link.',
+    category: 'categories.general',
   }; }
 };

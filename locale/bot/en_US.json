@@ -1,4 +1,9 @@
 {
+  "_": {
+    "name": "English (United States)",
+    "emoji": "us"
+  },
+
   "reload": {
     "reloading": "Reloading commands...",
     "done": "Reloaded commands."
@@ -61,6 +66,7 @@
     },
     "version": "Version",
     "uptime": "Uptime",
+    "note": "Note",
     "mem_usage": "Memory Usage",
     "server": {
       "one": "Server",
@@ -80,6 +86,68 @@
     "second": {
       "one": "{{seconds}} second",
       "many": "{{seconds}} seconds"
+    }
+  },
+  "categories": {
+    "general": "General",
+    "dev": "Developer",
+    "user": "User Management",
+    "view": "Viewing",
+    "webhook": "Webhooks",
+    "edit": "Editing",
+    "hidden": "Hidden",
+    "misc": "Miscellaneous"
+  },
+  "commands": {
+    "auth": {
+      "description": "Get the auth link to connect your Discord account to your Trello account."
+    },
+    "donate": {
+      "description": "Get the donation links for the developer."
+    },
+    "github": {
+      "description": "Sends the bot's open source link."
+    },
+    "invite": {
+      "description": "Sends the bot invite link."
+    },
+    "serverinvite": {
+      "description": "Get the invite for the support server."
+    },
+    "asynceval": {
+      "description": "Evaluates code asynchronously.",
+      "note": "Due to the added async IIFE wrapper in this command, it is necessary to use the return statment to return a result.\ne.g. `T!aeval return 1`",
+      "usage": "<code>"
+    },
+    "eval": {
+      "description": "Evaluates code.",
+      "usage": "<code>"
+    },
+    "exec": {
+      "description": "Utilizes `child_process.exec`.",
+      "usage": "<command> ..."
+    },
+    "reload": {
+      "description": "Reload commands."
+    },
+    "restart": {
+      "description": "Restarts the bot."
+    },
+    "hangman": {
+      "description": "???"
+    },
+    "help": {
+      "description": "Shows the help message and gives information on commands.",
+      "usage": "[command]"
+    },
+    "info": {
+      "description": "Get information about the bot."
+    },
+    "ping": {
+      "description": "Pong!"
+    },
+    "shardinfo": {
+      "description": "Gives the stats for every shard."
     }
   }
 }

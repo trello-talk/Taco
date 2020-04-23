@@ -31,7 +31,6 @@ module.exports = class Hangman extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: '???',
+    category: 'categories.hidden',
   }; }
 };

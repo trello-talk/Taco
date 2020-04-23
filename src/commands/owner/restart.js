@@ -34,7 +34,6 @@ module.exports = class Restart extends Command {
   }
 
   get metadata() { return {
-    category: 'Developer',
-    description: 'Restarts the bot.',
+    category: 'categories.dev',
   }; }
 };

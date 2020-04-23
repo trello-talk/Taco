@@ -45,10 +45,6 @@ module.exports = class AsyncEval extends Command {
   }
 
   get metadata() { return {
-    category: 'Developer',
-    description: 'Do a thing.\n\n' +
-    'NOTE: Due to the added async IIFE wrapper in this command, ' +
-    'it is necessary to use the return statment to return a result\ne.g. `T!aeval return 1`',
-    usage: '<code>',
+    category: 'categories.dev',
   }; }
 };

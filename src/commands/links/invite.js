@@ -35,7 +35,6 @@ module.exports = class Invite extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Sends the bot invite link.',
+    category: 'categories.general',
   }; }
 };

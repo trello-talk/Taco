@@ -48,15 +48,17 @@ module.exports = class Help extends Command {
       if (!command)
         this.client.createMessage(message.channel.id, _('help.not_found', { command: args[0] }));
       else {
-        const { usage = undefined } = command.metadata;
+        const hasDesc = _.valid(`commands.${command.name}.description`);
         const embed = {
           title: `${prefix}${command.name}`,
           color: this.client.config.embedColor,
           fields: [
             { name: _('words.usage'),
-              value: `${prefix}${command.name}${usage ? ` \`${usage}\`` : ''}` }
+              value: `${prefix}${command.name}${
+                _.valid(`commands.${command.name}.usage`) ?
+                  ` \`${_(`commands.${command.name}.usage`)}\`` : ''}` }
           ],
-          description: command.metadata.description
+          description: hasDesc ? _(`commands.${command.name}.description`) : undefined
         };
 
         // Cooldown
@@ -79,14 +81,13 @@ module.exports = class Help extends Command {
         if (command.metadata.image)
           embed.image = { url: command.metadata.image };
 
-        // Extras
-        if (command.metadata.extra) {
-          Util.keyValueForEach(command.metadata.extra, (k, v) => {
-            const o = { name: k, value: v };
-            if (Array.isArray(v)) o.value = `${v.join(', ')}`;
-            embed.fields.push(o);
+        // Note
+        if (_.valid(`commands.${command.name}.note`))
+          embed.fields.push({
+            name: _('words.note'),
+            value: _(`commands.${command.name}.note`)
           });
-        }
+
         return this.client.createMessage(message.channel.id, { embed });
       }
     } else { // Display general help command
@@ -113,7 +114,7 @@ module.exports = class Help extends Command {
       // List categories
       Util.keyValueForEach(categories, (k, v) => {
         embed.fields.push({
-          name: `**${k}**`,
+          name: `**${_(k)}**`,
           value: '```' + v.join(', ') + '```',
           inline: true
         });
@@ -123,8 +124,6 @@ module.exports = class Help extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Shows the help message and gives information on commands.',
-    usage: '[command]',
+    category: 'categories.general',
   }; }
 };

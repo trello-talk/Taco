@@ -35,7 +35,6 @@ module.exports = class ServerInvite extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Get the invite for the support server.',
+    category: 'categories.general',
   }; }
 };

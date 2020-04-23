@@ -83,7 +83,6 @@ module.exports = class Info extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Get information about the bot.',
+    category: 'categories.general',
   }; }
 };

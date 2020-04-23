@@ -58,7 +58,6 @@ module.exports = class ShardInfo extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Gives the stats for every shard.',
+    category: 'categories.general',
   }; }
 };

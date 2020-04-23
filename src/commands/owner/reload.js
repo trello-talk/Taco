@@ -50,7 +50,6 @@ module.exports = class Reload extends Command {
   }
 
   get metadata() { return {
-    category: 'Developer',
-    description: 'Reload commands.',
+    category: 'categories.dev',
   }; }
 };

@@ -34,7 +34,6 @@ module.exports = class Donate extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Get the donation links for the developer.',
+    category: 'categories.general',
   }; }
 };

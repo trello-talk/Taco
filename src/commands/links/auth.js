@@ -34,7 +34,6 @@ module.exports = class Auth extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Get the auth link to connect your Discord account to your Trello account.',
+    category: 'categories.general',
   }; }
 };

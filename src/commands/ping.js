@@ -40,7 +40,6 @@ module.exports = class Ping extends Command {
   }
 
   get metadata() { return {
-    category: 'General',
-    description: 'Pong!',
+    category: 'categories.general',
   }; }
 };

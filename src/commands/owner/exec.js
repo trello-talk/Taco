@@ -44,8 +44,6 @@ module.exports = class Exec extends Command {
   }
 
   get metadata() { return {
-    category: 'Developer',
-    description: 'Utilizes child_process.exec',
-    usage: '<command> ...',
+    category: 'categories.dev',
   }; }
 };

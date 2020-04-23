@@ -78,8 +78,7 @@ class LocaleHandler {
       const localeJSON = this.locales.get(locale);
       const source = this.locales.get(this.config.sourceLocale);
       const localeBase = localeJSON ? lodash.defaultsDeep(localeJSON, source) : source;
-      const localeString = lodash.get(localeBase, string);
-      return !!localeString;
+      return lodash.has(localeBase, string);
     };
 
     _.toLocaleString = number =>
