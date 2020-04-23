@@ -26,9 +26,11 @@ module.exports = class Auth extends Command {
     cooldown: 0,
   }; }
 
-  exec(message) {
+  exec(message, { _ }) {
+    if (!this.client.config.authURL)
+      return this.client.createMessage(message.channel.id, _('links.auth.fail'));
     return this.client.createMessage(message.channel.id,
-      `Authorize your Trello account with your Discord here: **<${this.client.config.authURL}>**`);
+      `${_('links.auth.start')} **<${this.client.config.authURL}>**`);
   }
 
   get metadata() { return {

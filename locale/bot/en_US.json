@@ -1,3 +1,85 @@
 {
-  "hangman_response": "I'm not a game bot."
+  "reload": {
+    "reloading": "Reloading commands...",
+    "done": "Reloaded commands."
+  },
+  "reloadlocale": {
+    "reloading": "Reloading locales...",
+    "done": "Reloaded locales."
+  },
+  "responses": {
+    "restart": "Restarting shard...",
+    "response": "I'm not a game bot.",
+    "took": "Took {{ms}} ms."
+  },
+  "links": {
+    "auth": {
+      "start": "Authorize your Trello account with your Discord here:",
+      "fail": "The bot owner hasn't supplied an authorization link!"
+    },
+    "donate": {
+      "start": "Support development by donating!",
+      "fail": "The bot owner hasn't supplied any donation links!"
+    },
+    "github": "Here is the link to my source code:",
+    "invite": {
+      "start": "Here are the links to invite me to other servers!",
+      "fail": "The bot owner hasn't supplied any invite links!"
+    },
+    "serverinvite": {
+      "start": "Here are the links to invite me to other servers!",
+      "fail": "The bot owner hasn't supplied any support server links!"
+    }
+  },
+  "help": {
+    "no_embed": "I need to be able to embed links in order to display help commands!",
+    "not_found": "The command `{{&command}}` was not found.",
+    "header": "{{&username}} (Running Modified [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: {{&link}}",
+    "footer": "`{{&prefix}}help [command]` for more info."
+  },
+  "info": {
+    "no_embed": "I need to be able to embed links in order to display bot information!",
+    "title": "Information about {{&username}}",
+    "faux": "This bot is using a modified version of [Faux](https://github.com/Snazzah/Faux)."
+  },
+  "ping": {
+    "message": "Pong!",
+    "ws": "WS: {{ms}} ms",
+    "rest": "REST: {{ms}} ms"
+  },
+  "shardinfo": {
+    "no_embed": "I need to be able to embed links in order to display bot shard information!",
+    "title": "Information about {{&username}}'s Shards",
+    "line": "**`{{id}}:`** {{status}}, {{ms}} ms, {{guilds}} guilds"
+  },
+  "words": {
+    "usage": "Usage",
+    "cooldown": "Cooldown",
+    "alias": {
+      "one": "Alias",
+      "many": "Aliases"
+    },
+    "version": "Version",
+    "uptime": "Uptime",
+    "mem_usage": "Memory Usage",
+    "server": {
+      "one": "Server",
+      "many": "Servers"
+    },
+    "website": {
+      "one": "Website",
+      "many": "Websites"
+    },
+    "trello_board": {
+      "one": "Trello Board",
+      "many": "Trello Boards"
+    },
+    "donate": "Donate"
+  },
+  "format": {
+    "second": {
+      "one": "{{seconds}} second",
+      "many": "{{seconds}} seconds"
+    }
+  }
 }

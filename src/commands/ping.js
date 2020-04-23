@@ -26,14 +26,17 @@ module.exports = class Ping extends Command {
     cooldown: 0,
   }; }
 
-  async exec(message) {
+  async exec(message, { _ }) {
     const currentPing = Array.from(this.client.shards.values())
       .map(shard => shard.latency).reduce((prev, val) => prev + val, 0);
     const timeBeforeMessage = Date.now();
     const sentMessage = await this.client.createMessage(
-      message.channel.id, `> :ping_pong: ***Pong!***\n> WS: ${currentPing} ms`);
+      message.channel.id, `> :ping_pong: ***${_('ping.message')}***\n` +
+      `> ${_('ping.ws', { ms: _.toLocaleString(currentPing) })}`);
     await sentMessage.edit(
-      `> :ping_pong: ***Pong!***\n> WS: ${currentPing} ms\n> REST: ${Date.now() - timeBeforeMessage} ms`);
+      `> :ping_pong: ***${_('ping.message')}***\n` +
+      `> ${_('ping.ws', { ms: _.toLocaleString(currentPing) })}\n` +
+      `> ${_('ping.rest', { ms: _.toLocaleString(Date.now() - timeBeforeMessage) })}`);
   }
 
   get metadata() { return {

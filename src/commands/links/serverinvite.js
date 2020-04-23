@@ -26,12 +26,11 @@ module.exports = class ServerInvite extends Command {
     cooldown: 0,
   }; }
 
-  exec(message) {
+  exec(message, { _ }) {
     if (!Array.isArray(this.client.config.supportServers) || !this.client.config.invites[0])
-      return this.client.createMessage(message.channel.id,
-        'The bot owner hasn\'t supplied any support server links!');
+      return this.client.createMessage(message.channel.id, _('links.serverinvite.fail'));
     return this.client.createMessage(message.channel.id,
-      'Here are the links to invite me to other servers!\n' +
+      _('links.serverinvite.start') + '\n' +
       this.client.config.supportServers.map(inv => `\`▶\` <${inv}>`).join('\n'));
   }
 

@@ -38,14 +38,15 @@ module.exports = class Reload extends Command {
     } else return fallback;
   }
 
-  async exec(message) {
+  async exec(message, { _ }) {
     if (!this.client.config.elevated.includes(message.author.id)) return;
+    const reloadingEmoji = this.emojiEmbedFallback(message, '632444546961375232', ':recycle:');
     const sentMessage = await this.client.createMessage(message.channel.id,
-      `${this.emojiEmbedFallback(message, '632444546961375232', ':recycle:')} Reloading commands...`);
+      `${reloadingEmoji} ${_('reload.reloading')}`);
     this.client.cmds.reload();
     this.client.cmds.preloadAll();
     const reloadEmoji = this.emojiEmbedFallback(message, '632444546684551183', ':white_check_mark:');
-    return sentMessage.edit(`${reloadEmoji} Reloaded commands.`);
+    return sentMessage.edit(`${reloadEmoji} ${_('reload.done')}`);
   }
 
   get metadata() { return {

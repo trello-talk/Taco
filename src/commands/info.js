@@ -43,10 +43,9 @@ module.exports = class Info extends Command {
     return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
   }
 
-  async exec(message) {
+  async exec(message, { _ }) {
     if (!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id,
-        'I need to be able to embed links in order to display bot information!');
+      return this.client.createMessage(message.channel.id, _('info.no_embed'));
 
     const servers = this.client.guilds.size;
     const hasWebsite = !!this.client.config.website;
@@ -57,15 +56,25 @@ module.exports = class Info extends Command {
     const donateEmoji = this.emojiEmbedFallback(message, '625323800048828453', ':money_with_wings:');
     const embed = {
       color: this.client.config.embedColor,
-      title: `Information about ${this.client.user.username}.`,
-      description: 'This bot is using a modified version of [Faux](https://github.com/Snazzah/Faux)\n\n'
-        + `**:computer: ${this.client.user.username} Version** ${this.client.pkg.version}\n`
-        + `**:clock: Uptime**: ${process.uptime() ? Util.toHHMMSS(process.uptime().toString()) : '???'}\n`
-        + `**:gear: Memory Usage**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
-        + `**:file_cabinet: Servers**: ${Util.toHHMMSS(servers)}\n\n`
-        + (hasWebsite ? `**:globe_with_meridians: Website**: ${this.client.config.website}\n` : '')
-        + (hasTrelloBoard ? `**${boardEmoji} Trello Board**: ${this.client.config.trelloBoard}\n` : '')
-        + (hasDonationLinks ? `**${donateEmoji} Donate**: ${this.client.config.donate[0]}\n` : ''),
+      title: _('info.title', { username: this.client.user.username }),
+      description: _('info.faux') + '\n\n'
+        + `**:computer: ${this.client.user.username} ${_('words.version')}** ${this.client.pkg.version}\n`
+
+        + `**:clock: ${_('words.uptime')}**: ${
+          process.uptime() ? Util.toHHMMSS(process.uptime().toString()) : '???'}\n`
+
+        + `**:gear: ${_('words.mem_usage')}**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
+
+        + `**:file_cabinet: ${_('words.server.one')}**: ${Util.toHHMMSS(servers)}\n\n`
+
+        + (hasWebsite ? `**:globe_with_meridians: ${_('words.website.one')}**: ${
+          this.client.config.website}\n` : '')
+
+        + (hasTrelloBoard ? `**${boardEmoji} ${_('words.trello_board.one')}**: ${
+          this.client.config.trelloBoard}\n` : '')
+
+        + (hasDonationLinks ? `**${donateEmoji} ${_('words.donate')}**: ${
+          this.client.config.donate[0]}\n` : ''),
       thumbnail: {
         url: this.client.config.iconURL
       }

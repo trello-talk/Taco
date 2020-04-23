@@ -26,8 +26,8 @@ module.exports = class Hangman extends Command {
     listed: false,
   }; }
 
-  exec(message) {
-    return this.client.createMessage(message.channel.id, 'I\'m not a game bot.');
+  exec(message, { _ }) {
+    return this.client.createMessage(message.channel.id, _('hangman.response'));
   }
 
   get metadata() { return {

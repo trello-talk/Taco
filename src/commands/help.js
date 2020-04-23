@@ -36,10 +36,9 @@ module.exports = class Help extends Command {
     return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
   }
 
-  exec(message, { args }) {
+  exec(message, { args, _ }) {
     if (!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id,
-        'I need to be able to embed links in order to display help commands!');
+      return this.client.createMessage(message.channel.id, _('help.no_embed'));
 
     const prefixes = [...this.client.config.prefixes,
       `@${this.client.user.username}#${this.client.user.discriminator}`];
@@ -47,14 +46,14 @@ module.exports = class Help extends Command {
     if (args[0]) { // Display help on a command
       const command = this.client.cmds.get(args[0]);
       if (!command)
-        this.client.createMessage(message.channel.id,`The command \`${args[0]}\` was not found.`);
+        this.client.createMessage(message.channel.id, _('help.not_found', { command: args[0] }));
       else {
         const { usage = undefined } = command.metadata;
         const embed = {
           title: `${prefix}${command.name}`,
           color: this.client.config.embedColor,
           fields: [
-            { name: 'Usage',
+            { name: _('words.usage'),
               value: `${prefix}${command.name}${usage ? ` \`${usage}\`` : ''}` }
           ],
           description: command.metadata.description
@@ -63,13 +62,16 @@ module.exports = class Help extends Command {
         // Cooldown
         if (command.options.cooldown)
           embed.fields.push({
-            name: 'Cooldown',
-            value: `${command.options.cooldown} seconds`, inline: false
+            name: _('words.cooldown'),
+            value: _('format.second.' + (command.options.cooldown == 1 ? 'one' : 'many'), {
+              seconds: _.toLocaleString(command.options.cooldown)
+            }),
+            inline: false
           });
 
         // Aliases
         if (command.options.aliases.length !== 0) embed.fields.push({
-          name: 'Aliases',
+          name: _('words.alias.' + (command.options.aliases.length == 1 ? 'one' : 'many')),
           value: command.options.aliases.map(a => `\`${prefix}${a}\``).join(', ')
         });
 
@@ -90,10 +92,11 @@ module.exports = class Help extends Command {
     } else { // Display general help command
       const embed = {
         color: this.client.config.embedColor,
-        description: `${this.client.user.username} (Running Modified [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: ${this.client.config.supportServers[0]}`,
-        footer: {
-          text: `\`${prefix}help [command]\` for more info`
-        },
+        description: _('help.header', {
+          username: this.client.user.username,
+          link: this.client.config.supportServers[0],
+        }),
+        footer: { text: _('help.footer', { prefix }) },
         fields: []
       };
 
@@ -106,6 +109,7 @@ module.exports = class Help extends Command {
           categories[v.metadata.category].push(string);
         else categories[v.metadata.category] = [string];
       });
+
       // List categories
       Util.keyValueForEach(categories, (k, v) => {
         embed.fields.push({

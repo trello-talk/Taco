@@ -30,10 +30,9 @@ module.exports = class ShardInfo extends Command {
     return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
   }
 
-  async exec(message) {
+  async exec(message, { _ }) {
     if (!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id,
-        'I need to be able to embed links in order to display bot shard information!');
+      return this.client.createMessage(message.channel.id, _('shardinfo.no_embed'));
 
     const serverMap = {};
     this.client.guilds.map(guild => {
@@ -44,11 +43,13 @@ module.exports = class ShardInfo extends Command {
     });
     const embed = {
       color: this.client.config.embedColor,
-      title: `Information about ${this.client.user.username}'s Shards`,
-      description: this.client.shards.map(shard =>
-        `**\`${shard.id}:\`** ${shard.status.toUpperCase()}, ` +
-        `${shard.latency}ms, ${serverMap[shard.id]} guilds`
-      ).join('\n'),
+      title: _('shardinfo.title', { username: this.client.user.username }),
+      description: this.client.shards.map(shard => _('shardinfo.line', {
+        id: shard.id,
+        status: shard.status.toUpperCase(),
+        ms: _.toLocaleString(shard.latency),
+        guilds: _.toLocaleString(serverMap[shard.id])
+      })).join('\n'),
       thumbnail: {
         url: this.client.config.iconURL
       }

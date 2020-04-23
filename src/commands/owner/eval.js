@@ -30,13 +30,14 @@ module.exports = class Eval extends Command {
   }; }
 
   // eslint-disable-next-line no-unused-vars
-  async exec(message, { args }) {
+  async exec(message, { args, _ }) {
     if (!this.client.config.elevated.includes(message.author.id)) return;
     try {
       const start = Date.now();
       const result = eval(Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' '));
       const time = Date.now() - start;
-      return this.client.createMessage(message.channel.id, `Took ${time} ms\n\`\`\`js\n${result}\`\`\`\n`);
+      return this.client.createMessage(message.channel.id,
+        `${_('responses.eval', { ms: _.toLocaleString(time) })}\n\`\`\`js\n${result}\`\`\`\n`);
     } catch (e) {
       return this.client.createMessage(message.channel.id, '```js\n' + e.stack + '\n```');
     }

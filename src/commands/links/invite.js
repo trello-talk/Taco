@@ -26,12 +26,11 @@ module.exports = class Invite extends Command {
     cooldown: 0,
   }; }
 
-  exec(message) {
+  exec(message, { _ }) {
     if (!Array.isArray(this.client.config.invites) || !this.client.config.invites[0])
-      return this.client.createMessage(message.channel.id,
-        'The bot owner hasn\'t supplied any invite links!');
+      return this.client.createMessage(message.channel.id, _('links.invite.fail'));
     return this.client.createMessage(message.channel.id,
-      'Here are the links to invite me to other servers!\n' +
+      _('links.invite.start') + '\n' +
       this.client.config.invites.map(inv => `\`▶\` <${inv}>`).join('\n'));
   }
 
