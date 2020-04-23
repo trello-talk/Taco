@@ -15,7 +15,7 @@
   "responses": {
     "restart": "Restarting shard...",
     "response": "I'm not a game bot.",
-    "took": "Took {{ms}} ms."
+    "eval": "Took {{ms}} ms."
   },
   "links": {
     "auth": {
@@ -56,6 +56,10 @@
     "no_embed": "I need to be able to embed links in order to display bot shard information!",
     "title": "Information about {{&username}}'s Shards",
     "line": "**`{{id}}:`** {{status}}, {{ms}} ms, {{guilds}} guilds"
+  },
+  "locale": {
+    "start": "Available Locales:",
+    "footer": "`{{&prefix}}locale setuser [locale]` or `{{&prefix}}locale setserver [locale]` to set locale."
   },
   "words": {
     "usage": "Usage",
@@ -130,6 +134,9 @@
     "reload": {
       "description": "Reload commands."
     },
+    "reloadlocale": {
+      "description": "Reload locale files."
+    },
     "restart": {
       "description": "Restarts the bot."
     },
@@ -145,6 +152,9 @@
     },
     "ping": {
       "description": "Pong!"
+    },
+    "locale": {
+      "description": "Shows a list of all locales."
     },
     "shardinfo": {
       "description": "Gives the stats for every shard."

@@ -51,6 +51,10 @@ class LocaleHandler {
     });
   }
 
+  get source() {
+    return this.locales.get(this.config.sourceLocale);
+  }
+
   load(filePath) {
     logger.info('Loading locale', filePath);
     const json = reload(filePath);
@@ -84,7 +88,14 @@ class LocaleHandler {
     _.toLocaleString = number =>
       number.toLocaleString((locale || this.config.sourceLocale).replace('_', '-'));
 
-    _.locale = locale;
+    _.locale = locale || this.config.sourceLocale;
+
+    _.json = () => {
+      const localeJSON = this.locales.get(locale);
+      const source = this.locales.get(this.config.sourceLocale);
+      const localeBase = localeJSON ? lodash.defaultsDeep(localeJSON, source) : source;
+      return localeBase;
+    };
 
     return _;
   }

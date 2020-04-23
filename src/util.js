@@ -41,6 +41,32 @@ exports.toHHMMSS = string => {
 
 exports.formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
+// https://stackoverflow.com/a/19101235/6467130
+exports.flattenObject = (data) => {
+  const result = {};
+  function recurse (cur, prop) {
+    if (Object(cur) !== cur) {
+      result[prop] = cur;
+    } else if (Array.isArray(cur)) {
+      const l = cur.length;
+      for (let i = 0; i < l; i++)
+        recurse(cur[i], prop + '[' + i + ']');
+      if (l == 0)
+        result[prop] = [];
+    } else {
+      let isEmpty = true;
+      for (const p in cur) {
+        isEmpty = false;
+        recurse(cur[p], prop ? prop + '.' + p : p);
+      }
+      if (isEmpty && prop)
+        result[prop] = {};
+    }
+  }
+  recurse(data, '');
+  return result;
+};
+
 exports.Random = {
   int(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
