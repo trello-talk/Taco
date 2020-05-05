@@ -333,7 +333,7 @@ class Trello {
   }
 
   async handleResponse({ response, message, client, _ }) {
-    if (response.status == 410) {
+    if (response.status == 401) {
       await client.pg.models.get('user').removeAuth(message.author);
       await client.createMessage(message.channel.id, _('trello_response.unauthorized'));
       return true;
