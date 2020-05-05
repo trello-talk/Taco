@@ -32,26 +32,15 @@ module.exports = class Info extends Command {
     cooldown: 0,
   }; }
 
-  canUseEmojis(message) {
-    return message.channel.type === 1 ||
-      message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
-  }
-
-  emojiEmbedFallback(message, customEmojiId, fallback) {
-    if (this.canUseEmojis(message) && this.client.guilds.has('617911034555924502')) {
-      const emoji = this.client.guilds.get('617911034555924502').emojis.find(e => e.id == customEmojiId);
-      return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
-    } else return fallback;
-  }
-
   async exec(message, { _ }) {
     const servers = this.client.guilds.size;
     const hasWebsite = !!this.client.config.website;
     const hasTrelloBoard = this.client.config.trelloBoard;
     const hasDonationLinks = Array.isArray(this.client.config.donate) && this.client.config.donate[0];
 
-    const boardEmoji = this.emojiEmbedFallback(message, '624184549001396225', ':blue_book:');
-    const donateEmoji = this.emojiEmbedFallback(message, '625323800048828453', ':money_with_wings:');
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
+    const boardEmoji = emojiFallback('624184549001396225', ':blue_book:');
+    const donateEmoji = emojiFallback('625323800048828453', ':money_with_wings:');
     const embed = {
       color: this.client.config.embedColor,
       title: _('info.title', { username: this.client.user.username }),

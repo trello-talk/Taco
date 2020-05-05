@@ -32,11 +32,6 @@ module.exports = class Help extends Command {
     cooldown: 0,
   }; }
 
-  canUseEmojis(message) {
-    return message.channel.type === 1 ||
-      message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
-  }
-
   exec(message, { args, _, prefixUsed }) {
     if (args[0]) {
       // Display help on a command

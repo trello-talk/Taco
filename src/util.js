@@ -205,6 +205,8 @@ exports.CommandPermissions = {
     message.channel.permissionsOf(client.user.id).has('attachFiles'),
   embed: (client, message) => message.channel.type === 1 ||
     message.channel.permissionsOf(client.user.id).has('embedLinks'),
+  emoji: (client, message) => message.channel.type === 1 ||
+    message.channel.permissionsOf(client.user.id).has('externalEmojis'),
   guild: (_, message) => !!message.guildID,
   elevated: (client, message) => client.config.elevated.includes(message.author.id),
   trelloRole: (_, message) => {
@@ -219,4 +221,13 @@ exports.CommandPermissions = {
   },
   auth: (_, __, { userData }) => userData && userData.trelloToken && userData.trelloID,
   selectedBoard: (_, __, { userData }) => userData && userData.selectedBoard
+};
+
+exports.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) => {
+  return (id, fallback) => {
+    if (exports.CommandPermissions.emoji(client, message) && client.guilds.has(emojiGuildID)) {
+      const emoji = this.client.guilds.get(emojiGuildID).emojis.find(e => e.id == id);
+      return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
+    } else return fallback;
+  };
 };

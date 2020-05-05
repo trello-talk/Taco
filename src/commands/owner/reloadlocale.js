@@ -17,6 +17,7 @@
 */
 
 const Command = require('../../structures/Command');
+const Util = require('../../util');
 
 module.exports = class ReloadLocale extends Command {
   get name() { return 'reloadlocale'; }
@@ -27,24 +28,13 @@ module.exports = class ReloadLocale extends Command {
     listed: false,
   }; }
 
-  canUseEmojis(message) {
-    return message.channel.type === 1 ||
-      message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
-  }
-
-  emojiEmbedFallback(message, customEmojiId, fallback) {
-    if (this.canUseEmojis(message) && this.client.guilds.has('617911034555924502')) {
-      const emoji = this.client.guilds.get('617911034555924502').emojis.find(e => e.id == customEmojiId);
-      return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
-    } else return fallback;
-  }
-
   async exec(message, { _ }) {
-    const reloadingEmoji = this.emojiEmbedFallback(message, '632444546961375232', ':recycle:');
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
+    const reloadingEmoji = emojiFallback('632444546961375232', ':recycle:');
     const sentMessage = await this.client.createMessage(message.channel.id,
       `${reloadingEmoji} ${_('reloadlocale.reloading')}`);
     this.client.locale.reload();
-    const reloadEmoji = this.emojiEmbedFallback(message, '632444546684551183', ':white_check_mark:');
+    const reloadEmoji = emojiFallback('632444546684551183', ':white_check_mark:');
     return sentMessage.edit(`${reloadEmoji} ${_('reloadlocale.done')}`);
   }
 
