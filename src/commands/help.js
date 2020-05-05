@@ -23,7 +23,11 @@ module.exports = class Help extends Command {
   get name() { return 'help'; }
 
   get _options() { return {
-    aliases: ['?', 'h', 'commands', 'cmds', 'c'],
+    aliases: [
+      '?', 'h', 'commands', 'cmds', 'c', // English
+      'yardim', 'yardım', 'komutlar', // Turkish
+      'ajuda' // Spanish
+    ],
     permissions: ['embed'],
     cooldown: 0,
   }; }

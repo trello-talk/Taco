@@ -23,7 +23,11 @@ module.exports = class Info extends Command {
   get name() { return 'info'; }
 
   get _options() { return {
-    aliases: ['i'],
+    aliases: [
+      'i', 'bot', 'information', // English
+      'bilgi', // Turkish
+      'informacion' // Spanish
+    ],
     permissions: ['embed'],
     cooldown: 0,
   }; }
