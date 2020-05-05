@@ -49,16 +49,22 @@ module.exports = class Events {
     const command = this.client.cmds.get(commandName, message);
     if (!message.content.match(Util.Prefix.regex(this.client)) || !command) return;
 
-    // TODO: Use database and stuff for localization and trello auth
+    // Postgres Data
+    // TODO: Server data
+    const userData = await this.client.pg.models.get('user').onlyGet(message.author.id);
+    const locale = userData ? userData.locale : null;
+
     const prefixUsed = message.content.match(Util.Prefix.regex(this.client))[1];
     const cleanPrefixUsed = message.content.match(new RegExp(`^<@!?${this.client.user.id}>`)) ?
       `@${this.client.user.username}#${this.client.user.discriminator} ` : prefixUsed;
-    const _ = this.client.locale.createModule(null, { raw: prefixUsed, clean: cleanPrefixUsed });
-    const trello = new Trello(this.client, this.client.config.trello.token);
+
+    const _ = this.client.locale.createModule(locale, { raw: prefixUsed, clean: cleanPrefixUsed });
+    const trello = new Trello(this.client, userData ? userData.trelloToken : null);
 
     try {
       await command._exec(message, {
         args, _, trello,
+        userData,
         prefixUsed: { raw: prefixUsed, clean: cleanPrefixUsed }
       });
     } catch (e) {
@@ -73,8 +79,7 @@ module.exports = class Events {
         logger.error(`The '${command.name}' command failed.`);
         console.log(e);
       }
-      this.client.createMessage(message.channel.id,
-        ':fire: An error occurred while processing that command!');
+      this.client.createMessage(message.channel.id, `:fire: ${_('error')}`);
       this.client.stopTyping(message.channel);
     }
   }

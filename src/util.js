@@ -216,5 +216,7 @@ exports.CommandPermissions = {
     
     const memberRoles = message.member.roles.map(roleID => message.channel.guild.roles.get(roleID));
     return !!memberRoles.find(role => role.name.toLowerCase() === 'trello');
-  }
+  },
+  auth: (_, __, { userData }) => userData && userData.trelloToken && userData.trelloID,
+  selectedBoard: (_, __, { userData }) => userData && userData.selectedBoard
 };

@@ -25,6 +25,18 @@ class User extends Model {
         defaultValue: false
       },
       banReason: Sequelize.STRING,
+      trelloToken: Sequelize.STRING,
+      trelloID: Sequelize.STRING,
+      currentBoard: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null
+      },
+      locale: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null
+      },
       prefixes: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: false,
