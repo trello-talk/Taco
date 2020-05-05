@@ -226,7 +226,7 @@ exports.CommandPermissions = {
 exports.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) => {
   return (id, fallback) => {
     if (exports.CommandPermissions.emoji(client, message) && client.guilds.has(emojiGuildID)) {
-      const emoji = this.client.guilds.get(emojiGuildID).emojis.find(e => e.id == id);
+      const emoji = client.guilds.get(emojiGuildID).emojis.find(e => e.id == id);
       return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
     } else return fallback;
   };
