@@ -18,6 +18,7 @@
 
 const Eris = require('eris');
 const dbots = require('dbots');
+const Postgres = require('./postgres');
 const Database = require('./database');
 const EventHandler = require('./events');
 const CommandLoader = require('./commandloader');
@@ -89,17 +90,19 @@ class TrelloBot extends Eris.Client {
   async start() {
     this.db = new Database(this);
     await this.db.connect(this.config.redis);
+    this.pg = new Postgres(this, path.join(this.dir, this.config.modelsPath));
+    await this.pg.connect(this.config.pg);
     await this.connect();
     await this.waitTill('ready');
     this.editStatus('online', {
       name: `boards scroll by me | ${this.config.prefixes[0]}help`,
       type: 3,
     });
-    this.cmds = new CommandLoader(this, path.join(this.dir, this.config.commandsPath), this.config.debug);
+    this.cmds = new CommandLoader(this, path.join(this.dir, this.config.commandsPath));
     this.cmds.reload();
     this.cmds.preloadAll();
     this.eventHandler = new EventHandler(this);
-    this.locale = new LocaleHandler(this, path.join(this.dir, this.config.localePath), this.config.debug);
+    this.locale = new LocaleHandler(this, path.join(this.dir, this.config.localePath));
     this.locale.reload();
     if (Object.keys(this.config.botlists).length) await this.initPoster();
   }

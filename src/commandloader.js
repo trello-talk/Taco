@@ -22,10 +22,9 @@ const logger = require('./logger')('[COMMANDS]');
 const reload = require('require-reload')(require);
 
 module.exports = class CommandLoader {
-  constructor(client, cPath, debug) {
+  constructor(client, cPath) {
     this.commands = [];
     this.path = path.resolve(cPath);
-    this.debug = debug;
     this.client = client;
     this.logger = logger;
   }

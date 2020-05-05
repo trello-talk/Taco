@@ -24,10 +24,9 @@ const reload = require('require-reload')(require);
 const lodash = require('lodash');
 
 class LocaleHandler {
-  constructor(client, cPath, debug) {
+  constructor(client, cPath) {
     this.locales = new Map();
     this.path = path.resolve(cPath);
-    this.debug = debug;
     this.logger = logger;
     this.config = client.config;
   }

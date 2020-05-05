@@ -10,11 +10,11 @@ module.exports = {
   sudoID: "620126394390675466",
   sourceLocale: 'en_US',
   localePath: "./locale/bot",
+  modelsPath: "./src/models",
   // Airbrake is not required
   airbrake: {
     projectId: '',
     projectKey: '',
-    host: 'https://myerrbit.com',
     environment: 'production',
   }
 };
