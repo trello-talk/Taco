@@ -199,3 +199,22 @@ exports.Escape = {
     return text.replace(/\|\|/g, '\\|\\|');
   },
 };
+
+exports.CommandPermissions = {
+  attach: (client, message) => message.channel.type === 1 ||
+    message.channel.permissionsOf(client.user.id).has('attachFiles'),
+  embed: (client, message) => message.channel.type === 1 ||
+    message.channel.permissionsOf(client.user.id).has('embedLinks'),
+  guild: (_, message) => !!message.guildID,
+  elevated: (client, message) => client.config.elevated.includes(message.author.id),
+  trelloRole: (_, message) => {
+    if (!message.guildID) return true;
+    
+    // Server owner or elevated users
+    if (message.channel.guild.ownerID == message.author.id ||
+      exports.CommandPermissions.elevated(message.author.id)) return true;
+    
+    const memberRoles = message.member.roles.map(roleID => message.channel.guild.roles.get(roleID));
+    return !!memberRoles.find(role => role.name.toLowerCase() === 'trello');
+  }
+};

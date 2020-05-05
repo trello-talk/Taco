@@ -23,6 +23,7 @@ module.exports = class ReloadLocale extends Command {
 
   get _options() { return {
     aliases: ['rl'],
+    permissions: ['elevated'],
     listed: false,
   }; }
 
@@ -39,7 +40,6 @@ module.exports = class ReloadLocale extends Command {
   }
 
   async exec(message, { _ }) {
-    if (!this.client.config.elevated.includes(message.author.id)) return;
     const reloadingEmoji = this.emojiEmbedFallback(message, '632444546961375232', ':recycle:');
     const sentMessage = await this.client.createMessage(message.channel.id,
       `${reloadingEmoji} ${_('reloadlocale.reloading')}`);

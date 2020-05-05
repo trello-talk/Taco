@@ -24,6 +24,7 @@ module.exports = class Help extends Command {
 
   get _options() { return {
     aliases: ['?', 'h', 'commands', 'cmds', 'c'],
+    permissions: ['embed'],
     cooldown: 0,
   }; }
 
@@ -32,29 +33,20 @@ module.exports = class Help extends Command {
       message.channel.permissionsOf(this.client.user.id).has('externalEmojis');
   }
 
-  canEmbed(message) {
-    return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
-  }
-
-  exec(message, { args, _ }) {
-    if (!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id, _('help.no_embed'));
-
-    const prefixes = [...this.client.config.prefixes,
-      `@${this.client.user.username}#${this.client.user.discriminator}`];
-    const prefix = prefixes[0];
-    if (args[0]) { // Display help on a command
+  exec(message, { args, _, prefixUsed }) {
+    if (args[0]) {
+      // Display help on a command
       const command = this.client.cmds.get(args[0]);
       if (!command)
         this.client.createMessage(message.channel.id, _('help.not_found', { command: args[0] }));
       else {
         const hasDesc = _.valid(`commands.${command.name}.description`);
         const embed = {
-          title: `${prefix}${command.name}`,
+          title: `${prefixUsed.clean}${command.name}`,
           color: this.client.config.embedColor,
           fields: [
             { name: _('words.usage'),
-              value: `${prefix}${command.name}${
+              value: `${prefixUsed.raw}${command.name}${
                 _.valid(`commands.${command.name}.usage`) ?
                   ` \`${_(`commands.${command.name}.usage`)}\`` : ''}` }
           ],
@@ -74,7 +66,7 @@ module.exports = class Help extends Command {
         // Aliases
         if (command.options.aliases.length !== 0) embed.fields.push({
           name: _('words.alias.' + (command.options.aliases.length == 1 ? 'one' : 'many')),
-          value: command.options.aliases.map(a => `\`${prefix}${a}\``).join(', ')
+          value: command.options.aliases.map(a => `\`${a}\``).join(', ')
         });
 
         // Image
@@ -90,22 +82,23 @@ module.exports = class Help extends Command {
 
         return this.client.createMessage(message.channel.id, { embed });
       }
-    } else { // Display general help command
+    } else {
+      // Display general help command
       const embed = {
         color: this.client.config.embedColor,
         description: _('help.header', {
           username: this.client.user.username,
           link: this.client.config.supportServers[0],
         }),
-        footer: { text: _('help.footer', { prefix }) },
+        footer: { text: _('help.footer') },
         fields: []
       };
 
       // Populate categories
       const categories = {};
       this.client.cmds.commands.forEach(v => {
-        if (!v.listed && !this.client.config.elevated.includes(message.author.id)) return;
-        const string = `${prefix}${v.name}`;
+        if (!v.options.listed && !this.client.config.elevated.includes(message.author.id)) return;
+        const string = v.name;
         if (categories[v.metadata.category])
           categories[v.metadata.category].push(string);
         else categories[v.metadata.category] = [string];

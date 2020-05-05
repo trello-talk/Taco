@@ -23,17 +23,11 @@ module.exports = class ShardInfo extends Command {
 
   get _options() { return {
     aliases: ['shards'],
+    permissions: ['embed'],
     cooldown: 0,
   }; }
 
-  canEmbed(message) {
-    return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
-  }
-
   async exec(message, { _ }) {
-    if (!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id, _('shardinfo.no_embed'));
-
     const serverMap = {};
     this.client.guilds.map(guild => {
       const shardID = guild.shard.id;

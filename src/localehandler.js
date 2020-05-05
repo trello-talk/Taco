@@ -66,13 +66,14 @@ class LocaleHandler {
     this.iterateFolder(this.path);
   }
 
-  createModule(locale, prefix){
+  createModule(locale, prefixes = {}){
     const _ = (string, params = {}) => {
       const localeJSON = this.locales.get(locale);
       const source = this.locales.get(this.config.sourceLocale);
       const localeBase = localeJSON ? lodash.defaultsDeep(localeJSON, source) : source;
       const localeString = lodash.get(localeBase, string);
-      if (!params.prefix) params.prefix = prefix;
+      if (!params.prefix) params.prefix = prefixes.raw;
+      if (!params.cleanPrefix) params.cleanPrefix = prefixes.clean;
       if (!localeString)
         throw new Error(`No string named '${string}' was found in the source translation.`);
       return M.render(localeString, params);

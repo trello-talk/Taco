@@ -18,6 +18,7 @@
 
 const logger = require('./logger')('[EVENTS]');
 const ArgumentInterpreter = require('./structures/ArgumentInterpreter');
+const Trello = require('./structures/Trello');
 const Util = require('./util');
 
 module.exports = class Events {
@@ -41,9 +42,6 @@ module.exports = class Events {
       if (sudoBot) return;
     }
 
-    // TODO: Use database and stuff for localization
-    const _ = this.client.locale.createModule();
-
     // Command parsing
     const argInterpretor = new ArgumentInterpreter(Util.Prefix.strip(message, this.client));
     const args = argInterpretor.parseAsStrings();
@@ -51,8 +49,18 @@ module.exports = class Events {
     const command = this.client.cmds.get(commandName, message);
     if (!message.content.match(Util.Prefix.regex(this.client)) || !command) return;
 
+    // TODO: Use database and stuff for localization and trello auth
+    const prefixUsed = message.content.match(Util.Prefix.regex(this.client))[1];
+    const cleanPrefixUsed = message.content.match(new RegExp(`^<@!?${this.client.user.id}>`)) ?
+      `@${this.client.user.username}#${this.client.user.discriminator} ` : prefixUsed;
+    const _ = this.client.locale.createModule(null, { raw: prefixUsed, clean: cleanPrefixUsed });
+    const trello = new Trello(this.client, this.client.config.trello.token);
+
     try {
-      await command._exec(message, { args, _ });
+      await command._exec(message, {
+        args, _, trello,
+        prefixUsed: { raw: prefixUsed, clean: cleanPrefixUsed }
+      });
     } catch (e) {
       if (this.client.airbrake) {
         await this.client.airbrake.notify({

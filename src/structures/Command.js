@@ -15,6 +15,7 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+const Util = require('../util');
 
 class Command {
   constructor(client) {
@@ -31,18 +32,37 @@ class Command {
     return true;
   }
 
-  async _exec(message, Extra) {
+  async _exec(message, opts) {
+    // Check minimum arguments
+    if (this.options.minimumArgs > 0 && opts.args.length < this.options.minimumArgs)
+      return this.client.createMessage(message.channel.id,
+        `${opts._(this.options.minimumArgsMessage)}\n${
+          opts._('words.usage')}: ${opts.prefixUsed.raw}${this.name}${
+          opts._.valid(`commands.${this.name}.usage`) ?
+            ` \`${opts._(`commands.${this.name}.usage`)}\`` : ''}`);
+
+    // Check commmand permissions
+    if (this.options.permissions.length)
+      for (const i in this.options.permissions) {
+        const perm = this.options.permissions[i];
+        if (!Util.CommandPermissions[perm])
+          throw new Error(`Invalid command permission "${perm}"`);
+        if (!Util.CommandPermissions[perm](this.client, message, opts))
+          return this.client.createMessage(message.channel.id, opts._(`command_permissions.${perm}`));
+      }
+
+    // Process cooldown
     if (!this.cooldownAbs || await this.client.cmds.processCooldown(message, this)) {
-      await this.exec(message, Extra);
+      await this.exec(message, opts);
     } else {
       const cd = await this.client.db.hget(`cooldowns:${message.author.id}`, this.name);
-      message.reply(
-        `:watch: This command needs to cool down! *(${Math.ceil(this.cooldownAbs - (Date.now() - cd))})*`);
+      return this.client.createMessage(message.channel.id,
+        `:watch: ${opts._('cooldown', { seconds: Math.ceil(this.cooldownAbs - (Date.now() - cd))})}`);
     }
   }
 
   // eslint-disable-next-line no-empty-function, no-unused-vars
-  exec(Message, Extra) { }
+  exec(Message, opts) { }
 
   get options() {
     const options = {
@@ -50,8 +70,9 @@ class Command {
       cooldown: 2,
       listed: true,
       minimumArgs: 0,
+      permissions: [],
 
-      badArgsMessage: 'Not enough arguments!',
+      minimumArgsMessage: 'bad_args',
     };
     Object.assign(options, this._options);
     return options;
@@ -63,9 +84,7 @@ class Command {
 
   get metadata() {
     return {
-      category: 'Misc.',
-      description: '???',
-      usage: '',
+      category: 'categories.misc',
     };
   }
 }

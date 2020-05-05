@@ -37,13 +37,11 @@
     }
   },
   "help": {
-    "no_embed": "I need to be able to embed links in order to display help commands!",
     "not_found": "The command `{{&command}}` was not found.",
     "header": "{{&username}} (Running Modified [Faux](https://github.com/Snazzah/Faux) By Snazzah)\nSupport Server: {{&link}}",
-    "footer": "`{{&prefix}}help [command]` for more info."
+    "footer": "`{{&cleanPrefix}}help [command]` for more info."
   },
   "info": {
-    "no_embed": "I need to be able to embed links in order to display bot information!",
     "title": "Information about {{&username}}",
     "faux": "This bot is using a modified version of [Faux](https://github.com/Snazzah/Faux)."
   },
@@ -53,7 +51,6 @@
     "rest": "REST: {{ms}} ms"
   },
   "shardinfo": {
-    "no_embed": "I need to be able to embed links in order to display bot shard information!",
     "title": "Information about {{&username}}'s Shards",
     "line": "**`{{id}}:`** {{status}}, {{ms}} ms, {{guilds}} guilds"
   },
@@ -85,6 +82,16 @@
       "many": "Trello Boards"
     },
     "donate": "Donate"
+  },
+  "cooldown_msg": "This command needs to cool down! *({{seconds}})*",
+  "bad_args": "Not enough arguments!",
+  "command_permissions": {
+    "attach": "I need the permission `Attach Files` to use this command!",
+    "embed": "I need the permission `Embed Links` to use this command!",
+    "trelloRole": "This command requires you to be the server owner or have a role named `Trello`!",
+    "elevated": "Only the elevated users of the bot can use this command!",
+    "auth": "You haven't authorized your Trello account with Discord!\nAuthorize with the `{{&cleanPrefix}}auth` command!",
+    "selectedBoard": "There is no board selected!\nSelect a board with the `{{&cleanPrefix}}switch` command!"
   },
   "format": {
     "second": {

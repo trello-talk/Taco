@@ -26,19 +26,19 @@ module.exports = class AsyncEval extends Command {
 
   get _options() { return {
     aliases: ['ae', 'aeval', 'aevaluate', 'asyncevaluate'],
+    permissions: ['elevated'],
     listed: false,
   }; }
 
   // eslint-disable-next-line no-unused-vars
-  async exec(message, { args, _ }) {
-    if (!this.client.config.elevated.includes(message.author.id)) return;
+  async exec(message, opts) {
     try {
       const start = Date.now();
       const code = Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' ');
       const result = await eval(`(async () => {${code}})()`);
       const time = Date.now() - start;
       return this.client.createMessage(message.channel.id,
-        `${_('responses.eval', { ms: _.toLocaleString(time) })}\n\`\`\`js\n${result}\`\`\`\n`);
+        `${opts._('responses.eval', { ms: opts._.toLocaleString(time) })}\n\`\`\`js\n${result}\`\`\`\n`);
     } catch (e) {
       return this.client.createMessage(message.channel.id, '```js\n' + e.stack + '\n```');
     }

@@ -24,6 +24,7 @@ module.exports = class Info extends Command {
 
   get _options() { return {
     aliases: ['i'],
+    permissions: ['embed'],
     cooldown: 0,
   }; }
 
@@ -39,14 +40,7 @@ module.exports = class Info extends Command {
     } else return fallback;
   }
 
-  canEmbed(message) {
-    return message.channel.type === 1 || message.channel.permissionsOf(this.client.user.id).has('embedLinks');
-  }
-
   async exec(message, { _ }) {
-    if (!this.canEmbed(message))
-      return this.client.createMessage(message.channel.id, _('info.no_embed'));
-
     const servers = this.client.guilds.size;
     const hasWebsite = !!this.client.config.website;
     const hasTrelloBoard = this.client.config.trelloBoard;

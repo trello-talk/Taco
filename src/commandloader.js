@@ -62,15 +62,10 @@ module.exports = class CommandLoader {
     this.iterateFolder(this.path);
   }
 
-  get(name, message = null) {
-    const cmds = this.commands.filter(c => {
-      if (!c.options.listed && message &&
-        !this.client.config.elevated.includes(message.author.id)) return false;
-      return true;
-    });
-    let cmd = cmds.find(c => c.name === name);
+  get(name) {
+    let cmd = this.commands.find(c => c.name === name);
     if (cmd) return cmd;
-    cmds.forEach(c => {
+    this.commands.forEach(c => {
       if (c.options.aliases.includes(name)) cmd = c;
     });
     return cmd;

@@ -23,11 +23,11 @@ module.exports = class Restart extends Command {
 
   get _options() { return {
     aliases: ['re'],
+    permissions: ['elevated'],
     listed: false,
   }; }
 
   async exec(message, { _ }) {
-    if (!this.client.config.elevated.includes(message.author.id)) return;
     await this.client.createMessage(message.channel.id, _('responses.restart'));
     await this.client.dieGracefully();
     process.exit(0);

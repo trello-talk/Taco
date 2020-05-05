@@ -24,8 +24,10 @@ module.exports = class Exec extends Command {
   get name() { return 'exec'; }
 
   get _options() { return {
-    aliases: ['ex'],
+    aliases: ['ex', 'sys'],
+    permissions: ['elevated'],
     listed: false,
+    minimumArgs: 1
   }; }
 
   codeBlock(content, lang = null) {
@@ -33,7 +35,6 @@ module.exports = class Exec extends Command {
   }
 
   async exec(message) {
-    if (!this.client.config.elevated.includes(message.author.id)) return;
     await this.client.startTyping(message.channel);
     exec(Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' '), (err, stdout, stderr) => {
       this.client.stopTyping(message.channel);
