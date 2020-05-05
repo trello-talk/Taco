@@ -63,7 +63,7 @@ module.exports = class Info extends Command {
 
         + `**:gear: ${_('words.mem_usage')}**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
 
-        + `**:file_cabinet: ${_('words.server.one')}**: ${Util.toHHMMSS(servers)}\n\n`
+        + `**:file_cabinet: ${_.numSuffix('words.server', servers)}**: ${_.toLocaleString(servers)}\n\n`
 
         + (hasWebsite ? `**:globe_with_meridians: ${_('words.website.one')}**: ${
           this.client.config.website}\n` : '')

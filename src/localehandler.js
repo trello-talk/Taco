@@ -85,6 +85,21 @@ class LocaleHandler {
       return lodash.has(localeBase, string);
     };
 
+    _.numSuffix = (string, value, params) => {
+      const suffixTable = [
+        [0, 'zero'], [1, 'one'], [2, 'two'],
+        [3, 'three'], [4, 'four'], [5, 'five']
+      ];
+
+      for (const i in suffixTable) {
+        const suffix = suffixTable[i];
+        if (value !== suffix[0]) continue;
+        if (value === suffix[0] && _.valid(`${string}.${suffix[1]}`))
+          return _(`${string}.${suffix[1]}`, params);
+      }
+      return _(`${string}.many`, params);
+    };
+
     _.toLocaleString = number =>
       number.toLocaleString((locale || this.config.sourceLocale).replace('_', '-'));
 

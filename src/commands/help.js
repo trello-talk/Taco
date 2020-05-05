@@ -61,7 +61,7 @@ module.exports = class Help extends Command {
         if (command.options.cooldown)
           embed.fields.push({
             name: _('words.cooldown'),
-            value: _('format.second.' + (command.options.cooldown == 1 ? 'one' : 'many'), {
+            value: _.numSuffix('format.second', command.options.cooldown, {
               seconds: _.toLocaleString(command.options.cooldown)
             }),
             inline: false
@@ -69,7 +69,7 @@ module.exports = class Help extends Command {
 
         // Aliases
         if (command.options.aliases.length !== 0) embed.fields.push({
-          name: _('words.alias.' + (command.options.aliases.length == 1 ? 'one' : 'many')),
+          name: _.numSuffix('words.alias', command.options.aliases.length),
           value: command.options.aliases.map(a => `\`${a}\``).join(', ')
         });
 
