@@ -44,7 +44,7 @@ module.exports = class Help extends Command {
           title: `${prefixUsed.clean}${command.name}`,
           color: this.client.config.embedColor,
           fields: [
-            { name: _('words.usage'),
+            { name: '*' + _('words.usage') + '*',
               value: `${prefixUsed.raw}${command.name}${
                 _.valid(`commands.${command.name}.usage`) ?
                   ` \`${_(`commands.${command.name}.usage`)}\`` : ''}` }
@@ -55,7 +55,7 @@ module.exports = class Help extends Command {
         // Cooldown
         if (command.options.cooldown)
           embed.fields.push({
-            name: _('words.cooldown'),
+            name: '*' + _('words.cooldown') + '*',
             value: _.numSuffix('format.second', command.options.cooldown, {
               seconds: _.toLocaleString(command.options.cooldown)
             }),
@@ -64,7 +64,7 @@ module.exports = class Help extends Command {
 
         // Aliases
         if (command.options.aliases.length !== 0) embed.fields.push({
-          name: _.numSuffix('words.alias', command.options.aliases.length),
+          name: '*' + _.numSuffix('words.alias', command.options.aliases.length) + '*',
           value: command.options.aliases.map(a => `\`${a}\``).join(', ')
         });
 
@@ -75,7 +75,7 @@ module.exports = class Help extends Command {
         // Note
         if (_.valid(`commands.${command.name}.note`))
           embed.fields.push({
-            name: _('words.note'),
+            name: '*' + _('words.note') + '*',
             value: _(`commands.${command.name}.note`)
           });
 
@@ -106,7 +106,7 @@ module.exports = class Help extends Command {
       // List categories
       Util.keyValueForEach(categories, (k, v) => {
         embed.fields.push({
-          name: `**${_(k)}**`,
+          name: `*${_(k)}*`,
           value: '```' + v.join(', ') + '```',
           inline: true
         });

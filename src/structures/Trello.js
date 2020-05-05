@@ -331,6 +331,24 @@ class Trello {
       url: `/tokens/${this.token}`
     });
   }
+
+  async handleResponse({ response, message, client, _ }) {
+    if (response.status == 410) {
+      await client.pg.models.get('user').removeAuth(message.author);
+      await client.createMessage(message.channel.id, _('trello_response.unauthorized'));
+      return true;
+    } else if (response == 419) {
+      await client.createMessage(message.channel.id, _('trello_response.ratelimit'));
+      return true;
+    } else if (response >= 500) {
+      await client.createMessage(message.channel.id, _('trello_response.internal'));
+      return true;
+    } else if (response >= 400 && response !== 404)
+      // TODO: Make a custom error class for this
+      throw response;
+
+    return false;
+  }
 }
 
 Trello.BASE_URL = 'https://api.trello.com/1';

@@ -71,8 +71,27 @@ module.exports = class Events {
       if (this.client.airbrake) {
         await this.client.airbrake.notify({
           error: e,
-          context: {
-            command: command.name
+          params: {
+            command: command.name,
+            user: {
+              id: message.author.id,
+              username: message.author.username,
+              discriminator: message.author.discriminator
+            },
+            message: {
+              id: message.id,
+              content: message.content,
+              type: message.type
+            },
+            guild: message.guildID ? {
+              id: message.guildID,
+              name: message.channel.guild.name
+            } : undefined,
+            channel: {
+              id: message.channel.id,
+              type: message.channel.type,
+              name: message.channel.name
+            }
           }
         });
       } else {
