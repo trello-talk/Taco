@@ -1,6 +1,6 @@
 module.exports = {
   token: "",
-  prefixes: ["T!", "trello"],
+  prefixes: ["T!"],
   elevated: [""],
   commandsPath: "./src/commands",
   debug: false,

@@ -42,29 +42,35 @@ module.exports = class Events {
       if (sudoBot) return;
     }
 
+    // Postgres Data
+    const userData = await this.client.pg.models.get('user').onlyGet(message.author.id);
+    const serverData = message.guildID ?
+      await this.client.pg.models.get('server').onlyGet(message.guildID) : null;
+
+    // Prefixes
+    const userPrefixes = userData ? userData.prefixes : [];
+    const serverPrefix = serverData ? [serverData.prefix] : this.client.config.prefixes;
+    const prefixes = [...userPrefixes, ...serverPrefix];
+
     // Command parsing
-    const argInterpretor = new ArgumentInterpreter(Util.Prefix.strip(message, this.client));
+    const argInterpretor = new ArgumentInterpreter(Util.Prefix.strip(message, this.client, prefixes));
     const args = argInterpretor.parseAsStrings();
     const commandName = args.splice(0, 1)[0];
     const command = this.client.cmds.get(commandName, message);
-    if (!message.content.match(Util.Prefix.regex(this.client)) || !command) return;
+    if (!message.content.match(Util.Prefix.regex(this.client, prefixes)) || !command) return;
 
-    // Postgres Data
-    // TODO: Server data
-    const userData = await this.client.pg.models.get('user').onlyGet(message.author.id);
-    const locale = userData ? userData.locale : null;
-
-    const prefixUsed = message.content.match(Util.Prefix.regex(this.client))[1];
+    const prefixUsed = message.content.match(Util.Prefix.regex(this.client, prefixes))[1];
     const cleanPrefixUsed = message.content.match(new RegExp(`^<@!?${this.client.user.id}>`)) ?
       `@${this.client.user.username}#${this.client.user.discriminator} ` : prefixUsed;
 
+    const locale = userData && userData.locale ? userData.locale : (serverData ? serverData.locale : null);
     const _ = this.client.locale.createModule(locale, { raw: prefixUsed, clean: cleanPrefixUsed });
     const trello = new Trello(this.client, userData ? userData.trelloToken : null);
 
     try {
       await command._exec(message, {
         args, _, trello,
-        userData,
+        userData, serverData,
         prefixUsed: { raw: prefixUsed, clean: cleanPrefixUsed }
       });
     } catch (e) {
