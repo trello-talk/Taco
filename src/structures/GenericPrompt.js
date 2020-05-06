@@ -18,6 +18,8 @@
 const EventEmitter = require('eventemitter3');
 const GenericPager = require('./GenericPager');
 const Paginator = require('./Paginator');
+const lodash = require('lodash');
+const fuzzy = require('fuzzy');
 
 /**
  * A generic pager that shows a list of items
@@ -57,6 +59,11 @@ class GenericPrompt extends EventEmitter {
    * @param {number} timeout
    */
   async choose(channelID, userID, timeout) {
+    if (this.pager.items.length === 0)
+      return null;
+    else if (this.pager.items.length === 1)
+      return this.pager.items[0];
+
     await this.pager.start(channelID, userID, timeout);
     this.halt = this.client.messageAwaiter.createHalt(channelID, userID, timeout);
 
@@ -85,7 +92,8 @@ class GenericPrompt extends EventEmitter {
       this.halt.on('end', () => {
         // In case the halt ends before reactions are finished coming up
         this.pager.reactionsCleared = true;
-        this.pager.collector.end();
+        if (this.pager.collector) 
+          this.pager.collector.end();
         this.pager.message.delete();
 
         if (foundItem && foundItem._canceled)
@@ -105,6 +113,38 @@ class GenericPrompt extends EventEmitter {
           }
         });
     });
+  }
+
+  /**
+   * Filters the items into a search and prompts results.
+   * @param {string} query The term to search for
+   * @param {Object} options The options passed on to {@see #choose} .
+   * @param {string} options.channelID The channel to post the new message to
+   * @param {string} options.userID The user's ID that started the process
+   * @param {number} options.timeout
+   * @param {string|Function} [key='name'] The path to use for searches
+   */
+  async search(query, { channelID, userID, timeout }, key = 'name') {
+    if (!query)
+      return this.choose(channelID, userID, timeout);
+
+    const results = fuzzy.filter(query, this.pager.items, {
+      extract: item => {
+        if (typeof key === 'string')
+          return lodash.get(item, key);
+        else if (typeof key === 'function')
+          return key(item);
+      }
+    }).map(el => el.original);
+
+    if (!results.length)
+      return { _noresults: true };
+
+    const tempItems = this.pager.items;
+    this.pager.items = results;
+    const result = await this.choose(channelID, userID, timeout);
+    this.pager.items = tempItems;
+    return result;
   }
 }
 
