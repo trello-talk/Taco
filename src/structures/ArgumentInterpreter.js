@@ -16,7 +16,14 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/**
+ * A class that iterates a string's index
+ * @see ArgumentInterpreter
+ */
 class StringIterator {
+  /**
+   * @param {string} string The string to iterate through
+   */
   constructor(string) {
     this.string = string;
     this.index = 0;
@@ -24,6 +31,10 @@ class StringIterator {
     this.end = string.length;
   }
 
+  /**
+   * Get the character on an index and moves the index forward.
+   * @returns {?string}
+   */
   get() {
     const nextChar = this.string[this.index];
     if (!nextChar)
@@ -35,25 +46,48 @@ class StringIterator {
     }
   }
 
+  /**
+   * Reverts to the previous index.
+   */
   undo() {
     this.index = this.previous;
   }
 
+  /**
+   * The previous character that was used
+   * @type {string}
+   */
   get prevChar() {
     return this.string[this.previous];
   }
 
+  /**
+   * Whether or not the index is out of range
+   * @type {boolean}
+   */
   get inEOF() {
     return this.index >= this.end;
   }
 }
 
+/**
+ * Parses arguments from a message.
+ */
 class ArgumentInterpreter {
+  /**
+   * @param {string} string The string that will be parsed for arguments
+   * @param {?Object} options The options for the interpreter
+   * @param {?boolean} [options.allowWhitespace=false] Whether to allow whitespace characters in the arguments
+   */
   constructor(string, { allowWhitespace = false } = {}) {
     this.string = string;
     this.allowWhitespace = allowWhitespace;
   }
 
+  /**
+   * Parses the arguements as strings.
+   * @returns {Array<String>}
+   */
   parseAsStrings() {
     const args = [];
     let currentWord = '';
@@ -127,6 +161,10 @@ class ArgumentInterpreter {
     return args;
   }
 
+  /**
+   * Checks whether or not a character is an opening quote
+   * @param {string} char The character to check
+   */
   isOpeningQuote(char) {
     return Object.keys(ArgumentInterpreter.QUOTES).includes(char);
   }

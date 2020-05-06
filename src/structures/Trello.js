@@ -88,6 +88,10 @@ class Trello {
   }
 
   // #region Get methods
+  /**
+   * Gets the info on a member
+   * @param {string} id The member's ID
+   */
   getMember(id) {
     return this._request({
       url: `/members/${id}`,
@@ -101,6 +105,10 @@ class Trello {
     });
   }
 
+  /**
+   * Gets the information on a board
+   * @param {string} id The board's ID
+   */
   getBoard(id) {
     return this._request({
       url: `/boards/${id}`,
@@ -120,6 +128,10 @@ class Trello {
     });
   }
 
+  /**
+   * Gets the open cards on a board
+   * @param {string} id The board's ID
+   */
   getLists(id) {
     return this._request({
       url: `/boards/${id}/lists`,
@@ -137,6 +149,10 @@ class Trello {
     });
   }
 
+  /**
+   * Gets the archived lists on a board
+   * @param {string} id The board's ID
+   */
   getListsArchived(id) {
     return this._request({
       url: `/boards/${id}/lists`,
@@ -151,6 +167,10 @@ class Trello {
     });
   }
 
+  /**
+   * Gets a card's info
+   * @param {string} id The card's ID
+   */
   getCard(id) {
     return this._request({
       url: `/cards/${id}`,
@@ -175,6 +195,10 @@ class Trello {
     });
   }
 
+  /**
+   * Gets the open cards on a board
+   * @param {string} id The board's ID
+   */
   getCards(id) {
     return this._request({
       url: `/boards/${id}/cards`,
@@ -187,6 +211,10 @@ class Trello {
     });
   }
 
+  /**
+   * Gets the archived cards on a board
+   * @param {string} id The board's ID
+   */
   getCardsArchived(id) {
     return this._request({
       url: `/boards/${id}/cards`,
@@ -200,6 +228,10 @@ class Trello {
     });
   }
 
+  /**
+   * Gets the labels on a board
+   * @param {string} id The board's ID
+   */
   getLabels(id) {
     return this._request({
       url: `/boards/${id}/labels`,
@@ -209,12 +241,18 @@ class Trello {
     });
   }
 
+  /**
+   * Gets the information based on the token
+   */
   getToken() {
     return this._request({
       url: `/tokens/${this.token}`
     });
   }
 
+  /**
+   * Gets all webhooks for the token
+   */
   getWebhooks() {
     return this._request({
       url: `/tokens/${this.token}/webhooks`
@@ -223,6 +261,11 @@ class Trello {
   // #endregion
 
   // #region Post methods
+  /**
+   * Creates a list on the board.
+   * @param {string} id The board's ID
+   * @param {string} name The name of the list
+   */
   addList(id, name) {
     return this._request({
       method: 'post',
@@ -231,6 +274,10 @@ class Trello {
     });
   }
 
+  /**
+   * Creates a webhook for Trello.
+   * @param {string} id The board's ID
+   */
   addWebhook(id) {
     return this._request({
       method: 'post',
@@ -243,6 +290,11 @@ class Trello {
     });
   }
 
+  /**
+   * Creates a card in the list
+   * @param {string} id The list's ID
+   * @param {Object} payload The card to add
+   */
   addCard(id, payload) {
     return this._request({
       method: 'post',
@@ -251,6 +303,11 @@ class Trello {
     });
   }
 
+  /**
+   * Creates an attachment to a card
+   * @param {string} id The card's ID
+   * @param {string} url The attachment's URL
+   */
   addAttachment(id, url) {
     return this._request({
       method: 'post',
@@ -261,6 +318,11 @@ class Trello {
   // #endregion
 
   // #region Put methods
+  /**
+   * Updates a label.
+   * @param {string} id The label's ID
+   * @param {Object} payload The data to use
+   */
   updateLabel(id, payload) {
     return this._request({
       method: 'put',
@@ -269,6 +331,11 @@ class Trello {
     });
   }
 
+  /**
+   * Updates a board
+   * @param {string} id The board's ID
+   * @param {Object} payload The data to use
+   */
   updateBoard(id, payload) {
     return this._request({
       method: 'put',
@@ -277,6 +344,11 @@ class Trello {
     });
   }
 
+  /**
+   * Updates a list.
+   * @param {string} id The list's ID
+   * @param {Object} payload The data to use
+   */
   updateList(id, payload) {
     return this._request({
       method: 'put',
@@ -285,6 +357,11 @@ class Trello {
     });
   }
 
+  /**
+   * Updates a card.
+   * @param {string} id The card's ID
+   * @param {Object} payload The data to use
+   */
   updateCard(id, payload) {
     return this._request({
       method: 'put',
@@ -293,6 +370,11 @@ class Trello {
     });
   }
 
+  /**
+   * Updates a webhook.
+   * @param {string} id The webhook's ID
+   * @param {Object} payload The data to use
+   */
   updateWebhook(id, payload) {
     return this._request({
       method: 'put',
@@ -303,6 +385,10 @@ class Trello {
   // #endregion
 
   // #region Delete methods
+  /**
+   * Deletes a label.
+   * @param {string} id The label's ID
+   */
   deleteLabel(id) {
     return this._request({
       method: 'delete',
@@ -310,6 +396,10 @@ class Trello {
     });
   }
 
+  /**
+   * Deletes a card.
+   * @param {string} id The card's ID
+   */
   deleteCard(id) {
     return this._request({
       method: 'delete',
@@ -317,6 +407,10 @@ class Trello {
     });
   }
 
+  /**
+   * Deletes a webhook.
+   * @param {string} id The webhook's ID
+   */
   deleteWebhook(id) {
     return this._request({
       method: 'delete',
@@ -325,6 +419,9 @@ class Trello {
   }
   // #endregion
 
+  /**
+   * Invalidates the token given.
+   */
   invalidate() {
     return this._request({
       method: 'delete',
@@ -332,6 +429,9 @@ class Trello {
     });
   }
 
+  /**
+   * Handles a response given by Trello.
+   */
   async handleResponse({ response, message, client, _ }) {
     if (response.status == 401) {
       await client.pg.models.get('user').removeAuth(message.author);

@@ -17,21 +17,38 @@
 */
 const Util = require('../util');
 
+/**
+ * A command in the bot.
+ */
 class Command {
+  /**
+   * @param {TrelloBot} client
+   */
   constructor(client) {
     this.client = client;
     this.subCommands = {};
   }
 
+  /**
+   * @private
+   */
   _preload() {
     if (!this.preload() && this.client.config.debug)
       this.client.cmds.logger.info('Preloading command', this.name);
   }
 
+  /**
+   * The function executed while loading the command into the command handler.
+   */
   preload() {
     return true;
   }
 
+  /**
+   * @private
+   * @param {Message} message
+   * @param {Object} opts
+   */
   async _exec(message, opts) {
     // Check minimum arguments
     if (this.options.minimumArgs > 0 && opts.args.length < this.options.minimumArgs)
@@ -64,6 +81,10 @@ class Command {
   // eslint-disable-next-line no-empty-function, no-unused-vars
   exec(Message, opts) { }
 
+  /**
+   * The optoins for the command
+   * @type {Object}
+   */
   get options() {
     const options = {
       aliases: [],
@@ -78,10 +99,21 @@ class Command {
     return options;
   }
 
+  /**
+   * @private
+   */
   _options() { return {}; }
 
+  /**
+   * The cooldown in milliseconnds
+   * @returns {number}
+   */
   get cooldownAbs() { return this.options.cooldown * 1000; }
 
+  /**
+   * The metadata for the command
+   * @return {Object}
+   */
   get metadata() {
     return {
       category: 'categories.misc',

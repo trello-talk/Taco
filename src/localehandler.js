@@ -31,6 +31,10 @@ class LocaleHandler {
     this.config = client.config;
   }
 
+  /**
+   * Loads locales from a folder
+   * @param {String} folderPath
+   */
   iterateFolder(folderPath) {
     const files = fs.readdirSync(folderPath);
     files.map(file => {
@@ -50,21 +54,36 @@ class LocaleHandler {
     });
   }
 
+  /**
+   * The source locale JSON
+   */
   get source() {
     return this.locales.get(this.config.sourceLocale);
   }
 
+  /**
+   * Loads a locale
+   * @param {string} filePath
+   */
   load(filePath) {
     logger.info('Loading locale', filePath);
     const json = reload(filePath);
     this.locales.set(path.parse(filePath).name, json);
   }
 
+  /**
+   * Reloads all locales
+   */
   reload() {
     this.locales.clear();
     this.iterateFolder(this.path);
   }
 
+  /**
+   * Creates a localization module
+   * @param {string} locale The locale to use
+   * @param {Object} prefixes The prefixes to use
+   */
   createModule(locale, prefixes = {}){
     const _ = (string, params = {}) => {
       const localeJSON = this.locales.get(locale);

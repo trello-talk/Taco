@@ -29,6 +29,10 @@ module.exports = class CommandLoader {
     this.logger = logger;
   }
 
+  /**
+   * Loads commands from a folder
+   * @param {String} folderPath
+   */
   iterateFolder(folderPath) {
     const files = fs.readdirSync(folderPath);
     files.map(file => {
@@ -48,6 +52,10 @@ module.exports = class CommandLoader {
     });
   }
 
+  /**
+   * Loads a command
+   * @param {string} commandPath
+   */
   load(commandPath) {
     logger.info('Loading command', commandPath);
     const cls = reload(commandPath);
@@ -56,11 +64,18 @@ module.exports = class CommandLoader {
     this.commands.push(cmd);
   }
 
+  /**
+   * Reloads all commands
+   */
   reload() {
     this.commands = [];
     this.iterateFolder(this.path);
   }
 
+  /**
+   * Gets a command based on it's name or alias
+   * @param {string} name The command's name or alias
+   */
   get(name) {
     let cmd = this.commands.find(c => c.name === name);
     if (cmd) return cmd;
@@ -70,15 +85,27 @@ module.exports = class CommandLoader {
     return cmd;
   }
 
+  /**
+   * Preloads a command
+   * @param {string} name The command's name or alias
+   */
   preload(name) {
     if (!this.get(name)) return;
     this.get(name)._preload();
   }
 
+  /**
+   * Preloads all commands
+   */
   preloadAll() {
     this.commands.forEach(c => c._preload());
   }
 
+  /**
+   * Processes the cooldown of a command
+   * @param {Message} message
+   * @param {Command} command
+   */
   async processCooldown(message, command) {
     if (message.author.id === this.client.config.owner) return true;
     const now = Date.now() - 1;

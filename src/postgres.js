@@ -23,6 +23,9 @@ const { EventEmitter } = require('eventemitter3');
 const logger = require('./logger')('[POSTGRES]');
 const reload = require('require-reload')(require);
 
+/**
+ * The Postgres database handler
+ */
 module.exports = class Postgres extends EventEmitter {
   constructor(client, modelsPath) {
     super();
@@ -32,6 +35,10 @@ module.exports = class Postgres extends EventEmitter {
     logger.info('Initialized');
   }
 
+  /**
+   * Loads models from a folder
+   * @param {String} folderPath
+   */
   iterateFolder(folderPath) {
     const files = fs.readdirSync(folderPath);
     files.map(file => {
@@ -51,6 +58,10 @@ module.exports = class Postgres extends EventEmitter {
     });
   }
 
+  /**
+   * Loads a model
+   * @param {string} modelPath
+   */
   load(modelPath) {
     logger.info('Loading model', modelPath);
     const model = reload(modelPath);
@@ -60,6 +71,10 @@ module.exports = class Postgres extends EventEmitter {
     this.models.set(path.parse(modelPath).name, model);
   }
 
+  /**
+   * Connects the postgres instance and syncs all models
+   * @param {Object} options
+   */
   connect({ host = 'localhost', database, user, password }) {
     logger.info('Connecting...');
     return new Promise((resolve, reject) => {

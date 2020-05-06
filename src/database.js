@@ -20,6 +20,9 @@ const redis = require('redis');
 const { EventEmitter } = require('eventemitter3');
 const logger = require('./logger')('[REDIS]');
 
+/**
+ * The Redis database handler
+ */
 module.exports = class Database extends EventEmitter {
   constructor(client) {
     super();
@@ -28,6 +31,10 @@ module.exports = class Database extends EventEmitter {
     logger.info('Initialized');
   }
 
+  /**
+   * Creates a client and connects to the database
+   * @param {Object} options
+   */
   connect({ host = 'localhost', port, password }) {
     logger.info('Connecting...');
     return new Promise((resolve, reject) => {
@@ -48,8 +55,13 @@ module.exports = class Database extends EventEmitter {
     });
   }
 
+  /**
+   * @private
+   * @param {string} k Key
+   */
   _p(k) { return (this.client.config.prefix || '') + k; }
 
+  // #region Redis functions
   hget(key, hashkey) {
     return new Promise((resolve, reject) => {
       this.redis.HGET(this._p(key), hashkey, (err, value) => {
@@ -113,13 +125,20 @@ module.exports = class Database extends EventEmitter {
       });
     });
   }
+  // #endregion
 
+  /**
+   * Reconnects the client
+   */
   async reconnect() {
     logger.warn('Attempting reconnection');
     this.conn = await this.connect(this);
     logger.info('Reconnected');
   }
 
+  /**
+   * Disconnects the client
+   */
   disconnect() {
     this.reconnectAfterClose = false;
     return new Promise(resolve => {
@@ -128,11 +147,17 @@ module.exports = class Database extends EventEmitter {
     });
   }
 
+  /**
+   * @private
+   */
   onError(err) {
     logger.error('Error', err);
     this.emit('error', err);
   }
 
+  /**
+   * @private
+   */
   async onClose() {
     logger.error('Closed');
     this.emit('close');

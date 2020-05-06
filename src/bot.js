@@ -83,10 +83,17 @@ class TrelloBot extends Eris.Client {
     logger.info('Client initialized');
   }
 
+  /**
+   * Creates a promise that resolves on the next event
+   * @param {string} event The event to wait for
+   */
   waitTill(event) {
     return new Promise(resolve => this.once(event, resolve));
   }
 
+  /**
+   * Starts the processes and log-in to Discord.
+   */
   async start() {
     this.db = new Database(this);
     await this.db.connect(this.config.redis);
@@ -104,9 +111,12 @@ class TrelloBot extends Eris.Client {
     this.eventHandler = new EventHandler(this);
     this.locale = new LocaleHandler(this, path.join(this.dir, this.config.localePath));
     this.locale.reload();
-    if (Object.keys(this.config.botlists).length) await this.initPoster();
+    if (Object.keys(this.config.botlists).length) this.initPoster();
   }
 
+  /**
+   * @private
+   */
   initPoster() {
     this.poster = new dbots.Poster({
       client: this,
@@ -124,14 +134,23 @@ class TrelloBot extends Eris.Client {
     this.poster.startInterval();
   }
 
+  /**
+   * @private
+   */
   onPost() {
     posterLogger.info('Posted stats to all bot lists.');
   }
 
+  /**
+   * @private
+   */
   onPostOne(result) {
     posterLogger.info(`Posted to ${result.request.socket.servername}!`);
   }
 
+  /**
+   * @private
+   */
   onPostFail(e, auto = false) {
     posterLogger.error(`Failed to ${
       auto ? 'auto-post' : 'post'
@@ -139,6 +158,9 @@ class TrelloBot extends Eris.Client {
     console.log(e.response.data);
   }
 
+  /**
+   * KIlls the bot
+   */
   dieGracefully() {
     return new Promise(resolve => {
       logger.info('Slowly dying...');
@@ -154,6 +176,10 @@ class TrelloBot extends Eris.Client {
 
   // Typing
 
+  /**
+   * Start typing in a channel
+   * @param {Channel} channel The channel to start typing in
+   */
   async startTyping(channel) {
     if (this.isTyping(channel)) return;
     await channel.sendTyping();
@@ -162,10 +188,18 @@ class TrelloBot extends Eris.Client {
     }, 5000));
   }
 
+  /**
+   * Whether the bot is currently typing in a channel
+   * @param {Channel} channel
+   */
   isTyping(channel) {
     return this.typingIntervals.has(channel.id);
   }
 
+  /**
+   * Stops typing in a channel
+   * @param {Channel} channel
+   */
   stopTyping(channel) {
     if (!this.isTyping(channel)) return;
     const interval = this.typingIntervals.get(channel.id);

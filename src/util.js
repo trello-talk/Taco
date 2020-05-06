@@ -16,17 +16,35 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-exports.keyValueForEach = (obj, func) => Object.keys(obj).map(key => func(key, obj[key]));
+/**
+ * Represents the utilities for the bot
+ * @typedef {Object} Util
+ */
+const Util = module.exports = {};
 
-exports.sliceKeys = (obj, f) => {
+/**
+ * Iterates through each key of an object
+ * @memberof Util.
+ */
+Util.keyValueForEach = (obj, func) => Object.keys(obj).map(key => func(key, obj[key]));
+
+/**
+ * @memberof Util.
+ * @deprecated
+ */
+Util.sliceKeys = (obj, f) => {
   const newObject = {};
-  exports.keyValueForEach(obj, (k, v) => {
+  Util.keyValueForEach(obj, (k, v) => {
     if (f(k, v)) newObject[k] = v;
   });
   return newObject;
 };
 
-exports.toHHMMSS = string => {
+/**
+ * Converts a number into a 00:00:00 format
+ * @memberof Util.
+ */
+Util.toHHMMSS = string => {
   const sec_num = parseInt(string, 10);
   let hours = Math.floor(sec_num / 3600);
   let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
@@ -39,10 +57,18 @@ exports.toHHMMSS = string => {
   return time;
 };
 
-exports.formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+/**
+ * @memberof Util.
+ * @deprecated
+ */
+Util.formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
-// https://stackoverflow.com/a/19101235/6467130
-exports.flattenObject = (data) => {
+/**
+ * Flattens a JSON object
+ * @memberof Util.
+ * @see https://stackoverflow.com/a/19101235/6467130
+ */
+Util.flattenObject = (data) => {
   const result = {};
   function recurse (cur, prop) {
     if (Object(cur) !== cur) {
@@ -67,42 +93,60 @@ exports.flattenObject = (data) => {
   return result;
 };
 
-exports.Random = {
+/**
+ * Randomness generator
+ * @memberof Util.
+ */
+Util.Random = {
   int(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   },
   bool() {
-    return exports.Random.int(0, 1) === 1;
+    return Util.Random.int(0, 1) === 1;
   },
   array(array) {
-    return array[exports.Random.int(0, array.length - 1)];
+    return array[Util.Random.int(0, array.length - 1)];
   },
   shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
   },
 };
 
-exports.Prefix = {
+/**
+ * Prefix-related functions
+ * @memberof Util.
+ */
+Util.Prefix = {
   regex(client, prefixes = null) {
     if (!prefixes)
       prefixes = client.config.prefixes;
     return new RegExp(`^((?:<@!?${client.user.id}>|${
-      prefixes.map(prefix => exports.Escape.regex(prefix)).join('|')})\\s?)(\\n|.)`, 'i');
+      prefixes.map(prefix => Util.Escape.regex(prefix)).join('|')})\\s?)(\\n|.)`, 'i');
   },
   strip(message, client, prefixes) {
     return message.content.replace(
-      exports.Prefix.regex(client, prefixes), '$2').replace(/\s\s+/g, ' ').trim();
+      Util.Prefix.regex(client, prefixes), '$2').replace(/\s\s+/g, ' ').trim();
   },
 };
 
-exports.Regex = {
+/**
+ * Commonly used regex patterns
+ * @memberof Util.
+ * @deprecated
+ */
+Util.Regex = {
   escape: /[-/\\^$*+?.()|[\]{}]/g,
   url: /https?:\/\/(-\.)?([^\s/?.#-]+\.?)+(\/[^\s]*)?/gi,
 };
-
-exports.Escape = {
+  
+/**
+ * Discord.JS's method of escaping characters
+ * @memberof Util.
+ * @see https://github.com/discordjs/discord.js/blob/12.0.0/src/util/Util.js#L97
+ */
+Util.Escape = {
   regex(s) {
-    return s.replace(exports.Regex.escape, '\\$&');
+    return s.replace(Util.Regex.escape, '\\$&');
   },
   markdown(
     text,
@@ -123,7 +167,7 @@ exports.Escape = {
         .split('```')
         .map((subString, index, array) => {
           if (index % 2 && index !== array.length - 1) return subString;
-          return exports.Escape.markdown(subString, {
+          return Util.Escape.markdown(subString, {
             inlineCode,
             bold,
             italic,
@@ -140,7 +184,7 @@ exports.Escape = {
         .split(/(?<=^|[^`])`(?=[^`]|$)/g)
         .map((subString, index, array) => {
           if (index % 2 && index !== array.length - 1) return subString;
-          return exports.Escape.markdown(subString, {
+          return Util.Escape.markdown(subString, {
             codeBlock,
             bold,
             italic,
@@ -151,13 +195,13 @@ exports.Escape = {
         })
         .join(inlineCode ? '\\`' : '`');
     }
-    if (inlineCode) text = exports.Escape.inlineCode(text);
-    if (codeBlock) text = exports.Escape.codeBlock(text);
-    if (italic) text = exports.Escape.italic(text);
-    if (bold) text = exports.Escape.bold(text);
-    if (underline) text = exports.Escape.underline(text);
-    if (strikethrough) text = exports.Escape.strikethrough(text);
-    if (spoiler) text = exports.Escape.spoiler(text);
+    if (inlineCode) text = Util.Escape.inlineCode(text);
+    if (codeBlock) text = Util.Escape.codeBlock(text);
+    if (italic) text = Util.Escape.italic(text);
+    if (bold) text = Util.Escape.bold(text);
+    if (underline) text = Util.Escape.underline(text);
+    if (strikethrough) text = Util.Escape.strikethrough(text);
+    if (spoiler) text = Util.Escape.spoiler(text);
     return text;
   },
   codeBlock(text) {
@@ -200,7 +244,11 @@ exports.Escape = {
   },
 };
 
-exports.CommandPermissions = {
+/**
+ * Command permission parsers
+ * @memberof Util.
+ */
+Util.CommandPermissions = {
   attach: (client, message) => message.channel.type === 1 ||
     message.channel.permissionsOf(client.user.id).has('attachFiles'),
   embed: (client, message) => message.channel.type === 1 ||
@@ -214,7 +262,7 @@ exports.CommandPermissions = {
     
     // Server owner or elevated users
     if (message.channel.guild.ownerID == message.author.id ||
-      exports.CommandPermissions.elevated(message.author.id)) return true;
+      Util.CommandPermissions.elevated(message.author.id)) return true;
     
     const memberRoles = message.member.roles.map(roleID => message.channel.guild.roles.get(roleID));
     return !!memberRoles.find(role => role.name.toLowerCase() === 'trello');
@@ -224,9 +272,13 @@ exports.CommandPermissions = {
   discordAuth: (_, __, { userData }) => userData && userData.discordToken
 };
 
-exports.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) => {
+/**
+ * Creates a module that makes emoji fallbacks
+ * @memberof Util.
+ */
+Util.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) => {
   return (id, fallback) => {
-    if (exports.CommandPermissions.emoji(client, message) && client.guilds.has(emojiGuildID)) {
+    if (Util.CommandPermissions.emoji(client, message) && client.guilds.has(emojiGuildID)) {
       const emoji = client.guilds.get(emojiGuildID).emojis.find(e => e.id == id);
       return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
     } else return fallback;
