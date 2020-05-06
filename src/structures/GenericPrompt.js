@@ -17,6 +17,7 @@
 */
 const EventEmitter = require('eventemitter3');
 const GenericPager = require('./GenericPager');
+const Paginator = require('./Paginator');
 
 /**
  * A generic pager that shows a list of items
@@ -39,13 +40,13 @@ class GenericPrompt extends EventEmitter {
     this.pagerOptions.header = pagerOptions.header || pagerOptions._('prompt.choose');
     this.pagerOptions.footer = (pagerOptions.footer ? pagerOptions.footer + '\n\n' : '') +
       pagerOptions._('prompt.cancel');
-    this.pagerOptions.extraEmbed = this.pagerOptions.extraEmbed || {};
-    this.pagerOptions.extraEmbed.author = {
+    this.pagerOptions.embedExtra = this.pagerOptions.embedExtra || {};
+    this.pagerOptions.embedExtra.author = {
       name: `${message.author.username}#${message.author.discriminator}`,
       icon_url: message.author.avatarURL || message.author.defaultAvatarURL
     };
 
-    this.pager = new GenericPager(client, message, pagerOptions);
+    this.pager = new GenericPager(client, message, this.pagerOptions);
     this.halt = null;
   }
 
@@ -66,8 +67,8 @@ class GenericPrompt extends EventEmitter {
 
     return new Promise(resolve => {
       let foundItem = null;
+
       this.halt.on('message', nextMessage => {
-        console.log('nextmsg', nextMessage.content, parseInt(nextMessage.content));
         if (GenericPrompt.CANCEL_TRIGGERS.includes(nextMessage.content.toLowerCase())) {
           foundItem = { _canceled: true };
           this.halt.end();
@@ -75,12 +76,12 @@ class GenericPrompt extends EventEmitter {
         const chosenIndex = parseInt(nextMessage.content);
         if (chosenIndex <= 0) return;
         const chosenItem = this.pager.items[chosenIndex - 1];
-        console.log('over 0', chosenIndex, chosenItem);
         if (chosenItem !== undefined) {
           foundItem = chosenItem;
           this.halt.end();
         }
       });
+
       this.halt.on('end', () => {
         // In case the halt ends before reactions are finished coming up
         this.pager.reactionsCleared = true;
@@ -95,6 +96,14 @@ class GenericPrompt extends EventEmitter {
 
         resolve(foundItem);
       });
+
+      if (this.pager.collector)
+        this.pager.collector.on('reaction', emoji => {
+          if (Paginator.STOP == emoji.name) {
+            foundItem = { _canceled: true };
+            this.halt.end();
+          }
+        });
     });
   }
 }

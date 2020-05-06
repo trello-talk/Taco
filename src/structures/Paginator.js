@@ -121,17 +121,20 @@ class Paginator extends EventEmitter {
    * @param {string} userID The user's ID that started the process
    * @param {number} timeout
    */
-  start(userID, timeout) {
+  async start(userID, timeout) {
     this.reactionsCleared = false;
     if (this.maxPages > 1 && this.canPaginate()) {
-      return Promise.all([
-        this.message.addReaction(Paginator.PREV),
-        this.message.addReaction(Paginator.STOP),
-        this.message.addReaction(Paginator.NEXT),
-      ]).then(() => {
+      try {
+        await Promise.all([
+          this.message.addReaction(Paginator.PREV),
+          this.message.addReaction(Paginator.STOP),
+          this.message.addReaction(Paginator.NEXT),
+        ]);
         this.collector = this.messageAwaiter.createReactionCollector(this.message, userID, timeout);
         this._hookEvents();
-      }).catch(() => this.clearReactions());
+      } catch (e) {
+        return this.clearReactions();
+      }
     }
   }
 

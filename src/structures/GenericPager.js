@@ -107,7 +107,7 @@ class GenericPager extends Paginator {
    */
   async start(channelID, userID, timeout) {
     this.message = await this.client.createMessage(channelID, this.currentMessage);
-    super.start(userID, timeout);
+    return super.start(userID, timeout);
   }
 
   /**
