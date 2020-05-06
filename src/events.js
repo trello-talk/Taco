@@ -25,6 +25,7 @@ module.exports = class Events {
   constructor(client) {
     this.client = client;
     client.on('messageCreate', this.onMessage.bind(this));
+    client.on('messageReactionAdd', this.onReaction.bind(this));
   }
 
   async onMessage(message) {
@@ -41,6 +42,9 @@ module.exports = class Events {
       const sudoBot = await message.channel.guild.members.has(this.client.config.sudoID);
       if (sudoBot) return;
     }
+
+    // Message awaiter
+    if (this.client.messageAwaiter.processHalt(message)) return;
 
     // Postgres Data
     const userData = await this.client.pg.models.get('user').onlyGet(message.author.id);
@@ -106,6 +110,14 @@ module.exports = class Events {
       }
       this.client.createMessage(message.channel.id, `:fire: ${_('error')}`);
       this.client.stopTyping(message.channel);
+    }
+  }
+
+  onReaction(message, emoji, userID) {
+    const id = `${message.id}:${userID}`;
+    if (this.client.messageAwaiter.reactionCollectors.has(id)) {
+      const collector = this.client.messageAwaiter.reactionCollectors.get(id);
+      collector._onReaction(emoji);
     }
   }
 };

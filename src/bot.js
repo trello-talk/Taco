@@ -23,6 +23,7 @@ const Database = require('./database');
 const EventHandler = require('./events');
 const CommandLoader = require('./commandloader');
 const LocaleHandler = require('./localehandler');
+const MessageAwaiter = require('./messageawaiter');
 const logger = require('./logger')('[DISCORD]');
 const posterLogger = require('./logger')('[POSTER]');
 const path = require('path');
@@ -95,22 +96,36 @@ class TrelloBot extends Eris.Client {
    * Starts the processes and log-in to Discord.
    */
   async start() {
+    // Redis
     this.db = new Database(this);
     await this.db.connect(this.config.redis);
+
+    // Postgres
     this.pg = new Postgres(this, path.join(this.dir, this.config.modelsPath));
     await this.pg.connect(this.config.pg);
+
+    // Discord
     await this.connect();
     await this.waitTill('ready');
     this.editStatus('online', {
       name: `boards scroll by me | ${this.config.prefixes[0]}help`,
       type: 3,
     });
+
+    // Commands
     this.cmds = new CommandLoader(this, path.join(this.dir, this.config.commandsPath));
     this.cmds.reload();
     this.cmds.preloadAll();
-    this.eventHandler = new EventHandler(this);
+
+    // Locale
     this.locale = new LocaleHandler(this, path.join(this.dir, this.config.localePath));
     this.locale.reload();
+
+    // Events
+    this.messageAwaiter = new MessageAwaiter(this);
+    this.eventHandler = new EventHandler(this);
+
+    // Botlist poster
     if (Object.keys(this.config.botlists).length) this.initPoster();
   }
 
