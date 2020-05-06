@@ -45,11 +45,8 @@ class User extends Model {
       banReason: Sequelize.STRING,
       trelloToken: Sequelize.STRING,
       trelloID: Sequelize.STRING,
-      currentBoard: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        defaultValue: null
-      },
+      currentBoard: Sequelize.STRING,
+      discordToken: Sequelize.STRING,
       locale: {
         type: Sequelize.STRING,
         allowNull: true,

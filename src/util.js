@@ -220,7 +220,8 @@ exports.CommandPermissions = {
     return !!memberRoles.find(role => role.name.toLowerCase() === 'trello');
   },
   auth: (_, __, { userData }) => userData && userData.trelloToken && userData.trelloID,
-  selectedBoard: (_, __, { userData }) => userData && userData.selectedBoard
+  selectedBoard: (_, __, { userData }) => userData && userData.selectedBoard,
+  discordAuth: (_, __, { userData }) => userData && userData.discordToken
 };
 
 exports.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) => {
