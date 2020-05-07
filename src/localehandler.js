@@ -22,6 +22,7 @@ const path = require('path');
 const logger = require('./logger')('[LOCALE]');
 const reload = require('require-reload')(require);
 const lodash = require('lodash');
+const moment = require('moment');
 
 class LocaleHandler {
   constructor(client, cPath) {
@@ -121,6 +122,9 @@ class LocaleHandler {
 
     _.toLocaleString = number =>
       number.toLocaleString((locale || this.config.sourceLocale).replace('_', '-'));
+
+    _.moment = (...args) =>
+      moment(...args).locale((locale || this.config.sourceLocale).replace('_', '-'));
 
     _.locale = locale || this.config.sourceLocale;
 

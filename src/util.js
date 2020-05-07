@@ -284,3 +284,12 @@ Util.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) 
     } else return fallback;
   };
 };
+
+/**
+ * Cuts off text to a limit
+ * @param {string} text
+ * @param {number} limit
+ */
+Util.cutoffText = (text, limit = 2000) => {
+  return text.length > limit ? text.slice(0, limit - 1) + '…' : text;
+};

@@ -116,14 +116,17 @@ class Trello {
         fields: [
           'subscribed', 'starred', 'pinned',
           'name', 'desc', 'prefs', 'shortLink',
-          'shortUrl'
+          'shortUrl', 'powerUps'
         ],
         members: 'all',
         member_fields: ['username', 'fullName', 'id'],
         lists: 'all',
         list_fields: ['name'],
         cards: 'all',
-        card_fields: ['name']
+        card_fields: [
+          'name', 'idList', 'shortLink', 'subscribed'
+        ],
+        organization: true
       }
     });
   }

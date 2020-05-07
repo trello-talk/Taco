@@ -6,6 +6,7 @@ dependencies:
   eventemitter3: 4.0.0
   fuzzy: 0.1.3
   lodash: 4.17.15
+  moment: 2.25.3
   mustache: 4.0.1
   node-fetch: 2.6.0
   pg: 8.0.3_pg@8.0.3
@@ -1784,6 +1785,7 @@ packages:
     dev: false
     name: dbots
     resolution:
+      registry: 'https://registry.npmjs.org/'
       tarball: 'https://codeload.github.com/dbots-pkg/dbots.js/tar.gz/35ebdbf01098286a35ee58b150bd91d398d7e8eb'
     version: 3.0.1
 specifiers:
@@ -1795,6 +1797,7 @@ specifiers:
   eventemitter3: ^4.0.0
   fuzzy: ^0.1.3
   lodash: ^4.17.15
+  moment: ^2.25.3
   mustache: ^4.0.1
   node-fetch: ^2.3.0
   pg: ^8.0.3

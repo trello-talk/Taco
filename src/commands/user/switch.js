@@ -30,16 +30,34 @@ module.exports = class Switch extends Command {
     minimumArgs: 1
   }; }
 
-  async setBoard(message, board, _) {
-    await this.client.pg.models.get('user').update({ currentBoard: board.shortLink },
-      { where: { userID: message.author.id } });
-    
-    const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const doneEmoji = emojiFallback('632444546684551183', ':white_check_mark:');
-    return message.channel.createMessage(`${doneEmoji} ` + _('boards.switch', {
-      name: Util.Escape.markdown(board.name),
-      id: board.shortLink
-    }));
+  async findBoard(query, boards, message, _, userData) {
+    if (boards.length) {
+      const foundBoard = boards.find(board => board.shortLink === query || board.id === query);
+      if (foundBoard) return foundBoard;
+      else {
+        const prompter = new GenericPrompt(this.client, message, {
+          items: boards, itemTitle: 'words.trello_board.many',
+          display: (item) => `${item.subscribed ? '🔔 ' : ''}${item.starred ? '⭐ ' : ''}\`${
+            item.shortLink}\` ${Util.Escape.markdown(item.name)}`,
+          _
+        });
+        const promptResult = await prompter.search(query,
+          { channelID: message.channel.id, userID: message.author.id });
+        if (promptResult && promptResult._noresults) {
+          await message.channel.createMessage(_('prompt.no_search'));
+          return;
+        } else
+          return promptResult;
+      }
+    } else {
+      // Remove current board
+      if (userData.currentBoard)
+        await this.client.pg.models.get('user').update({ currentBoard: null },
+          { where: { userID: message.author.id } });
+
+      await message.channel.createMessage(_('boards.none'));
+      return;
+    }
   }
 
   async exec(message, { args, _, trello, userData }) {
@@ -53,33 +71,18 @@ module.exports = class Switch extends Command {
 
     const json = await response.json();
 
-    if (json.boards.length) {
-      const foundBoard = json.boards.find(board => board.shortLink === arg);
-      if (foundBoard)
-        return this.setBoard(message, foundBoard, _);
-      else {
-        const prompter = new GenericPrompt(this.client, message, {
-          items: json.boards, itemTitle: 'words.trello_board.many',
-          display: board => `${Util.Escape.markdown(board.name)} (\`${board.shortLink}\`)`,
-          _
-        });
-        const promptResult = await prompter.search(arg,
-          { channelID: message.channel.id, userID: message.author.id });
-        if (promptResult && promptResult._noresults)
-          return message.channel.createMessage(_('boards.no_search'));
-        else if (!promptResult)
-          return message.channel.createMessage(_('boards.no_switch'));
-        else
-          return this.setBoard(message, promptResult, _);
-      }
-    } else {
-      // Remove current board
-      if (userData.currentBoard)
-        await this.client.pg.models.get('user').update({ currentBoard: null },
-          { where: { userID: message.author.id } });
+    const board = await this.findBoard(arg, json.boards, message, _, userData);
+    if (!board) return;
 
-      return message.channel.createMessage(_('boards.none'));
-    }
+    await this.client.pg.models.get('user').update({ currentBoard: board.id },
+      { where: { userID: message.author.id } });
+    
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
+    const doneEmoji = emojiFallback('632444546684551183', ':white_check_mark:');
+    return message.channel.createMessage(`${doneEmoji} ` + _('boards.switch', {
+      name: Util.Escape.markdown(board.name),
+      id: board.shortLink
+    }));
   }
 
   get metadata() { return {
