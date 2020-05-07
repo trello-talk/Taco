@@ -46,6 +46,11 @@ module.exports = class Switch extends Command {
     const arg = args.join(' ');
     const response = await trello.getMember(userData.trelloID);
     if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
+    if (response.status === 404) {
+      await this.client.pg.models.get('user').removeAuth(message.author);
+      return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
+    }
+
     const json = await response.json();
 
     if (json.boards.length) {

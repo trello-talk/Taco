@@ -3,7 +3,7 @@ module.exports = {
   clientOptions: {
     autoReconnect: true,
     disableEveryone: true, // Whether the bot should be able to ping @everyone
-    maxCachedMessages: 250,
+    maxCachedMessages: 0,
     intents: [
       "guilds",
       "guildEmojis",

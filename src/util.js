@@ -268,7 +268,7 @@ Util.CommandPermissions = {
     return !!memberRoles.find(role => role.name.toLowerCase() === 'trello');
   },
   auth: (_, __, { userData }) => userData && userData.trelloToken && userData.trelloID,
-  selectedBoard: (_, __, { userData }) => userData && userData.selectedBoard,
+  selectedBoard: (_, __, { userData }) => userData && userData.currentBoard,
   discordAuth: (_, __, { userData }) => userData && userData.discordToken
 };
 

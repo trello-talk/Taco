@@ -31,6 +31,11 @@ module.exports = class Me extends Command {
   async exec(message, { _, trello, userData }) {
     const response = await trello.getMember(userData.trelloID);
     if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
+    if (response.status === 404) {
+      await this.client.pg.models.get('user').removeAuth(message.author);
+      return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
+    }
+
     const json = await response.json();
 
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
@@ -40,7 +45,7 @@ module.exports = class Me extends Command {
     const embed = {
       author: {
         name: json.prefs.privacy.fullName !== 'public' ?
-          json.username : `${json.fullName} (${json.username})`,
+          json.username : `${Util.Escape.markdown(json.fullName)} (${json.username})`,
         icon_url: json.prefs.privacy.avatar !== 'public' ? null :
           (json.avatarUrl ? json.avatarUrl + '/170.png' : null),
         url: json.url
@@ -85,7 +90,7 @@ module.exports = class Me extends Command {
     if (json.bio)
       embed.fields.push({
         name: '*' + _('words.bio') + '*',
-        value: json.bio
+        value: Util.Escape.markdown(json.bio)
       });
     return this.client.createMessage(message.channel.id, { embed });
   }
