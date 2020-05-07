@@ -117,6 +117,15 @@ class Paginator extends EventEmitter {
   }
 
   /**
+   * Whether or not this instance can manage messages
+   * @returns {boolean}
+   */
+  canManage() {
+    return this.message.channel.type !== 1 &&
+      this.message.channel.permissionsOf(this.client.user.id).has('manageMessages');
+  }
+
+  /**
    * Starts the reaction collector and pagination
    * @param {string} userID The user's ID that started the process
    * @param {number} timeout
@@ -173,16 +182,18 @@ class Paginator extends EventEmitter {
   /**
    * @private
    */
-  _react(emoji) {
+  _react(emoji, userID) {
     const oldPage = this.pageNumber;
     if (Paginator.PREV == emoji.name)
       this.previousPage();
-    if (Paginator.NEXT == emoji.name)
+    else if (Paginator.NEXT == emoji.name)
       this.nextPage();
-    if (Paginator.STOP == emoji.name)
+    else if (Paginator.STOP == emoji.name)
       this.collector.end();
     if (this.pageNumber !== oldPage)
       this._change();
+    if ([Paginator.PREV, Paginator.STOP, Paginator.NEXT].includes(emoji.name) && this.canManage())
+      this.message.removeReaction(emoji.name, userID);
   }
 }
 

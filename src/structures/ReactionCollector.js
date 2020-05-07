@@ -53,8 +53,8 @@ class ReactionCollector extends EventEmitter {
   /**
    * @private
    */
-  _onReaction(emoji) {
-    this.emit('reaction', emoji);
+  _onReaction(emoji, userID) {
+    this.emit('reaction', emoji, userID);
     this.restart();
   }
 

@@ -117,7 +117,7 @@ module.exports = class Events {
     const id = `${message.id}:${userID}`;
     if (this.client.messageAwaiter.reactionCollectors.has(id)) {
       const collector = this.client.messageAwaiter.reactionCollectors.get(id);
-      collector._onReaction(emoji);
+      collector._onReaction(emoji, userID);
     }
   }
 };
