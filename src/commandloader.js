@@ -62,6 +62,7 @@ module.exports = class CommandLoader {
     const cmd = new cls(this.client);
     cmd.path = commandPath;
     this.commands.push(cmd);
+    return cmd;
   }
 
   /**
