@@ -24,7 +24,7 @@ module.exports = class Help extends Command {
 
   get _options() { return {
     aliases: [
-      '?', 'h', 'commands', 'cmds', 'c', // English
+      '?', 'h', 'commands', 'cmds', // English
       'yardim', 'yardım', 'komutlar', // Turkish
       'ajuda' // Spanish
     ],

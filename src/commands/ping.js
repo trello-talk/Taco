@@ -22,7 +22,7 @@ module.exports = class Ping extends Command {
   get name() { return 'ping'; }
 
   get _options() { return {
-    aliases: ['p'],
+    aliases: ['p', 'pong'],
     cooldown: 0,
   }; }
 
