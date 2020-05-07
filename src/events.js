@@ -104,7 +104,8 @@ module.exports = class Events {
             }
           }
         });
-      } else {
+      }
+      if (!this.client.airbrake || this.client.config.debug) {
         logger.error(`The '${command.name}' command failed.`);
         console.log(e);
       }
