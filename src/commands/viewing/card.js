@@ -25,7 +25,7 @@ module.exports = class Card extends Command {
 
   get _options() { return {
     aliases: ['viewcard', 'vc'],
-    cooldown: 2,
+    cooldown: 4,
     permissions: ['embed', 'auth', 'selectedBoard'],
     minimumArgs: 1
   }; }

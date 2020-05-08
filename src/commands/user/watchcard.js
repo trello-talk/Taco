@@ -24,7 +24,7 @@ module.exports = class WatchCard extends Command {
 
   get _options() { return {
     aliases: ['subscribecard', 'subcard', 'wcard', 'wc'],
-    cooldown: 2,
+    cooldown: 4,
     permissions: ['auth', 'selectedBoard'],
     minimumArgs: 1
   }; }

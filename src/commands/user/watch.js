@@ -24,7 +24,7 @@ module.exports = class Watch extends Command {
 
   get _options() { return {
     aliases: ['watchboard', 'wboard', 'wb', 'subscribeboard', 'subboard'],
-    cooldown: 2,
+    cooldown: 4,
     permissions: ['auth']
   }; }
 
