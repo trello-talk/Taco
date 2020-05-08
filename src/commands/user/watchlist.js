@@ -18,16 +18,15 @@
 
 const Command = require('../../structures/Command');
 const GenericPrompt = require('../../structures/GenericPrompt');
-const GenericPager = require('../../structures/GenericPager');
 const Util = require('../../util');
 
-module.exports = class List extends Command {
-  get name() { return 'list'; }
+module.exports = class WatchList extends Command {
+  get name() { return 'watchlist'; }
 
   get _options() { return {
-    aliases: ['viewlist', 'cards', 'vl'],
+    aliases: ['subscribelist', 'sublist', 'wlist', 'wl'],
     cooldown: 2,
-    permissions: ['embed', 'auth', 'selectedBoard'],
+    permissions: ['auth', 'selectedBoard'],
     minimumArgs: 1
   }; }
 
@@ -68,43 +67,18 @@ module.exports = class List extends Command {
 
     const json = await response.json();
 
-    const list = await this.findList(args[0], json, message, _);
+    const list = await this.findList(args.join(' '), json, message, _);
     if (!list) return;
 
-    const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const checkEmoji = emojiFallback('632444546684551183', ':ballot_box_with_check:');
-    const uncheckEmoji = emojiFallback('632444550115491910', ':white_large_square:');
-
-    if (list.cards.length) {
-      const paginator = new GenericPager(this.client, message, {
-        items: list.cards,
-        _, header: (list.closed ? `🗃️ **${_('words.arch_list.one')}**\n\n` : '') +
-          `**${_('words.list.one')}:** ${Util.Escape.markdown(list.name)}\n` +
-          `**${_('words.id')}:** \`${list.id}\`\n` +
-          `${list.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n\n` +
-          _('lists.list_header'), itemTitle: 'words.card.many',
-        display: (item) => `${item.closed ? '🗃️ ' : ''}${item.subscribed ? '🔔 ' : ''}\`${item.shortLink}\` ${
-          Util.Escape.markdown(item.name)}`
-      });
-
-      if (args[1])
-        paginator.toPage(args[1]);
-
-      return paginator.start(message.channel.id, message.author.id);
-    } else {
-      const embed = {
-        title: Util.Escape.markdown(list.name),
-        color: this.client.config.embedColor,
-        description: (list.closed ? `🗃️ **${_('words.arch_list.one')}**\n\n` : '') +
-          `**${_('words.id')}:** \`${list.id}\`\n` +
-          `${list.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n\n` +
-          _('lists.list_none')
-      };
-      return message.channel.createMessage({ embed });
-    }
+    if (await trello.handleResponse({
+      response: await trello.updateList(list.id, { subscribed: !list.subscribed }),
+      client: this.client, message, _ })) return;
+    
+    return message.channel.createMessage(
+      _(list.subscribed ? 'user_mgmt.unsub_list' : 'user_mgmt.sub_list', list));
   }
 
   get metadata() { return {
-    category: 'categories.view',
+    category: 'categories.user',
   }; }
 };

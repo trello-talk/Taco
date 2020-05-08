@@ -107,6 +107,16 @@ class Trello {
   }
 
   /**
+   * Gets the member's board stars
+   * @param {string} id The member's ID
+   */
+  getBoardStars(id) {
+    return this._request({
+      url: `/members/${id}/boardStars`
+    });
+  }
+
+  /**
    * Gets the information on a board
    * @param {string} id The board's ID
    */
@@ -313,7 +323,8 @@ class Trello {
     return this._request({
       method: 'post',
       url: `/boards/${id}/lists`,
-      query: { name }
+      bodyType: 'form',
+      body: { name }
     });
   }
 
@@ -325,7 +336,8 @@ class Trello {
     return this._request({
       method: 'post',
       url: `/tokens/${this.token}/webhooks`,
-      query: {
+      bodyType: 'form',
+      body: {
         idModel: id,
         callbackURL: this.client.config.webhookURL,
         description: `[${new Date()}] TrelloBot (https://github.com/trello-talk/TrelloBot)`
@@ -342,7 +354,8 @@ class Trello {
     return this._request({
       method: 'post',
       url: `/lists/${id}/cards`,
-      query: payload
+      bodyType: 'form',
+      body: payload
     });
   }
 
@@ -355,7 +368,23 @@ class Trello {
     return this._request({
       method: 'post',
       url: `/cards/${id}/attachments`,
-      query: { url }
+      bodyType: 'form',
+      body: { url }
+    });
+  }
+
+  /**
+   * Creates a star for a board
+   * @param {string} id The member's ID
+   * @param {string} boardID The board's ID
+   * @param {string} [pos='top'] The position of the star
+   */
+  starBoard(id, boardID, pos = 'top') {
+    return this._request({
+      method: 'post',
+      url: `/members/${id}/boardStars`,
+      bodyType: 'form',
+      body: { idBoard: boardID, pos }
     });
   }
   // #endregion
@@ -370,7 +399,8 @@ class Trello {
     return this._request({
       method: 'put',
       url: `/labels/${id}`,
-      query: payload
+      bodyType: 'form',
+      body: payload
     });
   }
 
@@ -383,7 +413,8 @@ class Trello {
     return this._request({
       method: 'put',
       url: `/boards/${id}`,
-      query: payload
+      bodyType: 'form',
+      body: payload
     });
   }
 
@@ -396,7 +427,8 @@ class Trello {
     return this._request({
       method: 'put',
       url: `/lists/${id}`,
-      query: payload
+      bodyType: 'form',
+      body: payload
     });
   }
 
@@ -409,7 +441,8 @@ class Trello {
     return this._request({
       method: 'put',
       url: `/cards/${id}`,
-      query: payload
+      bodyType: 'form',
+      body: payload
     });
   }
 
@@ -422,7 +455,8 @@ class Trello {
     return this._request({
       method: 'put',
       url: `/tokens/${this.token}/webhooks/${id}`,
-      query: payload
+      bodyType: 'form',
+      body: payload
     });
   }
   // #endregion
@@ -458,6 +492,18 @@ class Trello {
     return this._request({
       method: 'delete',
       url: `/tokens/${this.token}/webhooks/${id}`
+    });
+  }
+
+  /**
+   * Removs a star for a board
+   * @param {string} id The member's ID
+   * @param {string} starID The board star's ID
+   */
+  unstarBoard(id, starID) {
+    return this._request({
+      method: 'delete',
+      url: `/members/${id}/boardStars/${starID}`
     });
   }
   // #endregion

@@ -20,14 +20,13 @@ const Command = require('../../structures/Command');
 const GenericPrompt = require('../../structures/GenericPrompt');
 const Util = require('../../util');
 
-module.exports = class Switch extends Command {
-  get name() { return 'switch'; }
+module.exports = class Watch extends Command {
+  get name() { return 'watch'; }
 
   get _options() { return {
-    aliases: ['switchboard', 'select', 'selectboard'],
+    aliases: ['watchboard', 'wboard', 'wb', 'subscribeboard', 'subboard'],
     cooldown: 2,
-    permissions: ['auth'],
-    minimumArgs: 1
+    permissions: ['auth']
   }; }
 
   async findBoard(query, boards, message, _, userData) {
@@ -62,7 +61,7 @@ module.exports = class Switch extends Command {
   }
 
   async exec(message, { args, _, trello, userData }) {
-    const arg = args.join(' ');
+    const arg = args.join(' ') || userData.currentBoard;
     const response = await trello.getMember(userData.trelloID);
     if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
     if (response.status === 404) {
@@ -75,15 +74,15 @@ module.exports = class Switch extends Command {
     const board = await this.findBoard(arg, json.boards, message, _, userData);
     if (!board) return;
 
-    await this.client.pg.models.get('user').update({ currentBoard: board.id },
-      { where: { userID: message.author.id } });
+    if (await trello.handleResponse({
+      response: await trello.updateBoard(board.id, { subscribed: !board.subscribed }),
+      client: this.client, message, _ })) return;
     
-    const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const doneEmoji = emojiFallback('632444546684551183', ':white_check_mark:');
-    return message.channel.createMessage(`${doneEmoji} ` + _('boards.switch', {
-      name: Util.Escape.markdown(board.name),
-      id: board.shortLink
-    }));
+    return message.channel.createMessage(
+      _(board.subscribed ? 'user_mgmt.unsub_board' : 'user_mgmt.sub_board', {
+        name: board.name,
+        id: board.shortLink
+      }));
   }
 
   get metadata() { return {

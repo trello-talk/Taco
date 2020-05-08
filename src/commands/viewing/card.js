@@ -38,6 +38,7 @@ module.exports = class Card extends Command {
       else {
         const prompter = new GenericPrompt(this.client, message, {
           items: board.cards, itemTitle: 'words.card.many',
+          header: _('cards.choose'),
           display: card => {
             const list = board.lists.find(list => list.id === card.idList);
             return `\`${card.shortLink}\` ${card.closed ? '🗃️ ' : ''}${
@@ -55,7 +56,7 @@ module.exports = class Card extends Command {
           return promptResult;
       }
     } else {
-      await message.channel.createMessage(_('card.none'));
+      await message.channel.createMessage(_('cards.none'));
       return;
     }
   }
@@ -214,7 +215,8 @@ module.exports = class Card extends Command {
       embed.fields.push({
         name: '*' + _.numSuffix('words.sticker', json.stickers.length) + '*',
         value: Util.keyValueForEach(stickers, (key, value) =>
-          `<:_:${this.stickerMap[key]}>${value > 1 ? ' ' + _.toLocaleString(value) : ''}`).join(', '),
+          `${this.stickerMap[key] ? `<:_:${this.stickerMap[key]}>` : key}${
+            value > 1 ? ' ' + _.toLocaleString(value) : ''}`).join(', '),
         inline: true
       });
     }
