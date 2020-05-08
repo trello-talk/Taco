@@ -67,7 +67,7 @@ module.exports = class Prefix extends Command {
     const userPrefixes = userData ? userData.prefixes : [];
     const canUse = 5 - userPrefixes.length;
     let embed, prefix = args[1] || null;
-    switch (args[0]) {
+    switch (args[0] ? args[0].toLowerCase() : null) {
     case 'setserver':
     case 'ss':
     case 'set':

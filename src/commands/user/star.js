@@ -17,7 +17,6 @@
 */
 
 const Command = require('../../structures/Command');
-const GenericPrompt = require('../../structures/GenericPrompt');
 const Util = require('../../util');
 
 module.exports = class Star extends Command {
@@ -28,37 +27,6 @@ module.exports = class Star extends Command {
     cooldown: 2,
     permissions: ['auth']
   }; }
-
-  async findBoard(query, boards, message, _, userData) {
-    if (boards.length) {
-      const foundBoard = boards.find(board => board.shortLink === query || board.id === query);
-      if (foundBoard) return foundBoard;
-      else {
-        const prompter = new GenericPrompt(this.client, message, {
-          items: boards, itemTitle: 'words.trello_board.many',
-          header: _('boards.choose'),
-          display: (item) => `${item.subscribed ? '🔔 ' : ''}${item.starred ? '⭐ ' : ''}\`${
-            item.shortLink}\` ${Util.Escape.markdown(item.name)}`,
-          _
-        });
-        const promptResult = await prompter.search(query,
-          { channelID: message.channel.id, userID: message.author.id });
-        if (promptResult && promptResult._noresults) {
-          await message.channel.createMessage(_('prompt.no_search'));
-          return;
-        } else
-          return promptResult;
-      }
-    } else {
-      // Remove current board
-      if (userData.currentBoard)
-        await this.client.pg.models.get('user').update({ currentBoard: null },
-          { where: { userID: message.author.id } });
-
-      await message.channel.createMessage(_('boards.none'));
-      return;
-    }
-  }
 
   async exec(message, { args, _, trello, userData }) {
     const arg = args.join(' ') || userData.currentBoard;
@@ -71,7 +39,7 @@ module.exports = class Star extends Command {
 
     const json = await response.json();
 
-    const board = await this.findBoard(arg, json.boards, message, _, userData);
+    const board = await Util.Trello.findBoard(arg, json.boards, this.client, message, _, userData);
     if (!board) return;
 
     if (board.starred) {

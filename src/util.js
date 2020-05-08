@@ -16,6 +16,8 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+const GenericPrompt = require('./structures/GenericPrompt');
+
 /**
  * Represents the utilities for the bot
  * @typedef {Object} Util
@@ -291,6 +293,7 @@ Util.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) 
 
 /**
  * Cuts off text to a limit
+ * @memberof Util.
  * @param {string} text
  * @param {number} limit
  */
@@ -300,6 +303,7 @@ Util.cutoffText = (text, limit = 2000) => {
 
 /**
  * Cuts off an array of text to a limit
+ * @memberof Util.
  * @param {Array<string>} texts
  * @param {number} limit
  * @param {number} rollbackAmount Amount of items to roll back when the limit has been hit
@@ -315,4 +319,95 @@ Util.cutoffArray = (texts, limit = 2000, rollbackAmount = 1, paddingAmount = 1) 
     }
   }
   return texts;
+};
+
+/**
+ * Trello-related functions
+ * @memberof Util.
+ */
+Util.Trello = {
+  async findList(query, lists, client, message, _) {
+    if (lists.length) {
+      const foundList = lists.find(list => list.id === query);
+      if (foundList) return foundList;
+      else {
+        const prompter = new GenericPrompt(client, message, {
+          items: lists, itemTitle: 'words.list.many',
+          header: _('lists.choose'),
+          display: list => `${list.closed ? '🗃️ ' : ''}${
+            list.subscribed ? '🔔 ' : ''}\`${list.id}\` ${Util.Escape.markdown(list.name)}`,
+          _
+        });
+        const promptResult = await prompter.search(query,
+          { channelID: message.channel.id, userID: message.author.id });
+        if (promptResult && promptResult._noresults) {
+          await message.channel.createMessage(_('prompt.no_search'));
+          return;
+        } else
+          return promptResult;
+      }
+    } else {
+      await message.channel.createMessage(_('lists.none'));
+      return;
+    }
+  },
+  async findCard(query, board, client, message, _) {
+    if (board.cards.length) {
+      const foundCard = board.cards.find(card => card.id === query || card.shortLink === query);
+      if (foundCard) return foundCard;
+      else {
+        const prompter = new GenericPrompt(client, message, {
+          items: board.cards, itemTitle: 'words.card.many',
+          header: _('cards.choose'),
+          display: card => {
+            const list = board.lists.find(list => list.id === card.idList);
+            return `\`${card.shortLink}\` ${card.closed ? '🗃️ ' : ''}${
+              card.subscribed ? '🔔 ' : ''}${Util.Escape.markdown(card.name)}` +
+              (list ? ` (${_('words.in_lower')} ${Util.Escape.markdown(list.name)})` : '');
+          },
+          _
+        });
+        const promptResult = await prompter.search(query,
+          { channelID: message.channel.id, userID: message.author.id });
+        if (promptResult && promptResult._noresults) {
+          await message.channel.createMessage(_('prompt.no_search'));
+          return;
+        } else
+          return promptResult;
+      }
+    } else {
+      await message.channel.createMessage(_('cards.none'));
+      return;
+    }
+  },
+  async findBoard(query, boards, client, message, _, userData) {
+    if (boards.length) {
+      const foundBoard = boards.find(board => board.shortLink === query || board.id === query);
+      if (foundBoard) return foundBoard;
+      else {
+        const prompter = new GenericPrompt(client, message, {
+          items: boards, itemTitle: 'words.trello_board.many',
+          header: _('boards.choose'),
+          display: (item) => `${item.subscribed ? '🔔 ' : ''}${item.starred ? '⭐ ' : ''}\`${
+            item.shortLink}\` ${Util.Escape.markdown(item.name)}`,
+          _
+        });
+        const promptResult = await prompter.search(query,
+          { channelID: message.channel.id, userID: message.author.id });
+        if (promptResult && promptResult._noresults) {
+          await message.channel.createMessage(_('prompt.no_search'));
+          return;
+        } else
+          return promptResult;
+      }
+    } else {
+      // Remove current board
+      if (userData.currentBoard)
+        await client.pg.models.get('user').update({ currentBoard: null },
+          { where: { userID: message.author.id } });
+
+      await message.channel.createMessage(_('boards.none'));
+      return;
+    }
+  }
 };

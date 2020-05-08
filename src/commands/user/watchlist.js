@@ -17,7 +17,6 @@
 */
 
 const Command = require('../../structures/Command');
-const GenericPrompt = require('../../structures/GenericPrompt');
 const Util = require('../../util');
 
 module.exports = class WatchList extends Command {
@@ -30,32 +29,6 @@ module.exports = class WatchList extends Command {
     minimumArgs: 1
   }; }
 
-  async findList(query, lists, message, _) {
-    if (lists.length) {
-      const foundList = lists.find(list => list.id === query);
-      if (foundList) return foundList;
-      else {
-        const prompter = new GenericPrompt(this.client, message, {
-          items: lists, itemTitle: 'words.list.many',
-          header: _('lists.choose'),
-          display: list => `${list.closed ? '🗃️ ' : ''}${
-            list.subscribed ? '🔔 ' : ''}\`${list.id}\` ${Util.Escape.markdown(list.name)}`,
-          _
-        });
-        const promptResult = await prompter.search(query,
-          { channelID: message.channel.id, userID: message.author.id });
-        if (promptResult && promptResult._noresults) {
-          await message.channel.createMessage(_('prompt.no_search'));
-          return;
-        } else
-          return promptResult;
-      }
-    } else {
-      await message.channel.createMessage(_('lists.none'));
-      return;
-    }
-  }
-
   async exec(message, { args, _, trello, userData }) {
     const response = await trello.getAllLists(userData.currentBoard);
     if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
@@ -67,7 +40,7 @@ module.exports = class WatchList extends Command {
 
     const json = await response.json();
 
-    const list = await this.findList(args.join(' '), json, message, _);
+    const list = await Util.Trello.findList(args.join(' '), json, this.client, message, _);
     if (!list) return;
 
     if (await trello.handleResponse({

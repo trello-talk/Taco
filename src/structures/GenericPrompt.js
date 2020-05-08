@@ -15,7 +15,6 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-const EventEmitter = require('eventemitter3');
 const GenericPager = require('./GenericPager');
 const Paginator = require('./Paginator');
 const lodash = require('lodash');
@@ -24,14 +23,13 @@ const fuzzy = require('fuzzy');
 /**
  * A generic pager that shows a list of items
  */
-class GenericPrompt extends EventEmitter {
+class GenericPrompt {
   /**
    * @param {TrelloBot} client The client to use
    * @param {Message} message The user's message to read permissions from
    * @param {Object} pagerOptions The options for the pager
    */
   constructor(client, message, pagerOptions = {}) {
-    super();
     this.client = client;
     this.message = message;
     this.pagerOptions = pagerOptions;

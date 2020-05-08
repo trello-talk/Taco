@@ -74,7 +74,7 @@ module.exports = class Locale extends Command {
       (this.client.locale.locales.get(serverData.locale) || null) : null;
     const localeArray = [...this.client.locale.array(), ['unset', null]];
     let paginator, locale, _n = _;
-    switch (args[0]) {
+    switch (args[0] ? args[0].toLowerCase() : null) {
     case 'setuser':
     case 'set':
     case 'su':

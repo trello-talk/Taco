@@ -17,7 +17,6 @@
 */
 
 const Command = require('../../structures/Command');
-const GenericPrompt = require('../../structures/GenericPrompt');
 const Util = require('../../util');
 
 module.exports = class WatchCard extends Command {
@@ -30,36 +29,6 @@ module.exports = class WatchCard extends Command {
     minimumArgs: 1
   }; }
 
-  async findCard(query, board, message, _) {
-    if (board.cards.length) {
-      const foundCard = board.cards.find(card => card.id === query || card.shortLink === query);
-      if (foundCard) return foundCard;
-      else {
-        const prompter = new GenericPrompt(this.client, message, {
-          items: board.cards, itemTitle: 'words.card.many',
-          header: _('cards.choose'),
-          display: card => {
-            const list = board.lists.find(list => list.id === card.idList);
-            return `\`${card.shortLink}\` ${card.closed ? '🗃️ ' : ''}${
-              card.subscribed ? '🔔 ' : ''}${Util.Escape.markdown(card.name)}` +
-              (list ? ` (${_('words.in_lower')} ${Util.Escape.markdown(list.name)})` : '');
-          },
-          _
-        });
-        const promptResult = await prompter.search(query,
-          { channelID: message.channel.id, userID: message.author.id });
-        if (promptResult && promptResult._noresults) {
-          await message.channel.createMessage(_('prompt.no_search'));
-          return;
-        } else
-          return promptResult;
-      }
-    } else {
-      await message.channel.createMessage(_('cards.none'));
-      return;
-    }
-  }
-
   async exec(message, { args, _, trello, userData }) {
     const response = await trello.getSlimBoard(userData.currentBoard);
     if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
@@ -71,7 +40,7 @@ module.exports = class WatchCard extends Command {
 
     const boardJson = await response.json();
 
-    const card = await this.findCard(args.join(' '), boardJson, message, _);
+    const card = await Util.Trello.findCard(args.join(' '), boardJson, this.client, message, _);
     if (!card) return;
 
     if (await trello.handleResponse({
