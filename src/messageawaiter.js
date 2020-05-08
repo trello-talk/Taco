@@ -86,6 +86,7 @@ class MessageAwaiter {
    * Awaits the next message from a user
    * @param {Message} message The message to wait for
    * @param {Object} [options] The options for the await
+   * @param {number} [options.filter] The message filter
    * @param {number} [options.timeout=30000] The timeout for the halt
    * @returns {?Message}
    */
@@ -100,6 +101,41 @@ class MessageAwaiter {
         }
       });
       halt.on('end', () => resolve(foundMessage));
+    });
+  }
+
+  /**
+   * Same as {@see #awaitMessage}, but is used for getting user input via next message
+   * @param {Message} message The message to wait for
+   * @param {LocaleModule} _ The localization module
+   * @param {Object} [options] The options for the await
+   * @param {number} [options.filter] The message filter
+   * @param {number} [options.timeout=30000] The timeout for the halt
+   * @param {string} [options.header] The content to put in the bot message
+   * @returns {?Message}
+   */
+  async getInput(message, _, { filter = () => true, timeout = 30000, header = null } = {}) {
+    await message.channel.createMessage(`<@${message.author.id}>, ` + (header || _('prompt.input')) + '\n\n' +
+      _('prompt.cancel_input', { cancelPrompt: `<@!${this.client.user.id}> cancel` }));
+    return new Promise(resolve => {
+      const halt = this.createHalt(message.channel.id, message.author.id, timeout);
+      let handled = false, input = null;
+      halt.on('message', nextMessage => {
+        if (filter(nextMessage)) {
+          const cancelRegex = new RegExp(`^(?:<@!?${this.client.user.id}>\\s?)(cancel|stop|end)$`);
+
+          if (!nextMessage.content || cancelRegex.test(nextMessage.content.toLowerCase())) {
+            handled = true;
+            message.channel.createMessage(`<@${message.author.id}>, ` + _('prompt.input_canceled'));
+          } else input = nextMessage.content;
+          halt.end();
+        }
+      });
+      halt.on('end', async () => {
+        if (!input && !handled)
+          await message.channel.createMessage(`<@${message.author.id}>, ` + _('prompt.input_canceled'));
+        resolve(input);
+      });
     });
   }
 }
