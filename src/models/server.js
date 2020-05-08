@@ -56,10 +56,10 @@ class Server extends Model {
     });
   }
 
-  static _findObject(server) {
+  static _findObject(guild) {
     return this.findOrCreate({
       where: {
-        serverID: server.id,
+        serverID: guild.id,
       }
     });
   }

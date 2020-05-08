@@ -57,9 +57,20 @@ class LocaleHandler {
 
   /**
    * The source locale JSON
+   * @type {Object}
    */
   get source() {
     return this.locales.get(this.config.sourceLocale);
+  }
+
+  /**
+   * The array pairs of all locales
+   * @returns {Array<Array<string|Object>>}
+   */
+  array() {
+    const array = [];
+    this.locales.forEach((json, locale) => array.push([locale, json]));
+    return array;
   }
 
   /**
@@ -127,6 +138,8 @@ class LocaleHandler {
       moment(...args).locale((locale || this.config.sourceLocale).replace('_', '-'));
 
     _.locale = locale || this.config.sourceLocale;
+
+    _.prefixes = prefixes;
 
     _.json = () => {
       const localeJSON = this.locales.get(locale);

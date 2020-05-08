@@ -257,15 +257,18 @@ Util.CommandPermissions = {
     message.channel.permissionsOf(client.user.id).has('externalEmojis'),
   guild: (_, message) => !!message.guildID,
   elevated: (client, message) => client.config.elevated.includes(message.author.id),
-  trelloRole: (_, message) => {
+  trelloRole: (client, message) => {
     if (!message.guildID) return true;
     
     // Server owner or elevated users
     if (message.channel.guild.ownerID == message.author.id ||
-      Util.CommandPermissions.elevated(message.author.id)) return true;
+      Util.CommandPermissions.elevated(client, message)) return true;
     
     const memberRoles = message.member.roles.map(roleID => message.channel.guild.roles.get(roleID));
-    return !!memberRoles.find(role => role.name.toLowerCase() === 'trello');
+    
+    // Check member perms
+    return !!memberRoles.find(role => role.permissions.has('administrator') ||
+      role.permissions.has('manageGuild') || role.name.toLowerCase() === 'trello');
   },
   auth: (_, __, { userData }) => userData && userData.trelloToken && userData.trelloID,
   selectedBoard: (_, __, { userData }) => userData && userData.currentBoard,
