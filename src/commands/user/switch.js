@@ -25,12 +25,10 @@ module.exports = class Switch extends Command {
   get _options() { return {
     aliases: ['switchboard', 'select', 'selectboard'],
     cooldown: 2,
-    permissions: ['auth'],
-    minimumArgs: 1
+    permissions: ['auth']
   }; }
 
   async exec(message, { args, _, trello, userData }) {
-    const arg = args.join(' ');
     const handle = await trello.handleResponse({
       response: await trello.getMember(userData.trelloID),
       client: this.client, message, _ });
@@ -42,7 +40,7 @@ module.exports = class Switch extends Command {
 
     const json = handle.body;
 
-    const board = await Util.Trello.findBoard(arg, json.boards, this.client, message, _, userData);
+    const board = await Util.Trello.findBoard(args.join(' '), json.boards, this.client, message, _, userData);
     if (!board) return;
 
     await this.client.pg.models.get('user').update({ currentBoard: board.id },

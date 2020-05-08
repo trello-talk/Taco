@@ -26,8 +26,7 @@ module.exports = class List extends Command {
   get _options() { return {
     aliases: ['viewlist', 'cards', 'vl'],
     cooldown: 2,
-    permissions: ['embed', 'auth', 'selectedBoard'],
-    minimumArgs: 1
+    permissions: ['embed', 'auth', 'selectedBoard']
   }; }
 
   async exec(message, { args, _, trello, userData }) {

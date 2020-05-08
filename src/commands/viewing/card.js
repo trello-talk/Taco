@@ -26,8 +26,7 @@ module.exports = class Card extends Command {
   get _options() { return {
     aliases: ['viewcard', 'vc'],
     cooldown: 4,
-    permissions: ['embed', 'auth', 'selectedBoard'],
-    minimumArgs: 1
+    permissions: ['embed', 'auth', 'selectedBoard']
   }; }
 
   get stickerMap() {

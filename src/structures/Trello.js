@@ -129,7 +129,7 @@ class Trello {
           'subscribed', 'starred', 'pinned',
           'name', 'desc', 'prefs', 'shortLink',
           'shortUrl', 'powerUps', 'dateLastActivity',
-          'closed'
+          'closed', 'memberships'
         ],
         members: 'all',
         member_fields: ['username', 'fullName', 'id'],
@@ -358,9 +358,9 @@ class Trello {
   addCard(id, payload) {
     return this._request({
       method: 'post',
-      url: `/lists/${id}/cards`,
+      url: '/cards',
       bodyType: 'form',
-      body: payload
+      body: { ...payload, idList: id }
     });
   }
 

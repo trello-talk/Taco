@@ -25,8 +25,7 @@ module.exports = class WatchList extends Command {
   get _options() { return {
     aliases: ['subscribelist', 'sublist', 'wlist', 'wl'],
     cooldown: 4,
-    permissions: ['auth', 'selectedBoard'],
-    minimumArgs: 1
+    permissions: ['auth', 'selectedBoard']
   }; }
 
   async exec(message, { args, _, trello, userData }) {

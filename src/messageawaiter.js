@@ -138,6 +138,33 @@ class MessageAwaiter {
       });
     });
   }
+
+  /**
+   * Same as {@see #awaitMessage}, but is used for confirmation
+   * @param {Message} message The message to wait for
+   * @param {LocaleModule} _ The localization module
+   * @param {Object} [options] The options for the await
+   * @param {number} [options.timeout=30000] The timeout for the halt
+   * @param {string} [options.header] The content to put in the bot message
+   * @returns {?Message}
+   */
+  async confirm(message, _, { timeout = 30000, header = null } = {}) {
+    await message.channel.createMessage(`<@${message.author.id}>, ` +
+      (header || _('prompt.confirm')) + '\n\n' + _('prompt.cancel_confirm'));
+    return new Promise(resolve => {
+      const halt = this.createHalt(message.channel.id, message.author.id, timeout);
+      let input = false;
+      halt.on('message', nextMessage => {
+        input = nextMessage.content === 'yes';
+        halt.end();
+      });
+      halt.on('end', async () => {
+        if (!input)
+          await message.channel.createMessage(`<@${message.author.id}>, ` + _('prompt.no_confirm'));
+        resolve(input);
+      });
+    });
+  }
 }
 
 MessageAwaiter.Halt = Halt;
