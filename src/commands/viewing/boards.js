@@ -43,7 +43,8 @@ module.exports = class Boards extends Command {
       const paginator = new GenericPager(this.client, message, {
         items: json.boards,
         _, header: _('boards.header'), itemTitle: 'words.trello_board.many',
-        display: (item) => `${item.subscribed ? '🔔 ' : ''}${item.starred ? '⭐ ' : ''}\`${item.shortLink}\` ${
+        display: (item) => `${item.closed ? '🗃️ ' : ''}${item.subscribed ? '🔔 ' : ''}${
+          item.starred ? '⭐ ' : ''}\`${item.shortLink}\` ${
           Util.cutoffText(Util.Escape.markdown(item.name), 50)}`
       });
 

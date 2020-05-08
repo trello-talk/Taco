@@ -97,10 +97,11 @@ class Trello {
     return this._request({
       url: `/members/${id}`,
       query: {
-        boards: 'open',
+        boards: 'all',
         board_fields: [
           'subscribed', 'starred', 'pinned',
-          'name', 'shortLink', 'shortUrl'
+          'name', 'shortLink', 'shortUrl',
+          'closed'
         ]
       }
     });
@@ -127,7 +128,8 @@ class Trello {
         fields: [
           'subscribed', 'starred', 'pinned',
           'name', 'desc', 'prefs', 'shortLink',
-          'shortUrl', 'powerUps', 'dateLastActivity'
+          'shortUrl', 'powerUps', 'dateLastActivity',
+          'closed'
         ],
         members: 'all',
         member_fields: ['username', 'fullName', 'id'],

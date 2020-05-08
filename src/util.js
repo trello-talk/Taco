@@ -390,7 +390,8 @@ Util.Trello = {
         const prompter = new GenericPrompt(client, message, {
           items: boards, itemTitle: 'words.trello_board.many',
           header: _('boards.choose'),
-          display: (item) => `${item.subscribed ? '🔔 ' : ''}${item.starred ? '⭐ ' : ''}\`${
+          display: (item) => `${item.closed ? '🗃️ ' : ''}${item.subscribed ? '🔔 ' : ''}${
+            item.starred ? '⭐ ' : ''}\`${
             item.shortLink}\` ${Util.cutoffText(Util.Escape.markdown(item.name), 50)}`,
           _
         });

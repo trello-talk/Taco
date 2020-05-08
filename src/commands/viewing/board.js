@@ -61,9 +61,11 @@ module.exports = class Board extends Command {
       fields: [{
         // Information
         name: '*' + _('words.info') + '*',
-        value: `**${_('words.id')}:** \`${json.id}\`\n` +
+        value: (json.closed ? `🗃️ **${_('words.arch_board.one')}**\n\n` : '') +
+          `**${_('words.id')}:** \`${json.id}\`\n` +
           `**${_('words.short_link.one')}:** \`${json.shortLink}\`\n` +
-          `**${_('trello.last_act')}:** ${lastAct.format('LLLL')} *(${lastAct.fromNow()})*\n` +
+          (json.json.dateLastActivity ?
+            `**${_('trello.last_act')}:** ${lastAct.format('LLLL')} *(${lastAct.fromNow()})*\n` : '') +
           (json.organization ?
             `**${_('words.orgs.one')}:** [${
               Util.cutoffText(Util.Escape.markdown(json.organization.displayName), 50)
