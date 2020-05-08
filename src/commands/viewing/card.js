@@ -25,7 +25,7 @@ module.exports = class Card extends Command {
   get name() { return 'card'; }
 
   get _options() { return {
-    aliases: ['viewcard'],
+    aliases: ['viewcard', 'vc'],
     cooldown: 2,
     permissions: ['embed', 'auth', 'selectedBoard'],
     minimumArgs: 1

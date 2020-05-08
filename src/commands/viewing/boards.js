@@ -24,6 +24,7 @@ module.exports = class Boards extends Command {
   get name() { return 'boards'; }
 
   get _options() { return {
+    aliases: ['viewboards', 'vbs'],
     cooldown: 2,
     permissions: ['auth'],
   }; }

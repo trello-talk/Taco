@@ -24,7 +24,7 @@ module.exports = class ListArchive extends Command {
   get name() { return 'listarchive'; }
 
   get _options() { return {
-    aliases: ['viewlistarchive'],
+    aliases: ['viewlistarchive', 'vla'],
     cooldown: 2,
     permissions: ['auth', 'selectedBoard'],
   }; }

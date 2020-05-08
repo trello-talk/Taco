@@ -108,7 +108,7 @@ class TrelloBot extends Eris.Client {
     await this.connect();
     await this.waitTill('ready');
     this.editStatus('online', {
-      name: `boards scroll by me | ${this.config.prefixes[0]}help`,
+      name: `boards scroll by me • ${this.config.prefixes[0]}help`,
       type: 3,
     });
 

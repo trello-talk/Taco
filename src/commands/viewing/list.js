@@ -25,7 +25,7 @@ module.exports = class List extends Command {
   get name() { return 'list'; }
 
   get _options() { return {
-    aliases: ['viewlist', 'cards'],
+    aliases: ['viewlist', 'cards', 'vl'],
     cooldown: 2,
     permissions: ['embed', 'auth', 'selectedBoard'],
     minimumArgs: 1

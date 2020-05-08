@@ -23,7 +23,7 @@ module.exports = class Board extends Command {
   get name() { return 'board'; }
 
   get _options() { return {
-    aliases: ['viewboard', 'boardinfo'],
+    aliases: ['viewboard', 'boardinfo', 'vb'],
     cooldown: 2,
     permissions: ['embed', 'auth', 'selectedBoard'],
   }; }

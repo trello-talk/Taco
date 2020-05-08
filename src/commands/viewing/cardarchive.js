@@ -24,7 +24,7 @@ module.exports = class CardArchive extends Command {
   get name() { return 'cardarchive'; }
 
   get _options() { return {
-    aliases: ['viewcardarchive'],
+    aliases: ['viewcardarchive', 'vca'],
     cooldown: 2,
     permissions: ['auth', 'selectedBoard'],
   }; }
