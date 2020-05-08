@@ -38,7 +38,8 @@ module.exports = class List extends Command {
       else {
         const prompter = new GenericPrompt(this.client, message, {
           items: lists, itemTitle: 'words.list.many',
-          display: board => `${Util.Escape.markdown(board.name)} (\`${board.shortLink}\`)`,
+          display: list => `${list.closed ? '🗃️ ' : ''}${
+            list.subscribed ? '🔔 ' : ''}\`${list.id}\` ${Util.Escape.markdown(list.name)}`,
           _
         });
         const promptResult = await prompter.search(query,
@@ -56,7 +57,7 @@ module.exports = class List extends Command {
   }
 
   async exec(message, { args, _, trello, userData }) {
-    const response = await trello.getLists(userData.currentBoard);
+    const response = await trello.getAllLists(userData.currentBoard);
     if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
     if (response.status === 404) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
@@ -76,11 +77,12 @@ module.exports = class List extends Command {
     if (list.cards.length) {
       const paginator = new GenericPager(this.client, message, {
         items: list.cards,
-        _, header: `**${_('words.list.one')}:** ${Util.Escape.markdown(list.name)}\n` +
+        _, header: (list.closed ? `🗃️ **${_('words.arch_list.one')}**\n\n` : '') +
+          `**${_('words.list.one')}:** ${Util.Escape.markdown(list.name)}\n` +
           `**${_('words.id')}:** \`${list.id}\`\n` +
           `${list.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n\n` +
           _('lists.list_header'), itemTitle: 'words.card.many',
-        display: (item) => `${ item.subscribed ? '🔔 ' : ''}\`${item.shortLink}\` ${
+        display: (item) => `${item.closed ? '🗃️ ' : ''}${item.subscribed ? '🔔 ' : ''}\`${item.shortLink}\` ${
           Util.Escape.markdown(item.name)}`
       });
 
@@ -92,7 +94,8 @@ module.exports = class List extends Command {
       const embed = {
         title: Util.Escape.markdown(list.name),
         color: this.client.config.embedColor,
-        description: `**${_('words.id')}:** \`${list.id}\`\n` +
+        description: (list.closed ? `🗃️ **${_('words.arch_list.one')}**\n\n` : '') +
+          `**${_('words.id')}:** \`${list.id}\`\n` +
           `${list.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n\n` +
           _('lists.list_none')
       };

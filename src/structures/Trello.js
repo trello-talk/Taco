@@ -117,7 +117,7 @@ class Trello {
         fields: [
           'subscribed', 'starred', 'pinned',
           'name', 'desc', 'prefs', 'shortLink',
-          'shortUrl', 'powerUps'
+          'shortUrl', 'powerUps', 'dateLastActivity'
         ],
         members: 'all',
         member_fields: ['username', 'fullName', 'id'],
@@ -127,13 +127,35 @@ class Trello {
         card_fields: [
           'name', 'idList', 'shortLink', 'subscribed'
         ],
+        labels: 'all',
+        label_fields: [],
         organization: true
       }
     });
   }
 
   /**
-   * Gets the open cards on a board
+   * Gets the information on a board, optimized for card search
+   * @param {string} id The board's ID
+   */
+  getSlimBoard(id) {
+    return this._request({
+      url: `/boards/${id}`,
+      query: {
+        fields: ['name'],
+        lists: 'all',
+        list_fields: ['name', 'subscribed'],
+        cards: 'all',
+        card_fields: [
+          'name', 'idList', 'shortLink', 'subscribed',
+          'closed'
+        ]
+      }
+    });
+  }
+
+  /**
+   * Gets the open lists on a board
    * @param {string} id The board's ID
    */
   getLists(id) {
@@ -141,13 +163,28 @@ class Trello {
       url: `/boards/${id}/lists`,
       query: {
         cards: 'open',
-        card_fields: [
-          'name', 'subscribed', 'shortLink',
-          'shortUrl', 'labels'
-        ],
+        card_fields: [],
         fields: [
           'id', 'name', 'subscribed',
           'dateLastActivity'
+        ]
+      }
+    });
+  }
+
+  /**
+   * Gets all cards on a board
+   * @param {string} id The board's ID
+   */
+  getAllLists(id) {
+    return this._request({
+      url: `/boards/${id}/lists/all`,
+      query: {
+        cards: 'open',
+        card_fields: [],
+        fields: [
+          'id', 'name', 'subscribed',
+          'dateLastActivity', 'closed'
         ]
       }
     });
@@ -193,7 +230,8 @@ class Trello {
         checklist_fields: ['name'],
         fields: [
           'name', 'subscribed', 'desc', 'labels',
-          'shortLink', 'shortUrl', 'due'
+          'shortLink', 'shortUrl', 'due', 'dueComplete',
+          'cover', 'dateLastActivity', 'closed'
         ]
       }
     });
@@ -202,6 +240,7 @@ class Trello {
   /**
    * Gets the open cards on a board
    * @param {string} id The board's ID
+   * @deprecated
    */
   getCards(id) {
     return this._request({
@@ -221,12 +260,11 @@ class Trello {
    */
   getCardsArchived(id) {
     return this._request({
-      url: `/boards/${id}/cards`,
+      url: `/boards/${id}/cards/closed`,
       query: {
-        filter: 'closed',
-        card_fields: [
+        fields: [
           'name', 'subscribed', 'shortLink',
-          'shortUrl', 'labels'
+          'shortUrl'
         ]
       }
     });
@@ -240,7 +278,7 @@ class Trello {
     return this._request({
       url: `/boards/${id}/labels`,
       query: {
-        fields: ['name', 'color']
+        fields: ['name', 'color', 'uses']
       }
     });
   }

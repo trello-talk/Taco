@@ -293,3 +293,22 @@ Util.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) 
 Util.cutoffText = (text, limit = 2000) => {
   return text.length > limit ? text.slice(0, limit - 1) + '…' : text;
 };
+
+/**
+ * Cuts off an array of text to a limit
+ * @param {Array<string>} texts
+ * @param {number} limit
+ * @param {number} rollbackAmount Amount of items to roll back when the limit has been hit
+ */
+Util.cutoffArray = (texts, limit = 2000, rollbackAmount = 1, paddingAmount = 1) => {
+  let currLength = 0;
+  for (let i = 0; i < texts.length; i++) {
+    const text = texts[i];
+    currLength += text.length + paddingAmount;
+    if (currLength > limit) {
+      const clampedRollback = rollbackAmount > i ? i : rollbackAmount;
+      return texts.slice(0, (i + 1) - clampedRollback);
+    }
+  }
+  return texts;
+};

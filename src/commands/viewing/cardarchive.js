@@ -20,17 +20,17 @@ const Command = require('../../structures/Command');
 const GenericPager = require('../../structures/GenericPager');
 const Util = require('../../util');
 
-module.exports = class ListArchive extends Command {
-  get name() { return 'listarchive'; }
+module.exports = class CardArchive extends Command {
+  get name() { return 'cardarchive'; }
 
   get _options() { return {
-    aliases: ['viewlistarchive'],
+    aliases: ['viewcardarchive'],
     cooldown: 2,
     permissions: ['auth', 'selectedBoard'],
   }; }
 
   async exec(message, { args, _, trello, userData }) {
-    const response = await trello.getListsArchived(userData.currentBoard);
+    const response = await trello.getCardsArchived(userData.currentBoard);
     if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
     if (response.status === 404) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
@@ -43,8 +43,8 @@ module.exports = class ListArchive extends Command {
     if (json.length) {
       const paginator = new GenericPager(this.client, message, {
         items: json,
-        _, header: _('lists.arch_header'), itemTitle: 'words.arch_list.many',
-        display: (item) => `${item.subscribed ? '🔔 ' : ''}\`${item.id}\` ${
+        _, header: _('cards.arch_header'), itemTitle: 'words.arch_card.many',
+        display: (item) => `${item.subscribed ? '🔔 ' : ''}\`${item.shortLink}\` ${
           Util.Escape.markdown(item.name)}`
       });
 
@@ -53,7 +53,7 @@ module.exports = class ListArchive extends Command {
 
       return paginator.start(message.channel.id, message.author.id);
     } else
-      return message.channel.createMessage(_('lists.arch_none'));
+      return message.channel.createMessage(_('cards.arch_none'));
   }
 
   get metadata() { return {

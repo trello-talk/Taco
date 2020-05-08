@@ -47,6 +47,7 @@ module.exports = class Board extends Command {
       parseInt(json.prefs.backgroundTopColor.slice(1), 16) : this.client.config.embedColor;
     const backgroundImg = json.prefs.backgroundImageScaled ?
       json.prefs.backgroundImageScaled.reverse()[1].url : null;
+    const lastAct = _.moment(json.dateLastActivity);
 
     const embed = {
       title: Util.Escape.markdown(json.name),
@@ -60,6 +61,7 @@ module.exports = class Board extends Command {
         name: '*' + _('words.info') + '*',
         value: `**${_('words.id')}:** \`${json.id}\`\n` +
           `**${_('words.short_link.one')}:** \`${json.shortLink}\`\n` +
+          `**${_('trello.last_act')}:** ${lastAct.format('LLLL')} *(${lastAct.fromNow()})*\n` +
           (json.organization ?
             `**${_('words.orgs.one')}:** [${
               Util.Escape.markdown(json.organization.displayName)}](https://trello.com/${json.organization.name})\n` : '') +
@@ -71,7 +73,8 @@ module.exports = class Board extends Command {
         value: `${_.toLocaleString(json.members.length)} ${
           _.numSuffix('words.member', json.members.length)}\n` +
           `${_.toLocaleString(json.lists.length)} ${_.numSuffix('words.list', json.lists.length)}\n` +
-          `${_.toLocaleString(json.cards.length)} ${_.numSuffix('words.card', json.cards.length)}`,
+          `${_.toLocaleString(json.cards.length)} ${_.numSuffix('words.card', json.cards.length)}\n` +
+          `${_.toLocaleString(json.labels.length)} ${_.numSuffix('words.label', json.labels.length)}\n`,
         inline: true
       }, {
         // Preferences
