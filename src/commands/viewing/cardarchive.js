@@ -45,7 +45,7 @@ module.exports = class CardArchive extends Command {
         items: json,
         _, header: _('cards.arch_header'), itemTitle: 'words.arch_card.many',
         display: (item) => `${item.subscribed ? '🔔 ' : ''}\`${item.shortLink}\` ${
-          Util.Escape.markdown(item.name)}`
+          Util.cutoffText(Util.Escape.markdown(item.name), 50)}`
       });
 
       if (args[0])

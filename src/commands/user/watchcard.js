@@ -48,7 +48,7 @@ module.exports = class WatchCard extends Command {
       client: this.client, message, _ })) return;
     
     return message.channel.createMessage(_(card.subscribed ? 'user_mgmt.unsub_card' : 'user_mgmt.sub_card', {
-      name: card.name,
+      name: Util.cutoffText(Util.Escape.markdown(card.name), 50),
       id: card.shortLink
     }));
   }

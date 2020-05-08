@@ -44,7 +44,7 @@ module.exports = class Boards extends Command {
         items: json.boards,
         _, header: _('boards.header'), itemTitle: 'words.trello_board.many',
         display: (item) => `${item.subscribed ? '🔔 ' : ''}${item.starred ? '⭐ ' : ''}\`${item.shortLink}\` ${
-          Util.Escape.markdown(item.name)}`
+          Util.cutoffText(Util.Escape.markdown(item.name), 50)}`
       });
 
       if (args[0])

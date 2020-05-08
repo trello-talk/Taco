@@ -49,7 +49,7 @@ module.exports = class Switch extends Command {
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const doneEmoji = emojiFallback('632444546684551183', ':white_check_mark:');
     return message.channel.createMessage(`${doneEmoji} ` + _('boards.switch', {
-      name: Util.Escape.markdown(board.name),
+      name: Util.cutoffText(Util.Escape.markdown(board.name), 50),
       id: board.shortLink
     }));
   }

@@ -192,7 +192,10 @@ class Trello {
       url: `/boards/${id}/lists/all`,
       query: {
         cards: 'open',
-        card_fields: [],
+        card_fields: [
+          'name', 'subscribed', 'shortLink',
+          'closed'
+        ],
         fields: [
           'id', 'name', 'subscribed',
           'dateLastActivity', 'closed'

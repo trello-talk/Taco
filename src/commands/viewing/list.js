@@ -52,12 +52,12 @@ module.exports = class List extends Command {
       const paginator = new GenericPager(this.client, message, {
         items: list.cards,
         _, header: (list.closed ? `🗃️ **${_('words.arch_list.one')}**\n\n` : '') +
-          `**${_('words.list.one')}:** ${Util.Escape.markdown(list.name)}\n` +
+          `**${_('words.list.one')}:** ${Util.cutoffText(Util.Escape.markdown(list.name), 50)}\n` +
           `**${_('words.id')}:** \`${list.id}\`\n` +
           `${list.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n\n` +
           _('lists.list_header'), itemTitle: 'words.card.many',
         display: (item) => `${item.closed ? '🗃️ ' : ''}${item.subscribed ? '🔔 ' : ''}\`${item.shortLink}\` ${
-          Util.Escape.markdown(item.name)}`
+          Util.cutoffText(Util.Escape.markdown(item.name), 50)}`
       });
 
       if (args[1])
@@ -66,7 +66,7 @@ module.exports = class List extends Command {
       return paginator.start(message.channel.id, message.author.id);
     } else {
       const embed = {
-        title: Util.Escape.markdown(list.name),
+        title: Util.cutoffText(Util.Escape.markdown(list.name), 256),
         color: this.client.config.embedColor,
         description: (list.closed ? `🗃️ **${_('words.arch_list.one')}**\n\n` : '') +
           `**${_('words.id')}:** \`${list.id}\`\n` +

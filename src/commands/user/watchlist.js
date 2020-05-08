@@ -48,7 +48,10 @@ module.exports = class WatchList extends Command {
       client: this.client, message, _ })) return;
     
     return message.channel.createMessage(
-      _(list.subscribed ? 'user_mgmt.unsub_list' : 'user_mgmt.sub_list', list));
+      _(list.subscribed ? 'user_mgmt.unsub_list' : 'user_mgmt.sub_list', {
+        name: Util.cutoffText(Util.Escape.markdown(list.name), 50),
+        id: list.id
+      }));
   }
 
   get metadata() { return {

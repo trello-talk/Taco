@@ -61,7 +61,7 @@ module.exports = class Star extends Command {
     
     return message.channel.createMessage(
       _(board.starred ? 'user_mgmt.unstar_board' : 'user_mgmt.star_board', {
-        name: board.name,
+        name: Util.cutoffText(Util.Escape.markdown(board.name), 50),
         id: board.shortLink
       }));
   }

@@ -48,7 +48,7 @@ module.exports = class Watch extends Command {
     
     return message.channel.createMessage(
       _(board.subscribed ? 'user_mgmt.unsub_board' : 'user_mgmt.sub_board', {
-        name: board.name,
+        name: Util.cutoffText(Util.Escape.markdown(board.name), 50),
         id: board.shortLink
       }));
   }

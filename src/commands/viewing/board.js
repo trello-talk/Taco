@@ -52,10 +52,10 @@ module.exports = class Board extends Command {
     const archCardCount = json.cards.filter(card => card.closed).length;
 
     const embed = {
-      title: Util.Escape.markdown(json.name),
+      title: Util.cutoffText(Util.Escape.markdown(json.name), 256),
       url: json.shortUrl,
       color: boardColor,
-      description: json.desc ? Util.Escape.markdown(json.desc) : undefined,
+      description: json.desc ? Util.cutoffText(Util.Escape.markdown(json.desc), 2048) : undefined,
       image: backgroundImg ? { url: backgroundImg } : undefined,
       
       fields: [{
@@ -66,7 +66,8 @@ module.exports = class Board extends Command {
           `**${_('trello.last_act')}:** ${lastAct.format('LLLL')} *(${lastAct.fromNow()})*\n` +
           (json.organization ?
             `**${_('words.orgs.one')}:** [${
-              Util.Escape.markdown(json.organization.displayName)}](https://trello.com/${json.organization.name})\n` : '') +
+              Util.cutoffText(Util.Escape.markdown(json.organization.displayName), 50)
+            }](https://trello.com/${json.organization.name})\n` : '') +
           (json.prefs.backgroundImageScaled ?
             `**${_('words.bg_img')}:** [${_('words.link.one')}](${backgroundImg})\n` : '')
       }, {

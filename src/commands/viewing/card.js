@@ -113,7 +113,7 @@ module.exports = class Card extends Command {
     const hasVoted = !!json.membersVoted.find(member => member.id === userData.trelloID);
 
     const embed = {
-      title: Util.Escape.markdown(json.name),
+      title: Util.cutoffText(Util.Escape.markdown(json.name), 256),
       description: json.desc ? Util.cutoffText(json.desc, 2048) : undefined,
       color: this.client.config.embedColor,
       url: json.shortUrl,
@@ -124,7 +124,8 @@ module.exports = class Card extends Command {
         value: (json.closed ? `🗃️ **${_('words.arch_card.one')}**\n\n` : '') +
           `**${_('words.id')}:** \`${json.id}\`\n` +
           `**${_('words.short_link.one')}:** \`${json.shortLink}\`\n` +
-          `**${_('words.list.one')}:** ${Util.Escape.markdown(list.name)} (\`${list.id}\`)\n` +
+          `**${_('words.list.one')}:** ${
+            Util.cutoffText(Util.Escape.markdown(list.name), 25)} (\`${list.id}\`)\n` +
           `**${_('trello.last_act')}:** ${lastAct.format('LLLL')} *(${lastAct.fromNow()})*\n` +
           (json.due ? `**${_('trello.due')}:** ${json.dueComplete ? checkEmoji : uncheckEmoji} ${
             due.format('LLLL')} *(${due.fromNow()})*\n` : '') +
@@ -146,7 +147,8 @@ module.exports = class Card extends Command {
     if (json.labels.length) {
       const labels = Util.cutoffArray(
         json.labels.map(label => `${label.color ?
-          `\`${_(`trello.label_color.${label.color}`)}\` ` : ''}${Util.Escape.markdown(label.name)}`),
+          `\`${_(`trello.label_color.${label.color}`)}\` ` :
+          ''}${Util.cutoffText(Util.Escape.markdown(label.name), 50)}`),
         512, 1, 2);
       embed.fields.push({
         name: '*' + _.numSuffix('words.label', json.labels.length) + '*',
@@ -161,7 +163,7 @@ module.exports = class Card extends Command {
       const attachments = Util.cutoffArray(
         json.attachments.map(atch => {
           const filename = path.parse(atch.url).base;
-          return `[${filename}](${atch.url})`;
+          return `[${Util.cutoffText(filename, 50)}](${atch.url})`;
         }),
         512, 1, 3);
       embed.fields.push({
@@ -195,7 +197,8 @@ module.exports = class Card extends Command {
       const checklists = Util.cutoffArray(
         json.checklists.map(checklist => {
           const completed = !checklist.checkItems.find(item => item.state === 'incomplete');
-          return `${completed ? checkEmoji : uncheckEmoji} ${Util.Escape.markdown(checklist.name)} (${
+          return `${completed ? checkEmoji : uncheckEmoji} ${
+            Util.cutoffText(Util.Escape.markdown(checklist.name), 50)} (${
             _.toLocaleString(checklist.checkItems.length)} ${
             _.numSuffix('words.item', checklist.checkItems.length)})`;
         }),
@@ -213,7 +216,8 @@ module.exports = class Card extends Command {
     if (json.members.length) {
       const members = Util.cutoffArray(
         json.members.map(member => {
-          const result = `${Util.Escape.markdown(member.fullName)} (${member.username})`;
+          const result = `${Util.cutoffText(Util.Escape.markdown(member.fullName),
+            50)} (${member.username})`;
           return member.id === userData.trelloID ? `**${result}**` : result;
         }),
         256, 1, 1);

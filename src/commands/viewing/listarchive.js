@@ -45,7 +45,7 @@ module.exports = class ListArchive extends Command {
         items: json,
         _, header: _('lists.arch_header'), itemTitle: 'words.arch_list.many',
         display: (item) => `${item.subscribed ? '🔔 ' : ''}\`${item.id}\` ${
-          Util.Escape.markdown(item.name)}`
+          Util.cutoffText(Util.Escape.markdown(item.name), 25)}`
       });
 
       if (args[0])

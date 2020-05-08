@@ -45,7 +45,8 @@ module.exports = class Me extends Command {
     const embed = {
       author: {
         name: json.prefs.privacy.fullName !== 'public' ?
-          json.username : `${Util.Escape.markdown(json.fullName)} (${json.username})`,
+          json.username : `${Util.cutoffText(Util.Escape.markdown(json.fullName),
+            253 - json.username.length)} (${json.username})`,
         icon_url: json.prefs.privacy.avatar !== 'public' ? null :
           (json.avatarUrl ? json.avatarUrl + '/170.png' : null),
         url: json.url
