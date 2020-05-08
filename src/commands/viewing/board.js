@@ -48,6 +48,8 @@ module.exports = class Board extends Command {
     const backgroundImg = json.prefs.backgroundImageScaled ?
       json.prefs.backgroundImageScaled.reverse()[1].url : null;
     const lastAct = _.moment(json.dateLastActivity);
+    const archListCount = json.lists.filter(list => list.closed).length;
+    const archCardCount = json.cards.filter(card => card.closed).length;
 
     const embed = {
       title: Util.Escape.markdown(json.name),
@@ -72,8 +74,10 @@ module.exports = class Board extends Command {
         name: '*' + _('words.count.many') + '*',
         value: `${_.toLocaleString(json.members.length)} ${
           _.numSuffix('words.member', json.members.length)}\n` +
-          `${_.toLocaleString(json.lists.length)} ${_.numSuffix('words.list', json.lists.length)}\n` +
-          `${_.toLocaleString(json.cards.length)} ${_.numSuffix('words.card', json.cards.length)}\n` +
+          `${_.toLocaleString(json.lists.length)} ${_.numSuffix('words.list', json.lists.length)} (${
+            _.toLocaleString(archListCount)} ${_('trello.archived_lower')})\n` +
+          `${_.toLocaleString(json.cards.length)} ${_.numSuffix('words.card', json.cards.length)} (${
+            _.toLocaleString(archCardCount)} ${_('trello.archived_lower')})\n` +
           `${_.toLocaleString(json.labels.length)} ${_.numSuffix('words.label', json.labels.length)}\n`,
         inline: true
       }, {

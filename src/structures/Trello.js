@@ -122,10 +122,11 @@ class Trello {
         members: 'all',
         member_fields: ['username', 'fullName', 'id'],
         lists: 'all',
-        list_fields: ['name'],
+        list_fields: ['name', 'closed'],
         cards: 'all',
         card_fields: [
-          'name', 'idList', 'shortLink', 'subscribed'
+          'name', 'idList', 'shortLink', 'subscribed',
+          'closed'
         ],
         labels: 'all',
         label_fields: [],
@@ -144,7 +145,7 @@ class Trello {
       query: {
         fields: ['name'],
         lists: 'all',
-        list_fields: ['name', 'subscribed'],
+        list_fields: ['name'],
         cards: 'all',
         card_fields: [
           'name', 'idList', 'shortLink', 'subscribed',
