@@ -69,7 +69,7 @@ class Trello {
 
     // Abort Controller
     const controller = new AbortController();
-    const controllerTimeout = setTimeout(controller.abort, 5000);
+    const controllerTimeout = setTimeout(controller.abort.bind(controller), 5000);
 
     return new Promise((resolve, reject) => {
       fetch(url.href, {
@@ -82,7 +82,8 @@ class Trello {
         resolve(r);
       }).catch(e => {
         clearTimeout(controllerTimeout);
-        reject(e);
+        if (e && e.type === 'aborted')
+          resolve(e); else reject(e);
       });
     });
   }
@@ -436,7 +437,10 @@ class Trello {
    * Handles a response given by Trello.
    */
   async handleResponse({ response, message, client, _ }) {
-    if (response.status == 401) {
+    if (response.type === 'aborted') {
+      await client.createMessage(message.channel.id, _('trello_response.aborted'));
+      return true;
+    } else if (response.status == 401) {
       await client.pg.models.get('user').removeAuth(message.author);
       await client.createMessage(message.channel.id, _('trello_response.unauthorized'));
       return true;
