@@ -134,6 +134,8 @@ class GenericPrompt extends EventEmitter {
           return lodash.get(item, key);
         else if (typeof key === 'function')
           return key(item);
+        else if (key === null)
+          return item;
       }
     }).map(el => el.original);
 

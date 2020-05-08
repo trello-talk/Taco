@@ -137,6 +137,7 @@ Util.Prefix = {
 Util.Regex = {
   escape: /[-/\\^$*+?.()|[\]{}]/g,
   url: /https?:\/\/(-\.)?([^\s/?.#-]+\.?)+(\/[^\s]*)?/gi,
+  userMention: /<@!?(\d+)>/gi,
 };
   
 /**

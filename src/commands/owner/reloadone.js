@@ -33,12 +33,10 @@ module.exports = class ReloadOne extends Command {
   async exec(message, { args, _ }) {
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const reloadingEmoji = emojiFallback('632444546961375232', ':recycle:');
-    const sentMessage = await this.client.createMessage(message.channel.id,
-      `${reloadingEmoji} ${_('reload.reloading')}`);
     
     const commands = args.map(name => this.client.cmds.get(name));
     if (commands.includes(undefined))
-      return message.channel.send(_('reloadone.invalid'));
+      return this.client.createMessage(message.channel.id,_('reloadone.invalid'));
 
     const fileExist = commands.map(command => {
       const path = command.path;
@@ -47,7 +45,10 @@ module.exports = class ReloadOne extends Command {
     });
 
     if (fileExist.includes(false))
-      return message.channel.send(_('reloadone.file'));
+      return this.client.createMessage(message.channel.id,_('reloadone.file'));
+
+    const sentMessage = await this.client.createMessage(message.channel.id,
+      `${reloadingEmoji} ${_('reload.reloading')}`);
 
     const reloadedCommands = commands.map(command => {
       const path = command.path;

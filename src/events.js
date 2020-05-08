@@ -48,8 +48,10 @@ module.exports = class Events {
 
     // Postgres Data
     const userData = await this.client.pg.models.get('user').onlyGet(message.author.id);
+    if (userData && userData.bannedFromUse) return;
     const serverData = message.guildID ?
       await this.client.pg.models.get('server').onlyGet(message.guildID) : null;
+    if (serverData && serverData.bannedFromUse) return;
 
     // Prefixes
     const userPrefixes = userData ? userData.prefixes : [];
