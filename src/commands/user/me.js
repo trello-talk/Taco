@@ -29,14 +29,16 @@ module.exports = class Me extends Command {
   }; }
 
   async exec(message, { _, trello, userData }) {
-    const response = await trello.getMember(userData.trelloID);
-    if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
-    if (response.status === 404) {
+    const handle = await trello.handleResponse({
+      response: await trello.getMember(userData.trelloID),
+      client: this.client, message, _ });
+    if (handle.stop) return;
+    if (handle.response.status === 404) {
       await this.client.pg.models.get('user').removeAuth(message.author);
       return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
     }
 
-    const json = await response.json();
+    const json = handle.body;
 
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const checkEmoji = emojiFallback('632444546684551183', ':ballot_box_with_check:');

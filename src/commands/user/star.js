@@ -30,33 +30,39 @@ module.exports = class Star extends Command {
 
   async exec(message, { args, _, trello, userData }) {
     const arg = args.join(' ') || userData.currentBoard;
-    const response = await trello.getMember(userData.trelloID);
-    if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
-    if (response.status === 404) {
+
+    const handle = await trello.handleResponse({
+      response: await trello.getMember(userData.trelloID),
+      client: this.client, message, _ });
+    if (handle.stop) return;
+    if (handle.response.status === 404) {
       await this.client.pg.models.get('user').removeAuth(message.author);
       return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
     }
 
-    const json = await response.json();
+    const json = handle.body;
 
     const board = await Util.Trello.findBoard(arg, json.boards, this.client, message, _, userData);
     if (!board) return;
 
     if (board.starred) {
-      const starResponse = await trello.getBoardStars(userData.trelloID);
-      if (await trello.handleResponse({
-        response: starResponse, client: this.client, message, _ })) return;
-      const starJSON = await starResponse.json();
-      const star = starJSON.find(star => star.idBoard === board.id);
+      // Get stars
+      const starHandle = await trello.handleResponse({
+        response: await trello.getBoardStars(userData.trelloID),
+        client: this.client, message, _ });
+      if (starHandle.stop) return;
+      const star = starHandle.body.find(star => star.idBoard === board.id);
       if (!star)
         return message.channel.createMessage(_('user_mgmt.star_error'));
-      if (await trello.handleResponse({
+
+      // Remove star
+      if ((await trello.handleResponse({
         response: await trello.unstarBoard(userData.trelloID, star.id),
-        client: this.client, message, _ })) return;
+        client: this.client, message, _ })).stop) return;
     } else {
-      if (await trello.handleResponse({
+      if ((await trello.handleResponse({
         response: await trello.starBoard(userData.trelloID, board.id),
-        client: this.client, message, _ })) return;
+        client: this.client, message, _ })).stop) return;
     }
     
     return message.channel.createMessage(

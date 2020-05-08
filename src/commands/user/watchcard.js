@@ -30,22 +30,24 @@ module.exports = class WatchCard extends Command {
   }; }
 
   async exec(message, { args, _, trello, userData }) {
-    const response = await trello.getSlimBoard(userData.currentBoard);
-    if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
-    if (response.status === 404) {
+    const handle = await trello.handleResponse({
+      response: await trello.getSlimBoard(userData.currentBoard),
+      client: this.client, message, _ });
+    if (handle.stop) return;
+    if (handle.response.status === 404) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
         { where: { userID: message.author.id } });
       return this.client.createMessage(message.channel.id, _('boards.gone'));
     }
 
-    const boardJson = await response.json();
+    const boardJson = handle.body;
 
     const card = await Util.Trello.findCard(args.join(' '), boardJson, this.client, message, _);
     if (!card) return;
 
-    if (await trello.handleResponse({
+    if ((await trello.handleResponse({
       response: await trello.updateCard(card.id, { subscribed: !card.subscribed }),
-      client: this.client, message, _ })) return;
+      client: this.client, message, _ })).stop) return;
     
     return message.channel.createMessage(_(card.subscribed ? 'user_mgmt.unsub_card' : 'user_mgmt.sub_card', {
       name: Util.cutoffText(Util.Escape.markdown(card.name), 50),

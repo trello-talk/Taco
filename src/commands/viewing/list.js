@@ -31,16 +31,17 @@ module.exports = class List extends Command {
   }; }
 
   async exec(message, { args, _, trello, userData }) {
-    const response = await trello.getAllLists(userData.currentBoard);
-    if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
-    if (response.status === 404) {
+    const handle = await trello.handleResponse({
+      response: await trello.getAllLists(userData.currentBoard),
+      client: this.client, message, _ });
+    if (handle.stop) return;
+    if (handle.response.status === 404) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
         { where: { userID: message.author.id } });
       return this.client.createMessage(message.channel.id, _('boards.gone'));
     }
 
-    const json = await response.json();
-
+    const json = handle.body;
     const list = await Util.Trello.findList(args[0], json, this.client, message, _);
     if (!list) return;
 

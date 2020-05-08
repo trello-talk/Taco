@@ -527,24 +527,37 @@ class Trello {
    * Handles a response given by Trello.
    */
   async handleResponse({ response, message, client, _ }) {
+    const body = response.text ? await this._parse(response) : null;
     if (response.type === 'aborted') {
       await client.createMessage(message.channel.id, _('trello_response.aborted'));
-      return true;
-    } else if (response.status == 401) {
+      return { body, response, stop: true };
+    } else if (response.status === 401 && body === 'invalid token') {
       await client.pg.models.get('user').removeAuth(message.author);
       await client.createMessage(message.channel.id, _('trello_response.unauthorized'));
-      return true;
-    } else if (response == 419) {
+      return { body, response, stop: true };
+    } else if (response === 419) {
       await client.createMessage(message.channel.id, _('trello_response.ratelimit'));
-      return true;
+      return { body, response, stop: true };
     } else if (response >= 500) {
       await client.createMessage(message.channel.id, _('trello_response.internal'));
-      return true;
+      return { body, response, top: true };
     } else if (response >= 400 && response !== 404)
       // TODO: Make a custom error class for this
       throw response;
 
-    return false;
+    return { body, response, stop: false };
+  }
+
+  /**
+   * @private
+   */
+  async _parse(response) {
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      return text;
+    }
   }
 }
 

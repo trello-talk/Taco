@@ -31,14 +31,16 @@ module.exports = class Switch extends Command {
 
   async exec(message, { args, _, trello, userData }) {
     const arg = args.join(' ');
-    const response = await trello.getMember(userData.trelloID);
-    if (await trello.handleResponse({ response, client: this.client, message, _ })) return;
-    if (response.status === 404) {
+    const handle = await trello.handleResponse({
+      response: await trello.getMember(userData.trelloID),
+      client: this.client, message, _ });
+    if (handle.stop) return;
+    if (handle.response.status === 404) {
       await this.client.pg.models.get('user').removeAuth(message.author);
       return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
     }
 
-    const json = await response.json();
+    const json = handle.body;
 
     const board = await Util.Trello.findBoard(arg, json.boards, this.client, message, _, userData);
     if (!board) return;
