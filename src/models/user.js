@@ -47,6 +47,7 @@ class User extends Model {
       trelloID: Sequelize.STRING,
       currentBoard: Sequelize.STRING,
       discordToken: Sequelize.STRING,
+      discordRefresh: Sequelize.STRING,
       locale: {
         type: Sequelize.STRING,
         allowNull: true,
