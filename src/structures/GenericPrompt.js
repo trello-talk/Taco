@@ -74,6 +74,9 @@ class GenericPrompt {
       let foundItem = null;
 
       this.halt.on('message', nextMessage => {
+        if (this.pager.canManage())
+          nextMessage.delete();
+
         if (GenericPrompt.CANCEL_TRIGGERS.includes(nextMessage.content.toLowerCase())) {
           foundItem = { _canceled: true };
           this.halt.end();
@@ -105,7 +108,7 @@ class GenericPrompt {
 
       if (this.pager.collector)
         this.pager.collector.on('reaction', emoji => {
-          if (Paginator.STOP == emoji.name) {
+          if (Paginator.STOP === emoji.name) {
             foundItem = { _canceled: true };
             this.halt.end();
           }

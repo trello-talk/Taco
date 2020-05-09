@@ -108,8 +108,8 @@ module.exports = class Card extends Command {
     const list = boardJson.lists.find(list => list.id === card.idList);
 
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const checkEmoji = emojiFallback('632444546684551183', ':ballot_box_with_check:');
-    const uncheckEmoji = emojiFallback('632444550115491910', ':white_large_square:');
+    const checkEmoji = emojiFallback('632444546684551183', '☑️');
+    const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
 
     const due = json.due ? _.moment(json.due) : null;
     const lastAct = _.moment(json.dateLastActivity);

@@ -108,15 +108,6 @@ class Paginator extends EventEmitter {
   }
 
   /**
-   * Whether or not this instance can clear reactions from a message
-   * @returns {boolean}
-   */
-  canClearReactions() {
-    return this.message.channel.type === 1 ||
-      this.message.channel.permissionsOf(this.client.user.id).has('manageMessages');
-  }
-
-  /**
    * Whether or not this instance can manage messages
    * @returns {boolean}
    */
@@ -149,11 +140,13 @@ class Paginator extends EventEmitter {
 
   /**
    * Clears reaction from the message
+   * @return {boolean}
    */
   clearReactions() {
     if (!this.reactionsCleared) {
       this.reactionsCleared = true;
-      if (this.canClearReactions())
+      this.emit('clearReactions');
+      if (!this.canManage())
         return Promise.all([
           this.message.removeReaction(Paginator.NEXT).catch(() => {}),
           this.message.removeReaction(Paginator.STOP).catch(() => {}),

@@ -41,8 +41,8 @@ module.exports = class Me extends Command {
     const json = handle.body;
 
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const checkEmoji = emojiFallback('632444546684551183', ':ballot_box_with_check:');
-    const uncheckEmoji = emojiFallback('632444550115491910', ':white_large_square:');
+    const checkEmoji = emojiFallback('632444546684551183', '☑️');
+    const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
 
     const embed = {
       author: {

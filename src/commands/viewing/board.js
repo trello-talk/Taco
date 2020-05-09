@@ -42,8 +42,8 @@ module.exports = class Board extends Command {
     const json = handle.body;
 
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const checkEmoji = emojiFallback('632444546684551183', ':ballot_box_with_check:');
-    const uncheckEmoji = emojiFallback('632444550115491910', ':white_large_square:');
+    const checkEmoji = emojiFallback('632444546684551183', '☑️');
+    const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
 
     const boardColor = json.prefs.backgroundTopColor ?
       parseInt(json.prefs.backgroundTopColor.slice(1), 16) : this.client.config.embedColor;
@@ -66,7 +66,7 @@ module.exports = class Board extends Command {
         value: (json.closed ? `🗃️ **${_('words.arch_board.one')}**\n\n` : '') +
           `**${_('words.id')}:** \`${json.id}\`\n` +
           `**${_('words.short_link.one')}:** \`${json.shortLink}\`\n` +
-          (json.json.dateLastActivity ?
+          (json.dateLastActivity ?
             `**${_('trello.last_act')}:** ${lastAct.format('LLLL')} *(${lastAct.fromNow()})*\n` : '') +
           (json.organization ?
             `**${_('words.orgs.one')}:** [${
