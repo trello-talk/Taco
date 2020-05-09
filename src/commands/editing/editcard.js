@@ -25,7 +25,7 @@ module.exports = class EditCard extends Command {
 
   get _options() { return {
     aliases: ['ecard', 'ec'],
-    cooldown: 2,
+    cooldown: 10,
     permissions: ['auth', 'selectedBoard']
   }; }
 
@@ -111,6 +111,37 @@ module.exports = class EditCard extends Command {
         }
       }
     ];
+
+    if (json.due) {
+      menuOpts.push({
+        // Remove due date
+        names: ['removedue', 'rdue'],
+        title: _('cards.menu.remove_due'),
+        async exec(client) {
+          if ((await trello.handleResponse({
+            response: await trello.updateCard(json.id, { due: null }),
+            client, message, _ })).stop) return;
+          return message.channel.createMessage(_('cards.removed_due', {
+            name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+          }));
+        }
+      });
+      menuOpts.push({
+        // Toggle due complete
+        names: ['duecomplete', 'duedone'],
+        title: _(json.dueComplete ? 'cards.menu.due_off' : 'cards.menu.due_on'),
+        async exec(client) {
+          if ((await trello.handleResponse({
+            response: await trello.updateCard(json.id, { dueComplete: !json.dueComplete }),
+            client, message, _ })).stop) return;
+          
+          return message.channel.createMessage(
+            _(json.dueComplete ? 'cards.due_off' : 'cards.due_on', {
+              name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+            }));
+        }
+      });
+    }
 
     if (json.desc)
       menuOpts.push({

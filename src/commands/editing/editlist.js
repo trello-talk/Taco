@@ -25,7 +25,7 @@ module.exports = class EditList extends Command {
 
   get _options() { return {
     aliases: ['elist', 'el'],
-    cooldown: 2,
+    cooldown: 10,
     permissions: ['auth', 'selectedBoard']
   }; }
 

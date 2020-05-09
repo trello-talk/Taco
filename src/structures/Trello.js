@@ -365,6 +365,20 @@ class Trello {
   }
 
   /**
+   * Creates a comment on a card
+   * @param {string} id The card's ID
+   * @param {string} text The text to post
+   */
+  addComment(id, text) {
+    return this._request({
+      method: 'post',
+      url: `/cards/${id}/actions/comments`,
+      bodyType: 'form',
+      body: { text }
+    });
+  }
+
+  /**
    * Creates an attachment to a card
    * @param {string} id The card's ID
    * @param {string} url The attachment's URL
