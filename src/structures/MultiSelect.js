@@ -147,7 +147,7 @@ class MultiSelect extends EventEmitter {
 
 MultiSelect.DONE = '✅';
 MultiSelect.CANCEL_TRIGGERS = [
-  'c', 'cancel', 's', 'stop', 'q', 'quit'
+  'cancel', 'stop', 'quit'
 ];
 MultiSelect.DONE_TRIGGERS = [
   'save', 'finish', 'done'
