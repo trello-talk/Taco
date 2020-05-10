@@ -18,7 +18,6 @@
 
 const Command = require('../../structures/Command');
 const Util = require('../../util');
-const path = require('path');
 
 module.exports = class Card extends Command {
   get name() { return 'card'; }
@@ -164,10 +163,8 @@ module.exports = class Card extends Command {
     // Attachments
     if (json.attachments.length) {
       const attachments = Util.cutoffArray(
-        json.attachments.map(atch => {
-          const filename = path.parse(atch.url).base;
-          return `[${Util.cutoffText(filename, 50)}](${atch.url})`;
-        }),
+        json.attachments.map(atch =>
+          `[${Util.cutoffText(Util.Escape.markdown(atch.name), 20)}](${atch.url})`),
         512, 1, 3);
       embed.fields.push({
         name: '*' + _.numSuffix('words.attachment', json.attachments.length) + '*',

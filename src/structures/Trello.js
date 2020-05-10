@@ -241,7 +241,7 @@ class Trello {
         stickers: 'true',
         sticker_fields: ['image'],
         attachments: 'true',
-        attachment_fields: ['url'],
+        attachment_fields: ['url', 'name'],
         checklists: 'all',
         checklist_fields: ['name'],
         fields: [
@@ -336,16 +336,17 @@ class Trello {
   /**
    * Creates a webhook for Trello.
    * @param {string} id The board's ID
+   * @param {Object} payload The webhook to add
    */
-  addWebhook(id) {
+  addWebhook(id, payload) {
     return this._request({
       method: 'post',
       url: `/tokens/${this.token}/webhooks`,
       bodyType: 'form',
       body: {
         idModel: id,
-        callbackURL: this.client.config.webhookURL,
-        description: `[${new Date()}] TrelloBot (https://github.com/trello-talk/TrelloBot)`
+        description: `[${new Date()}] TrelloBot (https://github.com/trello-talk/TrelloBot)`,
+        ...payload
       }
     });
   }
