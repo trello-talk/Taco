@@ -21,6 +21,7 @@ const dbots = require('dbots');
 const Postgres = require('./postgres');
 const Database = require('./database');
 const EventHandler = require('./events');
+const Webserver = require('./webserver');
 const CommandLoader = require('./commandloader');
 const LocaleHandler = require('./localehandler');
 const MessageAwaiter = require('./messageawaiter');
@@ -40,6 +41,7 @@ class TrelloBot extends Eris.Client {
     this.logger = logger;
     this.config = config;
     this.typingIntervals = new Map();
+
     if (config.airbrake)
       this.airbrake = new Airbrake.Notifier({
         ...config.airbrake,
@@ -51,6 +53,9 @@ class TrelloBot extends Eris.Client {
         ],
         version: pkg.version
       });
+
+    if (this.config.webserver.enabled)
+      this.webserver = new Webserver(this);
 
     // Events
     this.on('ready', () => logger.info('All shards ready.'));
@@ -127,6 +132,9 @@ class TrelloBot extends Eris.Client {
 
     // Botlist poster
     if (Object.keys(this.config.botlists).length) this.initPoster();
+
+    if (this.webserver)
+      await this.webserver.start();
   }
 
   /**
@@ -182,6 +190,9 @@ class TrelloBot extends Eris.Client {
       this.waitTill('disconnect')
         .then(() => this.db.disconnect())
         .then(() => {
+          if (this.webserver)
+            return this.webserver.stop();
+        }).then(() => {
           logger.info('It\'s all gone...');
           resolve();
         });

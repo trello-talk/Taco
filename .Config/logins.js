@@ -1,6 +1,7 @@
 module.exports = {
   trello: {
     token: "",
+    secret: "",
     key: ""
   },
   redis: {

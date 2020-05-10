@@ -11,9 +11,12 @@
   "dependencies": {
     "@airbrake/node": "^1.1.2",
     "abort-controller": "^3.0.0",
+    "crypto": "^1.0.1",
     "dbots": "github:dbots-pkg/dbots.js#master",
     "eris": "^0.12.0",
     "eventemitter3": "^4.0.0",
+    "express": "^4.17.1",
+    "express-graceful-exit": "^0.5.0",
     "fuzzy": "^0.1.3",
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
