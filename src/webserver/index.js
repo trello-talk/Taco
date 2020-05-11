@@ -107,7 +107,7 @@ class WebServer {
    * @private
    */
   validateRequest(request) {
-    const content = JSON.stringify(request.body) + this.client.config.base + request.params.id;
+    const content = JSON.stringify(request.body) + this.client.config.webserver.base + request.params.id;
     const hash = crypto.createHmac('sha1', this.client.config.trello.secret).update(content).digest('base64');
     return hash === request.get('x-trello-webhook');
   }
