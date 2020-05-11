@@ -2,7 +2,7 @@
 	"apps": [
 		{
 			"name": "TrelloBot",
-			"script": "pnpm",
+			"script": "yarn",
 			"args": "start"
 		}
 	]
