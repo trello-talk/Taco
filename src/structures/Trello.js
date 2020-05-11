@@ -556,9 +556,7 @@ class Trello {
     } else if (response >= 500) {
       await client.createMessage(message.channel.id, _('trello_response.internal'));
       return { body, response, top: true };
-    } else if (response >= 400 && response !== 404)
-      // TODO: Make a custom error class for this
-      throw response;
+    }
 
     return { body, response, stop: false };
   }
