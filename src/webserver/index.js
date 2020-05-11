@@ -63,7 +63,7 @@ class WebServer {
 
   /**
    * Loads locales from a folder
-   * @param {String} folderPath
+   * @param {String} folderPath The folder to iterate from
    */
   iterateFolder(folderPath) {
     const files = fs.readdirSync(folderPath);
@@ -84,6 +84,10 @@ class WebServer {
     });
   }
 
+  /**
+   * Loads events from a file path
+   * @param {string} filePath The file that will be loaded
+   */
   loadEvent(filePath) {
     logger.info('Loading event', filePath);
     const file = reload(filePath);
@@ -97,10 +101,20 @@ class WebServer {
     if (this.middlewareAdded) return;
     this.app.use(gracefulExit.middleware(this.app));
     this.app.use(express.json());
-    this.app.get('/:id', (_, res) => res.status(200).send('Ready to recieve.'));
+    this.app.get('/:id', this.headRequest.bind(this));
     this.app.post('/:id', this.webhookRequest.bind(this));
     this.iterateFolder(path.resolve(__dirname, 'events'));
     this.middlewareAdded = true;
+  }
+
+  /**
+   * @private
+   */
+  headRequest(request, response) {
+    if (!/^[0-9a-f]{24}$/.test(request.params.id))
+      return response.status(400).send('Bad request');
+    else
+      return response.status(200).send('Ready to recieve.');
   }
 
   /**
@@ -111,8 +125,6 @@ class WebServer {
     const hash = crypto.createHmac('sha1', this.client.config.trello.secret).update(content).digest('base64');
     return hash === request.get('x-trello-webhook');
   }
-
-  // https://website.com/{id}
 
   /**
    * @private

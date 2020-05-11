@@ -259,6 +259,8 @@ Util.CommandPermissions = {
   emoji: (client, message) => message.channel.type === 1 ||
     message.channel.permissionsOf(client.user.id).has('externalEmojis'),
   guild: (_, message) => !!message.guildID,
+  webhooks: (client, message) => !!message.guildID ||
+    message.channel.permissionsOf(client.user.id).has('manageWebhooks'),
   elevated: (client, message) => client.config.elevated.includes(message.author.id),
   trelloRole: (client, message) => {
     if (!message.guildID) return true;

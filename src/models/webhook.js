@@ -58,6 +58,10 @@ class Webhook extends Model {
         allowNull: false,
         defaultValue: 'default'
       },
+      guildID: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       webhookID: Sequelize.STRING,
       webhookToken: Sequelize.STRING,
       whitelist: {
