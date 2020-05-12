@@ -121,7 +121,7 @@ Util.Random = {
 Util.Prefix = {
   regex(client, prefixes = null) {
     if (!prefixes)
-      prefixes = client.config.prefixes;
+      prefixes = [client.config.prefix];
     return new RegExp(`^((?:<@!?${client.user.id}>|${
       prefixes.map(prefix => Util.Escape.regex(prefix)).join('|')})\\s?)(\\n|.)`, 'i');
   },

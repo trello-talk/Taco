@@ -51,7 +51,7 @@ class Server extends Model {
       prefix: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: client.config.prefixes[0]
+        defaultValue: client.config.prefix
       }
     });
   }

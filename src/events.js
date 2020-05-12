@@ -55,7 +55,7 @@ module.exports = class Events {
 
     // Prefixes
     const userPrefixes = userData ? userData.prefixes : [];
-    const serverPrefix = serverData ? [serverData.prefix] : this.client.config.prefixes;
+    const serverPrefix = serverData ? [serverData.prefix] : [this.client.config.prefix];
     const prefixes = [...userPrefixes, ...serverPrefix];
 
     // Command parsing

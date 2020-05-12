@@ -63,7 +63,7 @@ module.exports = class Prefix extends Command {
   }
 
   async exec(message, { args, _, userData, serverData, prefixUsed }) {
-    const serverPrefix = serverData ? serverData.prefix : this.client.config.prefixes[0];
+    const serverPrefix = serverData ? serverData.prefix : this.client.config.prefix;
     const userPrefixes = userData ? userData.prefixes : [];
     const canUse = 5 - userPrefixes.length;
     let embed, prefix = args[1] || null;
