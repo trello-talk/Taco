@@ -51,7 +51,7 @@ module.exports = class Webhooks extends Command {
       items: webhooks,
       _, header: _('webhook_cmd.header'), itemTitle: 'words.webhook.many',
       display: (item) => {
-        let result = `\`${item.id}\` ${item.active ? checkEmoji : uncheckEmoji} `
+        let result = `\`${item.id}\` ${item.active ? checkEmoji : uncheckEmoji} `;
         
         if (item.discordWebhook)
           result += `${
