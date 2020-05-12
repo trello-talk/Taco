@@ -30,8 +30,7 @@ module.exports = class Ping extends Command {
     const currentPing = Array.from(this.client.shards.values())
       .map(shard => shard.latency).reduce((prev, val) => prev + val, 0);
     const timeBeforeMessage = Date.now();
-    const sentMessage = await this.client.createMessage(
-      message.channel.id, `> :ping_pong: ***${_('ping.message')}***\n` +
+    const sentMessage = await message.channel.createMessage(`> :ping_pong: ***${_('ping.message')}***\n` +
       `> ${_('ping.ws', { ms: _.toLocaleString(currentPing) })}`);
     await sentMessage.edit(
       `> :ping_pong: ***${_('ping.message')}***\n` +

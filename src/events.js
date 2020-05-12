@@ -110,7 +110,7 @@ module.exports = class Events {
         console.error(`The '${command.name}' command failed.`);
         console.log(e);
       }
-      this.client.createMessage(message.channel.id, `:fire: ${_('error')}`);
+      message.channel.createMessage(`:fire: ${_('error')}`);
       this.client.stopTyping(message.channel);
     }
   }

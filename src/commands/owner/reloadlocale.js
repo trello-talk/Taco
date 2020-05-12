@@ -31,7 +31,7 @@ module.exports = class ReloadLocale extends Command {
   async exec(message, { _ }) {
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const reloadingEmoji = emojiFallback('632444546961375232', ':recycle:');
-    const sentMessage = await this.client.createMessage(message.channel.id,
+    const sentMessage = await message.channel.createMessage(
       `${reloadingEmoji} ${_('reloadlocale.reloading')}`);
     this.client.locale.reload();
     const reloadEmoji = emojiFallback('632444546684551183', ':white_check_mark:');

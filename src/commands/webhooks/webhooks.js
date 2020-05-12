@@ -41,7 +41,7 @@ module.exports = class Webhooks extends Command {
       }));
 
     if (!webhooks.length)
-      return this.client.createMessage(message.channel.id, _('webhook_cmd.none'));
+      return message.channel.createMessage(_('webhook_cmd.none'));
 
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const checkEmoji = emojiFallback('632444546684551183', '☑️');

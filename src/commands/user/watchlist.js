@@ -36,7 +36,7 @@ module.exports = class WatchList extends Command {
     if (handle.response.status === 404) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
         { where: { userID: message.author.id } });
-      return this.client.createMessage(message.channel.id, _('boards.gone'));
+      return message.channel.createMessage(_('boards.gone'));
     }
 
     const json = handle.body;

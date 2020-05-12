@@ -87,16 +87,16 @@ module.exports = class Locale extends Command {
         { where: { userID: message.author.id } });
       if (locale[1])
         _n = this.client.locale.createModule(locale[0], _.prefixes);
-      return this.client.createMessage(message.channel.id, _n(
+      return message.channel.createMessage(_n(
         locale[1] ? 'locale.user_set' : 'locale.user_unset', {
           name: locale[1] ? locale[1]._.name : null
         }));
     case 'setserver':
     case 'ss':
       if (!message.guildID)
-        return this.client.createMessage(message.channel.id, _('locale.no_guild'));
+        return message.channel.createMessage(_('locale.no_guild'));
       if (!Util.CommandPermissions.trelloRole(this.client, message))
-        return this.client.createMessage(message.channel.id, _('command_permissions.trelloRole'));
+        return message.channel.createMessage(_('command_permissions.trelloRole'));
       locale = await this.findLocale(args[1], localeArray, message, _);
       if (!locale) return;
       if (!serverData)
@@ -105,7 +105,7 @@ module.exports = class Locale extends Command {
         { where: { serverID: message.guildID } });
       if (locale[1])
         _n = this.client.locale.createModule(locale[0], _.prefixes);
-      return this.client.createMessage(message.channel.id, _n(
+      return message.channel.createMessage(_n(
         locale[1] ? 'locale.server_set' : 'locale.server_unset', {
           name: locale[1] ? locale[1]._.name : null
         }));

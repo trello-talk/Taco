@@ -28,9 +28,8 @@ module.exports = class Invite extends Command {
 
   exec(message, { _ }) {
     if (!Array.isArray(this.client.config.invites) || !this.client.config.invites[0])
-      return this.client.createMessage(message.channel.id, _('links.invite.fail'));
-    return this.client.createMessage(message.channel.id,
-      _('links.invite.start') + '\n' +
+      return message.channel.createMessage(_('links.invite.fail'));
+    return message.channel.createMessage(_('links.invite.start') + '\n' +
       this.client.config.invites.map(inv => `\`▶\` <${inv}>`).join('\n'));
   }
 

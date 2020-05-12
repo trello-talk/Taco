@@ -37,7 +37,7 @@ module.exports = class Help extends Command {
       // Display help on a command
       const command = this.client.cmds.get(args[0]);
       if (!command)
-        this.client.createMessage(message.channel.id, _('help.not_found', { command: args[0] }));
+        return message.channel.createMessage(_('help.not_found', { command: args[0] }));
       else {
         const hasDesc = _.valid(`commands.${command.name}.description`);
         const embed = {
@@ -79,7 +79,7 @@ module.exports = class Help extends Command {
             value: _(`commands.${command.name}.note`)
           });
 
-        return this.client.createMessage(message.channel.id, { embed });
+        return message.channel.createMessage({ embed });
       }
     } else {
       // Display general help command
@@ -111,7 +111,7 @@ module.exports = class Help extends Command {
           inline: true
         });
       });
-      return this.client.createMessage(message.channel.id, { embed });
+      return message.channel.createMessage({ embed });
     }
   }
 

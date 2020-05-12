@@ -36,7 +36,7 @@ module.exports = class ReloadOne extends Command {
     
     const commands = args.map(name => this.client.cmds.get(name));
     if (commands.includes(undefined))
-      return this.client.createMessage(message.channel.id,_('reloadone.invalid'));
+      return message.channel.createMessage(_('reloadone.invalid'));
 
     const fileExist = commands.map(command => {
       const path = command.path;
@@ -45,9 +45,9 @@ module.exports = class ReloadOne extends Command {
     });
 
     if (fileExist.includes(false))
-      return this.client.createMessage(message.channel.id,_('reloadone.file'));
+      return message.channel.createMessage(_('reloadone.file'));
 
-    const sentMessage = await this.client.createMessage(message.channel.id,
+    const sentMessage = await message.channel.createMessage(
       `${reloadingEmoji} ${_('reload.reloading')}`);
 
     const reloadedCommands = commands.map(command => {

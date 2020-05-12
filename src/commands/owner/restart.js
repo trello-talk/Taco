@@ -28,7 +28,7 @@ module.exports = class Restart extends Command {
   }; }
 
   async exec(message, { _ }) {
-    await this.client.createMessage(message.channel.id, _('responses.restart'));
+    await message.channel.createMessage(_('responses.restart'));
     await this.client.dieGracefully();
     process.exit(0);
   }

@@ -66,7 +66,7 @@ module.exports = class Info extends Command {
         url: this.client.config.iconURL
       }
     };
-    return this.client.createMessage(message.channel.id, { embed });
+    return message.channel.createMessage({ embed });
   }
 
   get metadata() { return {

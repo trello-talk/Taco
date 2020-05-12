@@ -34,7 +34,7 @@ module.exports = class ReloadWebServer extends Command {
       return message.channel.createMessage(_('reloadwebserver.no'));
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const reloadingEmoji = emojiFallback('632444546961375232', ':recycle:');
-    const sentMessage = await this.client.createMessage(message.channel.id,
+    const sentMessage = await message.channel.createMessage(
       `${reloadingEmoji} ${_('reloadwebserver.reloading')}`);
     await this.client.webserver.stop();
     this.client.webserver = null;

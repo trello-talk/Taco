@@ -35,7 +35,7 @@ module.exports = class Me extends Command {
     if (handle.stop) return;
     if (handle.response.status === 404) {
       await this.client.pg.models.get('user').removeAuth(message.author);
-      return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
+      return message.channel.createMessage(_('trello_response.unauthorized'));
     }
 
     const json = handle.body;
@@ -95,7 +95,7 @@ module.exports = class Me extends Command {
         name: '*' + _('words.bio') + '*',
         value: Util.Escape.markdown(json.bio)
       });
-    return this.client.createMessage(message.channel.id, { embed });
+    return message.channel.createMessage({ embed });
   }
 
   get metadata() { return {

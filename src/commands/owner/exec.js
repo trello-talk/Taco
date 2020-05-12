@@ -38,9 +38,9 @@ module.exports = class Exec extends Command {
     await this.client.startTyping(message.channel);
     exec(Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' '), (err, stdout, stderr) => {
       this.client.stopTyping(message.channel);
-      if (err) return this.client.createMessage(message.channel.id, this.codeBlock(err, 'js'));
+      if (err) return message.channel.createMessage(this.codeBlock(err, 'js'));
       const stdErrBlock = (stderr ? this.codeBlock(stderr, 'js') + '\n' : '');
-      return this.client.createMessage(message.channel.id, stdErrBlock + this.codeBlock(stdout));
+      return message.channel.createMessage(stdErrBlock + this.codeBlock(stdout));
     });
   }
 

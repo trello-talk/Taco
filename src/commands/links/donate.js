@@ -28,8 +28,8 @@ module.exports = class Donate extends Command {
 
   exec(message, { _ }) {
     if (!Array.isArray(this.client.config.donate) || !this.client.config.donate[0])
-      return this.client.createMessage(message.channel.id, _('links.donate.fail'));
-    return this.client.createMessage(message.channel.id, _('links.donate.start') + '\n' +
+      return message.channel.createMessage(_('links.donate.fail'));
+    return message.channel.createMessage(_('links.donate.start') + '\n' +
       this.client.config.donate.map(inv => `\`▶\` <${inv}>`).join('\n'));
   }
 

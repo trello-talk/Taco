@@ -73,13 +73,13 @@ module.exports = class Prefix extends Command {
     case 'set':
     case 's':
       if (!message.guildID)
-        return this.client.createMessage(message.channel.id, _('locale.no_guild'));
+        return message.channel.createMessage(_('locale.no_guild'));
       if (!Util.CommandPermissions.trelloRole(this.client, message))
-        return this.client.createMessage(message.channel.id, _('command_permissions.trelloRole'));
+        return message.channel.createMessage(_('command_permissions.trelloRole'));
       if (!prefix)
-        return this.client.createMessage(message.channel.id, _('prefix.no_arg_server'));
+        return message.channel.createMessage(_('prefix.no_arg_server'));
       if (serverPrefix.toLowerCase() === prefix.toLowerCase())
-        return this.client.createMessage(message.channel.id, _('prefix.already'));
+        return message.channel.createMessage(_('prefix.already'));
       if (await this.checkPrefix(prefix, message, prefixUsed, _)) return;
       if (!serverData)
         await this.client.pg.models.get('server').get(message.channel.guild);
@@ -89,11 +89,11 @@ module.exports = class Prefix extends Command {
     case 'add':
     case 'a':
       if (!prefix)
-        return this.client.createMessage(message.channel.id, _('prefix.no_arg'));
+        return message.channel.createMessage(_('prefix.no_arg'));
       if (userPrefixes.map(p => p.toLowerCase()).includes(prefix.toLowerCase()))
-        return this.client.createMessage(message.channel.id, _('prefix.already'));
+        return message.channel.createMessage(_('prefix.already'));
       if (canUse <= 0 && !Util.CommandPermissions.elevated(this.client, message))
-        return this.client.createMessage(message.channel.id, _('prefix.limit'));
+        return message.channel.createMessage(_('prefix.limit'));
       if (await this.checkPrefix(prefix, message, prefixUsed, _)) return;
       if (!userData)
         await this.client.pg.models.get('user').get(message.author);
@@ -104,7 +104,7 @@ module.exports = class Prefix extends Command {
     case 'delete':
     case 'd':
       if (!userData || userData && !userData.prefixes.length)
-        return this.client.createMessage(message.channel.id, _('prefix.none'));
+        return message.channel.createMessage(_('prefix.none'));
       prefix = await this.findPrefix(args[1], userPrefixes, message, _);
       if (!prefix) return;
       await this.client.pg.models.get('user').removeFromArray(message.author, 'prefixes', prefix);

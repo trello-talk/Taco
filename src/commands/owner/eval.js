@@ -37,10 +37,10 @@ module.exports = class Eval extends Command {
       const start = Date.now();
       const result = eval(Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' '));
       const time = Date.now() - start;
-      return this.client.createMessage(message.channel.id,
+      return message.channel.createMessage(
         `${opts._('responses.eval', { ms: opts._.toLocaleString(time) })}\n\`\`\`js\n${result}\`\`\`\n`);
     } catch (e) {
-      return this.client.createMessage(message.channel.id, '```js\n' + e.stack + '\n```');
+      return message.channel.createMessage('```js\n' + e.stack + '\n```');
     }
   }
 

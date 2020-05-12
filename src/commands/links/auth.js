@@ -28,9 +28,8 @@ module.exports = class Auth extends Command {
 
   exec(message, { _ }) {
     if (!this.client.config.authURL)
-      return this.client.createMessage(message.channel.id, _('links.auth.fail'));
-    return this.client.createMessage(message.channel.id,
-      `${_('links.auth.start')} **<${this.client.config.authURL}>**`);
+      return message.channel.createMessage(_('links.auth.fail'));
+    return message.channel.createMessage(`${_('links.auth.start')} **<${this.client.config.authURL}>**`);
   }
 
   get metadata() { return {

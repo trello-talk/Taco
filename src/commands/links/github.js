@@ -27,7 +27,7 @@ module.exports = class GitHUb extends Command {
   }; }
 
   exec(message, { _ }) {
-    return this.client.createMessage(message.channel.id,
+    return message.channel.createMessage(
       `${_('links.github')} **<https://github.com/trello-talk/TrelloBot>**`);
   }
 

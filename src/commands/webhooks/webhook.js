@@ -34,7 +34,7 @@ module.exports = class Webhook extends Command {
   async exec(message, { args, _ }) {
     const requestedID = parseInt(args[0]);
     if (isNaN(requestedID) || requestedID < 1)
-      return this.client.createMessage(message.channel.id, _('webhook_cmd.invalid'));
+      return message.channel.createMessage(_('webhook_cmd.invalid'));
 
     const webhook = await this.client.pg.models.get('webhook').findOne({ where: {
       guildID: message.guildID,
@@ -42,7 +42,7 @@ module.exports = class Webhook extends Command {
     }});
 
     if (!webhook)
-      return this.client.createMessage(message.channel.id, _('webhook_cmd.not_found'));
+      return message.channel.createMessage(_('webhook_cmd.not_found'));
 
     const trelloMember = await this.client.pg.models.get('user').findOne({ where: {
       trelloID: webhook.memberID

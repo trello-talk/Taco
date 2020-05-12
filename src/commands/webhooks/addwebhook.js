@@ -38,7 +38,7 @@ module.exports = class AddWebhook extends Command {
     if (handle.stop) return;
     if (handle.response.status === 404) {
       await this.client.pg.models.get('user').removeAuth(message.author);
-      return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
+      return message.channel.createMessage(_('trello_response.unauthorized'));
     }
 
     const json = handle.body;
@@ -77,7 +77,7 @@ module.exports = class AddWebhook extends Command {
         channel.permissionsOf(this.client.user.id).has('manageWebhooks'));
 
     if (!availableChannels.length)
-      return this.client.createMessage(message.channel.id, _('webhook_cmd.no_channels'));
+      return message.channel.createMessage(_('webhook_cmd.no_channels'));
 
     const prompter = new GenericPrompt(this.client, message, {
       items: availableChannels, itemTitle: 'words.channel.many',
@@ -94,7 +94,7 @@ module.exports = class AddWebhook extends Command {
       }, `[${message.author.username}#${message.author.discriminator} ${message.author.id}] Webhook Setup`);
       return this.finalizeSetup(message, board, webhook, userData, trello, _);
     } catch (e) {
-      return this.client.createMessage(message.channel.id, _('webhook_cmd.couldnt_create'));
+      return message.channel.createMessage(_('webhook_cmd.couldnt_create'));
     }
   }
 
@@ -102,7 +102,7 @@ module.exports = class AddWebhook extends Command {
     const discordWebhooks = await message.channel.guild.getWebhooks();
 
     if (!discordWebhooks.length)
-      return this.client.createMessage(message.channel.id, _('webhook_cmd.no_dwh'));
+      return message.channel.createMessage(_('webhook_cmd.no_dwh'));
 
     const prompter = new GenericPrompt(this.client, message, {
       items: discordWebhooks, itemTitle: 'webhook_cmd.dwh.many',
@@ -152,7 +152,7 @@ module.exports = class AddWebhook extends Command {
         })
       }]
     });
-    return this.client.createMessage(message.channel.id, _('webhook_cmd.created', {
+    return message.channel.createMessage(_('webhook_cmd.created', {
       name: Util.cutoffText(Util.Escape.markdown(board.name), 50)
     }));
   }

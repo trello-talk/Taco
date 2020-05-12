@@ -27,7 +27,7 @@ module.exports = class Hangman extends Command {
   }; }
 
   exec(message, { _ }) {
-    return this.client.createMessage(message.channel.id, _('responses.hangman'));
+    return message.channel.createMessage(_('responses.hangman'));
   }
 
   get metadata() { return {

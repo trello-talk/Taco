@@ -52,7 +52,7 @@ class Command {
   async _exec(message, opts) {
     // Check minimum arguments
     if (this.options.minimumArgs > 0 && opts.args.length < this.options.minimumArgs)
-      return this.client.createMessage(message.channel.id,
+      return message.channel.createMessage(
         `${opts._(this.options.minimumArgsMessage)}\n${
           opts._('words.usage')}: ${opts.prefixUsed.raw}${this.name}${
           opts._.valid(`commands.${this.name}.usage`) ?
@@ -65,7 +65,7 @@ class Command {
         if (!Util.CommandPermissions[perm])
           throw new Error(`Invalid command permission "${perm}"`);
         if (!Util.CommandPermissions[perm](this.client, message, opts))
-          return this.client.createMessage(message.channel.id, opts._(`command_permissions.${perm}`));
+          return message.channel.createMessage(opts._(`command_permissions.${perm}`));
       }
 
     // Process cooldown
@@ -73,7 +73,7 @@ class Command {
       await this.exec(message, opts);
     } else {
       const cd = await this.client.db.hget(`cooldowns:${message.author.id}`, this.name);
-      return this.client.createMessage(message.channel.id,
+      return message.channel.createMessage(
         `:watch: ${opts._('cooldown', { seconds: Math.ceil(this.cooldownAbs - (Date.now() - cd))})}`);
     }
   }

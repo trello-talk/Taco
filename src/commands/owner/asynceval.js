@@ -37,10 +37,10 @@ module.exports = class AsyncEval extends Command {
       const code = Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' ');
       const result = await eval(`(async () => {${code}})()`);
       const time = Date.now() - start;
-      return this.client.createMessage(message.channel.id,
+      return message.channel.createMessage(
         `${opts._('responses.eval', { ms: opts._.toLocaleString(time) })}\n\`\`\`js\n${result}\`\`\`\n`);
     } catch (e) {
-      return this.client.createMessage(message.channel.id, '```js\n' + e.stack + '\n```');
+      return message.channel.createMessage('```js\n' + e.stack + '\n```');
     }
   }
 

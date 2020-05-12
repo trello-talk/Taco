@@ -28,9 +28,8 @@ module.exports = class ServerInvite extends Command {
 
   exec(message, { _ }) {
     if (!Array.isArray(this.client.config.supportServers) || !this.client.config.invites[0])
-      return this.client.createMessage(message.channel.id, _('links.serverinvite.fail'));
-    return this.client.createMessage(message.channel.id,
-      _('links.serverinvite.start') + '\n' +
+      return message.channel.createMessage(_('links.serverinvite.fail'));
+    return message.channel.createMessage(_('links.serverinvite.start') + '\n' +
       this.client.config.supportServers.map(inv => `\`▶\` <${inv}>`).join('\n'));
   }
 

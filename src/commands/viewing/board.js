@@ -36,7 +36,7 @@ module.exports = class Board extends Command {
     if (handle.response.status === 404) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
         { where: { userID: message.author.id } });
-      return this.client.createMessage(message.channel.id, _('boards.gone'));
+      return message.channel.createMessage(_('boards.gone'));
     }
 
     const json = handle.body;
@@ -108,7 +108,7 @@ module.exports = class Board extends Command {
       }]
     };
 
-    return this.client.createMessage(message.channel.id, { embed });
+    return message.channel.createMessage({ embed });
   }
 
   get metadata() { return {

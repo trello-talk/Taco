@@ -37,7 +37,7 @@ module.exports = class Star extends Command {
     if (handle.stop) return;
     if (handle.response.status === 404) {
       await this.client.pg.models.get('user').removeAuth(message.author);
-      return this.client.createMessage(message.channel.id, _('trello_response.unauthorized'));
+      return message.channel.createMessage(_('trello_response.unauthorized'));
     }
 
     const json = handle.body;

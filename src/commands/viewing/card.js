@@ -87,7 +87,7 @@ module.exports = class Card extends Command {
     if (handle.response.status === 404) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
         { where: { userID: message.author.id } });
-      return this.client.createMessage(message.channel.id, _('boards.gone'));
+      return message.channel.createMessage(_('boards.gone'));
     }
 
     const boardJson = handle.body;
@@ -101,7 +101,7 @@ module.exports = class Card extends Command {
       client: this.client, message, _ });
     if (handle.stop) return;
     if (handle.response.status === 404)
-      return this.client.createMessage(message.channel.id, _('cards.error'));
+      return message.channel.createMessage(_('cards.error'));
 
     const json = cardHandle.body;
     const list = boardJson.lists.find(list => list.id === card.idList);
