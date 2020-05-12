@@ -275,7 +275,7 @@ class WebhookData {
       color: this.isChildAction() ? WebhookData.DEFAULT_COLORS.CHILD :
         WebhookData.DEFAULT_COLORS[this.filterFlag.split('_')[0]],
       author: {
-        icon_url: 'https://get.snaz.in/6WGgyu8.png',
+        icon_url: this.webserver.client.config.iconURL,
         name: 'Trello: ' + Util.cutoffText(this.model.name, 248),
         url: this.model.url
       },

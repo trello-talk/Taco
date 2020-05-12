@@ -39,7 +39,7 @@ module.exports = class Events {
     if (this.client.config.sudoID &&
       this.client.user.id !== this.client.config.sudoID &&
       message.channel.guild) {
-      const sudoBot = await message.channel.guild.members.has(this.client.config.sudoID);
+      const sudoBot = message.channel.guild.members.has(this.client.config.sudoID);
       if (sudoBot) return;
     }
 
