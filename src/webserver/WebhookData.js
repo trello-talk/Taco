@@ -288,7 +288,7 @@ class WebhookData {
       content,
       embeds: [lodash.defaultsDeep(embed, defaultEmbed)]
     };
-    return this.webserver.client.this.client.executeWebhook(this.webhook.webhookID,
+    return this.webserver.client.executeWebhook(this.webhook.webhookID,
       this.webhook.webhookToken, body);
   }
 }
