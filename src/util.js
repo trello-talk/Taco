@@ -284,12 +284,11 @@ Util.CommandPermissions = {
  * Creates a module that makes emoji fallbacks
  * @memberof Util.
  */
-Util.emojiFallback = ({ emojiGuildID = '617911034555924502', message, client }) => {
-  return (id, fallback) => {
-    if (Util.CommandPermissions.emoji(client, message) && client.guilds.has(emojiGuildID)) {
-      const emoji = client.guilds.get(emojiGuildID).emojis.find(e => e.id == id);
-      return `<${emoji.animated ? 'a' : ''}:_:${emoji.id}>`;
-    } else return fallback;
+Util.emojiFallback = ({ message, client }) => {
+  return (id, fallback, animated = false) => {
+    if (Util.CommandPermissions.emoji(client, message)) 
+      return `<${animated ? 'a' : ''}:_:${id}>`;
+    else return fallback;
   };
 };
 

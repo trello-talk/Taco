@@ -50,9 +50,18 @@ module.exports = class Webhooks extends Command {
     const paginator = new GenericPager(this.client, message, {
       items: webhooks,
       _, header: _('webhook_cmd.header'), itemTitle: 'words.webhook.many',
-      display: (item) => `\`${item.id}\` ${item.active ? checkEmoji : uncheckEmoji} ${
-        Util.cutoffText(Util.Escape.markdown(item.discordWebhook.name), 50)} ` + 
-        `(${_('words.board.one')} \`${item.modelID}\`, <@${item.discordWebhook.user.id}>)`
+      display: (item) => {
+        let result = `\`${item.id}\` ${item.active ? checkEmoji : uncheckEmoji} `
+        
+        if (item.discordWebhook)
+          result += `${
+            Util.cutoffText(Util.Escape.markdown(item.discordWebhook.name), 50)} ` + 
+            `(${_('words.board.one')} \`${item.modelID}\`, <@${item.discordWebhook.user.id}>)`;
+        else
+          result += `[${_('webhook_cmd.unknown')}] (${_('words.board.one')} \`${item.modelID}\`)`;
+
+        return result;
+      }
     });
 
     if (args[0])
