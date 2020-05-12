@@ -25,10 +25,13 @@ const Webserver = require('./webserver');
 const CommandLoader = require('./commandloader');
 const LocaleHandler = require('./localehandler');
 const MessageAwaiter = require('./messageawaiter');
-const logger = require('./logger')('[DISCORD]');
-const posterLogger = require('./logger')('[POSTER]');
 const path = require('path');
 const Airbrake = require('@airbrake/node');
+const Bottleneck = require('bottleneck');
+
+const logger = require('./logger')('[DISCORD]');
+const posterLogger = require('./logger')('[POSTER]');
+const limiterLogger = require('./logger')('[LIMITER]');
 
 class TrelloBot extends Eris.Client {
   constructor({ configPath, packagePath, mainDir } = {}) {
@@ -108,6 +111,24 @@ class TrelloBot extends Eris.Client {
     // Postgres
     this.pg = new Postgres(this, path.join(this.dir, this.config.modelsPath));
     await this.pg.connect(this.config.pg);
+
+    // Bottleneck
+    this.limiter = new Bottleneck({
+      // Per API key: https://help.trello.com/article/838-api-rate-limits
+      reservoir: 300,
+      reservoirRefreshAmount: 300,
+      reservoirRefreshInterval: 10000,
+      maxConcurrent: 1,
+
+      // Clustering options
+      id: 'trello-bot',
+      datastore: 'redis',
+      clearDatastore: false,
+      clientOptions: this.config.redis
+    });
+    this.limiter.on('error', err => limiterLogger.error('Error', err));
+    this.limiter.on('debug', (message, data) => limiterLogger.debug('Error', message, data));
+    await this.limiter.ready();
 
     // Discord
     await this.connect();

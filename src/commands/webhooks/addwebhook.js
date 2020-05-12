@@ -21,7 +21,6 @@ const SubMenu = require('../../structures/SubMenu');
 const GenericPrompt = require('../../structures/GenericPrompt');
 const WebhookFilters = require('../../structures/WebhookFilters');
 const Util = require('../../util');
-const fetch = require('node-fetch');
 
 module.exports = class AddWebhook extends Command {
   get name() { return 'addwebhook'; }
@@ -145,28 +144,17 @@ module.exports = class AddWebhook extends Command {
       webhookToken: webhook.token
     });
 
-    await this.sendConfirmMessage(webhook, board, _);
+    await this.client.executeWebhook(webhook.id, webhook.token, {
+      embeds: [{
+        type: 'rich',
+        description: _('webhook_cmd.create_confirm', {
+          name: Util.cutoffText(Util.Escape.markdown(board.name), 50)
+        })
+      }]
+    });
     return this.client.createMessage(message.channel.id, _('webhook_cmd.created', {
       name: Util.cutoffText(Util.Escape.markdown(board.name), 50)
     }));
-  }
-
-  sendConfirmMessage(webhook, board, _) {
-    return fetch(`https://discord.com/api/webhooks/${webhook.id}/${webhook.token}`, {
-      method: 'post',
-      body: JSON.stringify({
-        embeds: [{
-          type: 'rich',
-          description: _('webhook_cmd.create_confirm', {
-            name: Util.cutoffText(Util.Escape.markdown(board.name), 50)
-          })
-        }]
-      }),
-      headers: {
-        'User-Agent': `TrelloBot (https://github.com/trello-talk/TrelloBot ${this.client.pkg.version}) Node.js/${process.version}`,
-        'Content-Type': 'application/json'
-      }
-    });
   }
 
   get metadata() { return {

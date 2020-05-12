@@ -15,7 +15,6 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-const fetch = require('node-fetch');
 const Util = require('../util');
 const lodash = require('lodash');
 
@@ -34,6 +33,7 @@ class WebhookData {
 
   /**
    * The webhook URL the data is parsing to
+   * @deprecated
    * @type {string}
    */
   get webhookURL() {
@@ -288,14 +288,8 @@ class WebhookData {
       content,
       embeds: [lodash.defaultsDeep(embed, defaultEmbed)]
     };
-    return fetch(this.webhookURL, {
-      method: 'post',
-      body: JSON.stringify(body),
-      headers: {
-        'User-Agent': `TrelloBot (https://github.com/trello-talk/TrelloBot ${this.webserver.client.pkg.version}) Node.js/${process.version}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    return this.webserver.client.this.client.executeWebhook(this.webhook.webhookID,
+      this.webhook.webhookToken, body);
   }
 }
 

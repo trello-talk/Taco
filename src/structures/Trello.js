@@ -67,11 +67,11 @@ class Trello {
     else
       options.headers['User-Agent'] = userAgent;
 
-    // Abort Controller
-    const controller = new AbortController();
-    const controllerTimeout = setTimeout(controller.abort.bind(controller), 5000);
+    return this.client.limiter.schedule(() => new Promise((resolve, reject) => {
+      // Abort Controller
+      const controller = new AbortController();
+      const controllerTimeout = setTimeout(controller.abort.bind(controller), 5000);
 
-    return new Promise((resolve, reject) => {
       fetch(url.href, {
         body,
         headers: options.headers,
@@ -85,7 +85,7 @@ class Trello {
         if (e && e.type === 'aborted')
           resolve(e); else reject(e);
       });
-    });
+    }));
   }
 
   // #region Get methods
