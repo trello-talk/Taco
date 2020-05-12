@@ -16,7 +16,6 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const logger = require('./logger')('[EVENTS]');
 const ArgumentInterpreter = require('./structures/ArgumentInterpreter');
 const Trello = require('./structures/Trello');
 const Util = require('./util');
@@ -108,7 +107,7 @@ module.exports = class Events {
         });
       }
       if (!this.client.airbrake || this.client.config.debug) {
-        logger.error(`The '${command.name}' command failed.`);
+        console.error(`The '${command.name}' command failed.`);
         console.log(e);
       }
       this.client.createMessage(message.channel.id, `:fire: ${_('error')}`);

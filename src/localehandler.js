@@ -19,7 +19,6 @@
 const fs = require('fs');
 const M = require('mustache');
 const path = require('path');
-const logger = require('./logger')('[LOCALE]');
 const reload = require('require-reload')(require);
 const lodash = require('lodash');
 const moment = require('moment');
@@ -28,7 +27,6 @@ class LocaleHandler {
   constructor(client, cPath) {
     this.locales = new Map();
     this.path = path.resolve(cPath);
-    this.logger = logger;
     this.config = client.config;
   }
 
@@ -78,7 +76,7 @@ class LocaleHandler {
    * @param {string} filePath
    */
   load(filePath) {
-    logger.info('Loading locale', filePath);
+    console.fileload('Loading locale', filePath);
     const json = reload(filePath);
     this.locales.set(path.parse(filePath).name, json);
   }

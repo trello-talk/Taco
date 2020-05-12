@@ -28,10 +28,7 @@ const MessageAwaiter = require('./messageawaiter');
 const path = require('path');
 const Airbrake = require('@airbrake/node');
 const Bottleneck = require('bottleneck');
-
-const logger = require('./logger')('[DISCORD]');
-const posterLogger = require('./logger')('[POSTER]');
-const limiterLogger = require('./logger')('[LIMITER]');
+const CatLoggr = require('cat-loggr');
 
 class TrelloBot extends Eris.Client {
   constructor({ configPath, packagePath, mainDir } = {}) {
@@ -41,7 +38,22 @@ class TrelloBot extends Eris.Client {
     super(config.token, config.discordConfig);
     this.dir = mainDir;
     this.pkg = pkg;
-    this.logger = logger;
+    this.logger = new CatLoggr({
+      level: config.debug ? 'debug' : 'info',
+      levels: [
+        { name: 'fatal', color: CatLoggr._chalk.red.bgBlack, err: true },
+        { name: 'error', color: CatLoggr._chalk.black.bgRed, err: true },
+        { name: 'warn', color: CatLoggr._chalk.black.bgYellow, err: true },
+        { name: 'init', color: CatLoggr._chalk.black.bgGreen },
+        { name: 'webserv', color: CatLoggr._chalk.black.bgBlue },
+        { name: 'info', color: CatLoggr._chalk.black.bgCyan },
+        { name: 'poster', color: CatLoggr._chalk.yellow.bgBlack },
+        { name: 'debug', color: CatLoggr._chalk.magenta.bgBlack, aliases: ['log', 'dir'] },
+        { name: 'limiter', color: CatLoggr._chalk.gray.bgBlack },
+        { name: 'fileload', color: CatLoggr._chalk.white.bgBlack }
+      ]
+    });
+    this.logger.setGlobal();
     this.config = config;
     this.typingIntervals = new Map();
 
@@ -61,35 +73,33 @@ class TrelloBot extends Eris.Client {
       this.webserver = new Webserver(this);
 
     // Events
-    this.on('ready', () => logger.info('All shards ready.'));
-    this.on('disconnect', () => logger.info('All Shards Disconnected.'));
-    this.on('reconnecting', () => logger.warn('Reconnecting'));
-    if (config.debug) this.on('debug', message => logger.debug(message));
+    this.on('ready', () => console.info('All shards ready.'));
+    this.on('disconnect', () => console.warn('All shards Disconnected.'));
+    this.on('reconnecting', () => console.warn('Reconnecting client.'));
+    this.on('debug', message => console.debug(message));
 
     // Shard Events
-    this.on('connect', id => logger.info(`Shard ${id} connected.`));
-    this.on('error', (error, id) => logger.error(`Error in shard ${id}`, error));
-    this.on('hello', (_, id) => logger.info(`Shard ${id} recieved hello.`));
-    this.on('warn', (message, id) => logger.warn(`Warning in Shard ${id}`, message));
-    this.on('shardReady', id => logger.info(`Shard ${id} ready.`));
-    this.on('shardResume', id => logger.warn(`Shard ${id} resumed.`));
-    this.on('shardDisconnect', (error, id) => logger.warn(`Shard ${id} disconnected`, error));
+    this.on('connect', id => console.info(`Shard ${id} connected.`));
+    this.on('error', (error, id) => console.error(`Error in shard ${id}`, error));
+    this.on('hello', (_, id) => console.debug(`Shard ${id} recieved hello.`));
+    this.on('warn', (message, id) => console.warn(`Warning in Shard ${id}`, message));
+    this.on('shardReady', id => console.info(`Shard ${id} ready.`));
+    this.on('shardResume', id => console.warn(`Shard ${id} resumed.`));
+    this.on('shardDisconnect', (error, id) => console.warn(`Shard ${id} disconnected`, error));
 
     // SIGINT & uncaught exceptions
     process.once('uncaughtException', err => {
-      logger.error('Uncaught Exception:', err.stack);
+      console.error('Uncaught Exception', err.stack);
       setTimeout(() => process.exit(0), 2500);
     });
 
     process.once('SIGINT', async () => {
-      logger.info('Caught SIGINT');
+      console.info('Caught SIGINT');
       await this.dieGracefully();
       process.exit(0);
     });
 
-    process.env.LOGGER_DEBUG = config.debug;
-
-    logger.info('Client initialized');
+    console.init('Client initialized');
   }
 
   /**
@@ -126,8 +136,8 @@ class TrelloBot extends Eris.Client {
       clearDatastore: false,
       clientOptions: this.config.redis
     });
-    this.limiter.on('error', err => limiterLogger.error('Error', err));
-    this.limiter.on('debug', (message, data) => limiterLogger.debug('Error', message, data));
+    this.limiter.on('error', err => console.error('Limiter Error', err));
+    this.limiter.on('debug', (message, data) => console.limiter(message, data));
     await this.limiter.ready();
 
     // Discord
@@ -182,24 +192,21 @@ class TrelloBot extends Eris.Client {
    * @private
    */
   onPost() {
-    posterLogger.info('Posted stats to all bot lists.');
+    console.poster('Posted stats to all bot lists.');
   }
 
   /**
    * @private
    */
   onPostOne(result) {
-    posterLogger.info(`Posted to ${result.request.socket.servername}!`);
+    console.poster(`Posted to ${result.request.socket.servername}!`);
   }
 
   /**
    * @private
    */
-  onPostFail(e, auto = false) {
-    posterLogger.error(`Failed to ${
-      auto ? 'auto-post' : 'post'
-    } in ${e.response.config.url}! (${e.request.method}, ${e.response.status})`);
-    console.log(e.response.data);
+  onPostFail(error, auto = false) {
+    console.poster(`Failed to ${auto ? 'auto-post' : 'post'}`, error);
   }
 
   /**
@@ -207,14 +214,14 @@ class TrelloBot extends Eris.Client {
    */
   dieGracefully() {
     return new Promise(resolve => {
-      logger.info('Slowly dying...');
+      console.info('Slowly dying...');
       this.waitTill('disconnect')
         .then(() => this.db.disconnect())
         .then(() => {
           if (this.webserver)
             return this.webserver.stop();
         }).then(() => {
-          logger.info('It\'s all gone...');
+          console.info('It\'s all gone...');
           resolve();
         });
       super.disconnect();

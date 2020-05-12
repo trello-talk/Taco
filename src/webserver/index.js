@@ -18,8 +18,6 @@
 */
 
 const express = require('express');
-const logger = require('../logger')('[WEBSERVER]');
-const webhookLogger = require('../logger')('[WEBHOOK]');
 const gracefulExit = require('express-graceful-exit');
 const reload = require('require-reload')(require);
 const WebhookData = require('./WebhookData');
@@ -58,7 +56,7 @@ class WebServer {
 
     this.events = new Map();
 
-    logger.info('Webserver initialized');
+    console.init('Webserver initialized');
   }
 
   /**
@@ -89,7 +87,7 @@ class WebServer {
    * @param {string} filePath The file that will be loaded
    */
   loadEvent(filePath) {
-    logger.info('Loading event', filePath);
+    console.fileload('Loading event', filePath);
     const file = reload(filePath);
     this.events.set(file.name, file.exec);
   }
@@ -140,7 +138,7 @@ class WebServer {
       return response.status(401).send('Unauthorized');
 
     if (!this.validateRequest(request)) {
-      webhookLogger.info(`Failed validation from request @ ${request.params.id}`, ip);
+      console.webserv(`Failed webhook validation from request @ ${request.params.id}`, ip);
       return response.status(401).send('Validation failed');
     }
 
@@ -200,7 +198,7 @@ class WebServer {
     return new Promise(resolve => {
       this.addMiddleware();
       this.server = this.app.listen(this.client.config.webserver.port, () => {
-        logger.info(`Running on port ${this.client.config.webserver.port}`);
+        console.info(`Running webhook on port ${this.client.config.webserver.port}`);
         resolve();
       });
     });
@@ -214,9 +212,9 @@ class WebServer {
     return new Promise(resolve => {
       gracefulExit.gracefulExitHandler(this.app, this.server, {
         exitProcess: false,
-        logger: logger.info,
+        logger: console.info,
         callback: () => {
-          logger.info('Killed Webserver');
+          console.info('Killed Webserver');
           resolve();
         }
       });

@@ -20,7 +20,6 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const { EventEmitter } = require('eventemitter3');
-const logger = require('./logger')('[POSTGRES]');
 const reload = require('require-reload')(require);
 
 /**
@@ -32,7 +31,7 @@ module.exports = class Postgres extends EventEmitter {
     this.client = client;
     this.path = path.resolve(modelsPath);
     this.models = new Map();
-    logger.info('Initialized');
+    console.init('Postgres initialized');
   }
 
   /**
@@ -63,7 +62,7 @@ module.exports = class Postgres extends EventEmitter {
    * @param {string} modelPath
    */
   load(modelPath) {
-    logger.info('Loading model', modelPath);
+    console.fileload('Loading model', modelPath);
     const model = reload(modelPath);
     model.init(this.client, this.sequelize);
     model.sync();
@@ -76,7 +75,7 @@ module.exports = class Postgres extends EventEmitter {
    * @param {Object} options
    */
   connect({ host = 'localhost', database, user, password }) {
-    logger.info('Connecting...');
+    console.info('Connecting to postgres...');
     return new Promise((resolve, reject) => {
       this.sequelize = new Sequelize(
         database, user, password,
@@ -89,7 +88,7 @@ module.exports = class Postgres extends EventEmitter {
       );
       this.sequelize.authenticate()
         .then(() => {
-          logger.info('Connection has been established successfully.');
+          console.info('Postgres connection has been established successfully.');
 
           // array_append_distinct function
           this.sequelize.query(`
@@ -103,7 +102,7 @@ module.exports = class Postgres extends EventEmitter {
           this.iterateFolder(this.path);
           resolve();
         }).catch(err => {
-          logger.error('Unable to connect to the database', err);
+          console.error('Unable to connect to the postgres database', err);
           reject(err);
         });
     });

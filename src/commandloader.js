@@ -18,7 +18,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const logger = require('./logger')('[COMMANDS]');
 const reload = require('require-reload')(require);
 
 module.exports = class CommandLoader {
@@ -26,7 +25,6 @@ module.exports = class CommandLoader {
     this.commands = [];
     this.path = path.resolve(cPath);
     this.client = client;
-    this.logger = logger;
   }
 
   /**
@@ -57,7 +55,7 @@ module.exports = class CommandLoader {
    * @param {string} commandPath
    */
   load(commandPath) {
-    logger.info('Loading command', commandPath);
+    console.fileload('Loading command', commandPath);
     const cls = reload(commandPath);
     const cmd = new cls(this.client);
     cmd.path = commandPath;

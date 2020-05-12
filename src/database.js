@@ -18,7 +18,6 @@
 
 const redis = require('redis');
 const { EventEmitter } = require('eventemitter3');
-const logger = require('./logger')('[REDIS]');
 
 /**
  * The Redis database handler
@@ -28,7 +27,7 @@ module.exports = class Database extends EventEmitter {
     super();
     this.client = client;
     this.reconnectAfterClose = true;
-    logger.info('Initialized');
+    console.init('Redis initialized');
   }
 
   /**
@@ -36,16 +35,15 @@ module.exports = class Database extends EventEmitter {
    * @param {Object} options
    */
   connect({ host = 'localhost', port, password }) {
-    logger.info('Connecting...');
+    console.info('Connecting to redis...');
     return new Promise((resolve, reject) => {
       this.redis = redis.createClient({ host, port, password });
-      logger.info('Connected');
       this.redis.on('error', this.onError.bind(this));
-      this.redis.on('warning', w => logger.warn(w));
+      this.redis.on('warning', w => console.warn('Redis Warning', w));
       this.redis.on('end', () => this.onClose.bind(this));
-      this.redis.on('reconnecting', () => logger.warn('Reconnecting'));
-      this.redis.on('ready', () => logger.info('Ready'));
-      this.redis.on('connect', () => logger.info('Redis connection has started.'));
+      this.redis.on('reconnecting', () => console.warn('Reconnecting to redis...'));
+      this.redis.on('ready', () => console.info('Redis client ready.'));
+      this.redis.on('connect', () => console.info('Redis connection has started.'));
       this.host = host;
       this.port = port;
       this.password = password;
@@ -131,9 +129,8 @@ module.exports = class Database extends EventEmitter {
    * Reconnects the client
    */
   async reconnect() {
-    logger.warn('Attempting reconnection');
+    console.warn('Attempting redis reconnection');
     this.conn = await this.connect(this);
-    logger.info('Reconnected');
   }
 
   /**
@@ -151,7 +148,7 @@ module.exports = class Database extends EventEmitter {
    * @private
    */
   onError(err) {
-    logger.error('Error', err);
+    console.error('Redis Error', err);
     this.emit('error', err);
   }
 
@@ -159,7 +156,7 @@ module.exports = class Database extends EventEmitter {
    * @private
    */
   async onClose() {
-    logger.error('Closed');
+    console.error('Redis closed');
     this.emit('close');
     if (this.reconnectAfterClose) await this.reconnect();
   }

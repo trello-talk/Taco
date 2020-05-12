@@ -257,7 +257,15 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-chalk@^2.0.0, chalk@^2.1.0:
+cat-loggr@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/cat-loggr/-/cat-loggr-1.1.0.tgz#ed47d95213a20c619d9c36ba4ae1272f4fa8ef7c"
+  integrity sha512-91HA5xug2mYbfBqKd4ldAUAo7rTQpA39Cy3rzM7rfPynueiYSBe60tskwP8SriG+UwZKCsKycTk7FyR1N557zg==
+  dependencies:
+    chalk "^2.4.1"
+    moment "^2.22.2"
+
+chalk@^2.0.0, chalk@^2.1.0, chalk@^2.4.1:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -1257,7 +1265,7 @@ moment-timezone@^0.5.21:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.24.0, moment@^2.25.3:
+"moment@>= 2.9.0", moment@^2.22.2, moment@^2.24.0, moment@^2.25.3:
   version "2.25.3"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.3.tgz#252ff41319cf41e47761a1a88cab30edfe9808c0"
   integrity sha512-PuYv0PHxZvzc15Sp8ybUCoQ+xpyPWvjOuK72a5ovzp2LI32rJXOiIfyoFoYvG3s6EwwrdkMyWuRiEHSZRLJNdg==
