@@ -80,7 +80,7 @@ module.exports = class EditWebhook extends Command {
       {
         // Delete
         names: ['delete', 'remove'],
-        title: _('webhook_cmd.edit_menu.delete'),
+        title: _('webhook_cmd.edit_menu.delete') + '\n',
         async exec(client) {
           if (await client.messageAwaiter.confirm(message, _, {
             header: _('webhook_cmd.confirm_delete')
@@ -103,8 +103,103 @@ module.exports = class EditWebhook extends Command {
             return message.channel.createMessage(_('webhook_cmd.deleted'));
           }
         },
+      },
+      {
+        // Whitelist/Blacklist
+        names: ['whitelist', 'wlist', 'blacklist', 'blist'],
+        title: _(webhook.whitelist ? 'webhook_cmd.edit_menu.blist' : 'webhook_cmd.edit_menu.wlist'),
+        async exec(client) {
+          await client.pg.models.get('webhook').update({ whitelist: !webhook.whitelist },
+            { where: { id: webhook.id } });
+          return message.channel.createMessage(
+            _(webhook.active ? 'webhook_cmd.to_blist' : 'webhook_cmd.to_wlist'));
+        }
+      },
+      {
+        // Filtered Lists
+        names: ['editlists', 'lists', 'list'],
+        title: _('webhook_cmd.edit_menu.lists'),
+        async exec() {
+          return _this.editFilteredLists(message, webhook, trello, _);
+        },
+      },
+      {
+        // Filtered Cards
+        names: ['editcards', 'cards', 'card'],
+        title: _('webhook_cmd.edit_menu.cards'),
+        async exec() {
+          return _this.editFilteredCards(message, webhook, trello, _);
+        },
       }
     ]);
+  }
+
+  async editFilteredLists(message, webhook, trello, _) {
+    const handle = await trello.handleResponse({
+      response: await trello.getLists(webhook.modelID),
+      client: this.client, message, _ });
+    if (handle.stop) return;
+    if (handle.response.status === 404 || handle.response.status === 401)
+      return message.channel.createMessage(_('webhook_cmd.no_access'));
+
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
+    const checkEmoji = emojiFallback('632444546684551183', '☑️');
+    const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
+
+    const selector = new MultiSelect(this.client, message, {
+      path: 'value', checkEmoji, uncheckEmoji,
+      header: _('webhook_cmd.choose_lists')
+    }, {
+      items: handle.body.map(item => ({
+        ...item,
+        value: webhook.lists.includes(item.id)
+      })), _,
+      display: (item) => `${
+        item.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(item.name), 25)} (${
+        _.toLocaleString(item.cards.length)} ${_.numSuffix('words.card', item.cards.length)})`
+    });
+    const newLists = await selector.start(message.channel.id, message.author.id);
+    if (!newLists) return;
+    await this.client.pg.models.get('webhook').update(
+      { lists: newLists.filter(item => item.value).map(item => item.id) },
+      { where: { id: webhook.id } });
+    return message.channel.createMessage(_('webhook_cmd.lists_updated'));
+  }
+
+  async editFilteredCards(message, webhook, trello, _) {
+    const handle = await trello.handleResponse({
+      response: await trello.getSlimBoard(webhook.modelID),
+      client: this.client, message, _ });
+    if (handle.stop) return;
+    if (handle.response.status === 404 || handle.response.status === 401)
+      return message.channel.createMessage(_('webhook_cmd.no_access'));
+
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
+    const checkEmoji = emojiFallback('632444546684551183', '☑️');
+    const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
+
+    const selector = new MultiSelect(this.client, message, {
+      path: 'value', checkEmoji, uncheckEmoji,
+      header: _('webhook_cmd.choose_cards')
+    }, {
+      items: handle.body.map(item => ({
+        ...item,
+        value: webhook.cards.includes(item.id)
+      })), _,
+      display: card => {
+        const list = handle.body.lists.find(list => list.id === card.idList);
+        return `${card.closed ? '🗃️ ' : ''}${
+          card.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(card.name), 50)}` +
+          (list ? ` (${_('words.in_lower')} ${
+            Util.cutoffText(Util.Escape.markdown(list.name), 25)})` : '');
+      }
+    });
+    const newCards = await selector.start(message.channel.id, message.author.id);
+    if (!newCards) return;
+    await this.client.pg.models.get('webhook').update(
+      { cards: newCards.filter(item => item.value).map(item => item.id) },
+      { where: { id: webhook.id } });
+    return message.channel.createMessage(_('webhook_cmd.cards_updated'));
   }
 
   get filterGroups() {

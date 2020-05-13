@@ -47,7 +47,7 @@ module.exports = class Lists extends Command {
         items: json,
         _, header: _('lists.header'), itemTitle: 'words.list.many',
         display: (item) => `${
-          item.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(item.name), 25)} (${
+          item.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(item.name), 50)} (${
           _.toLocaleString(item.cards.length)} ${_.numSuffix('words.card', item.cards.length)})`
       });
 

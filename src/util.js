@@ -337,8 +337,8 @@ Util.Trello = {
           items: lists, itemTitle: 'words.list.many',
           header: _('lists.choose'),
           display: list => `${list.closed ? '🗃️ ' : ''}${
-            list.subscribed ? '🔔 ' : ''} ${
-            Util.cutoffText(Util.Escape.markdown(list.name), 25)}`,
+            list.subscribed ? '🔔 ' : ''}${
+            Util.cutoffText(Util.Escape.markdown(list.name), 50)}`,
           _
         });
         const promptResult = await prompter.search(query,
@@ -393,7 +393,7 @@ Util.Trello = {
           items: boards, itemTitle: 'words.trello_board.many',
           header: _('boards.choose'),
           display: (item) => `${item.closed ? '🗃️ ' : ''}${item.subscribed ? '🔔 ' : ''}${
-            item.starred ? '⭐ ' : ''} ${Util.cutoffText(Util.Escape.markdown(item.name), 50)}`,
+            item.starred ? '⭐ ' : ''}${Util.cutoffText(Util.Escape.markdown(item.name), 50)}`,
           _
         });
         const promptResult = await prompter.search(query,
