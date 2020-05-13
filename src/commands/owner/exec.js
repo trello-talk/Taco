@@ -40,7 +40,7 @@ module.exports = class Exec extends Command {
       this.client.stopTyping(message.channel);
       if (err) return message.channel.createMessage(this.codeBlock(err, 'js'));
       const stdErrBlock = (stderr ? this.codeBlock(stderr, 'js') + '\n' : '');
-      return message.channel.createMessage(stdErrBlock + this.codeBlock(stdout));
+      return Util.Hastebin.autosend(stdErrBlock + this.codeBlock(stdout), message);
     });
   }
 

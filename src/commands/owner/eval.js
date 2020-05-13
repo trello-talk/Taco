@@ -37,10 +37,11 @@ module.exports = class Eval extends Command {
       const start = Date.now();
       const result = eval(Util.Prefix.strip(message, this.client).split(' ').slice(1).join(' '));
       const time = Date.now() - start;
-      return message.channel.createMessage(
-        `${opts._('responses.eval', { ms: opts._.toLocaleString(time) })}\n\`\`\`js\n${result}\`\`\`\n`);
+      return Util.Hastebin.autosend(
+        `${opts._('responses.eval', { ms: opts._.toLocaleString(time) })}\n\`\`\`js\n${result}\`\`\`\n`,
+        message);
     } catch (e) {
-      return message.channel.createMessage('```js\n' + e.stack + '\n```');
+      return Util.Hastebin.autosend('```js\n' + e.stack + '\n```', message);
     }
   }
 

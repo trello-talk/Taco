@@ -17,6 +17,7 @@
 */
 
 const GenericPrompt = require('./structures/GenericPrompt');
+const fetch = require('node-fetch');
 
 /**
  * Represents the utilities for the bot
@@ -413,6 +414,48 @@ Util.Trello = {
 
       await message.channel.createMessage(_('boards.none'));
       return;
+    }
+  }
+};
+
+
+/**
+ * Hastebin-related functions
+ * @memberof Util.
+ */
+Util.Hastebin = {
+  async autosend(content, message) {
+    if (content.length > 2000) {
+      const haste = await Util.Hastebin.post(content);
+      if (haste.ok)
+        return message.channel.createMessage(`<https://hastebin.com/${haste.key}.md>`);
+      else
+        return message.channel.createMessage({}, {
+          name: 'output.txt',
+          file: new Buffer(content)
+        });
+    } else return message.channel.createMessage(content);
+  },
+  /**
+   * Post text to hastebin
+   * @param {string} content - The content to upload
+   */
+  async post(content) {
+    const haste = await fetch('https://hastebin.com/documents', {
+      method: 'POST',
+      body: content
+    });
+    if (haste.status >= 400)
+      return {
+        ok: false,
+        status: haste.status
+      };
+    else {
+      const hasteInfo = await haste.json();
+      return {
+        ok: true,
+        key: hasteInfo.key
+      };
     }
   }
 };
