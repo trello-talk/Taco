@@ -13,7 +13,6 @@
     "abort-controller": "^3.0.0",
     "bottleneck": "^2.19.5",
     "cat-loggr": "^1.1.0",
-    "crypto": "^1.0.1",
     "dbots": "github:dbots-pkg/dbots.js#master",
     "eris": "^0.13.1",
     "eventemitter3": "^4.0.0",

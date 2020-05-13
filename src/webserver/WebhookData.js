@@ -17,6 +17,7 @@
 */
 const Util = require('../util');
 const lodash = require('lodash');
+const Bottleneck = require('bottleneck');
 
 class WebhookData {
   constructor(request, webhook, webserver, filterFlag) {
@@ -268,9 +269,8 @@ class WebhookData {
   /**
    * Sends the embed to the webhook
    * @param {Object} embed The embed of the massage
-   * @param {string} [content] The content of the message
    */
-  async send(embed, content = undefined) {
+  async send(embed) {
     const defaultEmbed = {
       color: this.isChildAction() ? WebhookData.DEFAULT_COLORS.CHILD :
         WebhookData.DEFAULT_COLORS[this.filterFlag.split('_')[0]],
@@ -284,20 +284,35 @@ class WebhookData {
       thumbnail: { url: this.invoker.avatar },
       timestamp: this.action.date
     };
-    const body = {
-      content,
-      embeds: [lodash.defaultsDeep(embed, defaultEmbed)]
-    };
-    try {
-      return await this.webserver.client.executeWebhook(this.webhook.webhookID,
-        this.webhook.webhookToken, body);
-    } catch (e) {
-      console.webserv(`Discord webhook execution failed @ ${this.webhook.webhookID}:${this.webhook.id}`, e);
-      return await this.webserver.client.pg.models.get('webhook').update({
-        webhookID: null,
-        webhookToken: null
-      }, { where: { id: this.webhook.id } });
-    }
+
+    if (this.webserver.batches.has(this.webhook.webhookID))
+      // Since Batcher#add returns a promise that resolves after a flush, this won't return the promise and
+      // therefore won't halt the request until flushed.
+      return (() => {
+        this.webserver.batches.get(this.webhook.webhookID).add(lodash.defaultsDeep(embed, defaultEmbed));
+      })();
+
+    const batcher = new Bottleneck.Batcher({
+      maxTime: 1000,
+      maxSize: 10
+    });
+    this.webserver.batches.set(this.webhook.webhookID, batcher);
+
+    batcher.on('batch', async embeds => {
+      this.webserver.batches.delete(this.webhook.webhookID);
+      try {
+        return await this.webserver.client.executeWebhook(this.webhook.webhookID,
+          this.webhook.webhookToken, { embeds });
+      } catch (e) {
+        console.webserv(`Discord webhook execution failed @ ${this.webhook.webhookID}:${this.webhook.id}`, e);
+        return await this.webserver.client.pg.models.get('webhook').update({
+          webhookID: null,
+          webhookToken: null
+        }, { where: { id: this.webhook.id } });
+      }
+    });
+
+    batcher.add(lodash.defaultsDeep(embed, defaultEmbed));
   }
 }
 

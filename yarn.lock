@@ -423,11 +423,6 @@ cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-crypto@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/crypto/-/crypto-1.0.1.tgz#2af1b7cad8175d24c8a1b0778255794a21803037"
-  integrity sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==
-
 "dbots@github:dbots-pkg/dbots.js#master":
   version "3.0.1"
   resolved "https://codeload.github.com/dbots-pkg/dbots.js/tar.gz/abcf2c62d61b1186842a24882ba0a4e8ad94c7de"

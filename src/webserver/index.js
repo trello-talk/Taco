@@ -55,6 +55,7 @@ class WebServer {
     this.client = client;
 
     this.events = new Map();
+    this.batches = new Map();
 
     console.init('Webserver initialized');
   }
