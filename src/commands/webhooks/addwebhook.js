@@ -61,11 +61,19 @@ module.exports = class AddWebhook extends Command {
         }
       },
       {
-        // USe existing webhook
+        // Use existing webhook
         names: ['exist', 'existing', 'existingwebhook'],
         title: _('webhook_cmd.menu.exist'),
         exec() {
           return _this.existingWebhook(message, board, userData, trello, _);
+        }
+      },
+      {
+        // Use webhook link
+        names: ['link', 'linkwebhook'],
+        title: _('webhook_cmd.menu.link'),
+        exec() {
+          return _this.linkWebhook(message, board, userData, trello, _);
         }
       },
     ]);
@@ -113,6 +121,24 @@ module.exports = class AddWebhook extends Command {
     });
     const discordWebhook = await prompter.choose(message.channel.id, message.author.id);
     if (!discordWebhook) return;
+
+    return this.finalizeSetup(message, board, discordWebhook, userData, trello, _);
+  }
+
+  async linkWebhook(message, board, userData, trello, _) {
+    const input = await this.client.messageAwaiter.getInput(message, _, {
+      header: _('webhook_cmd.input_link')
+    });
+    if (!input) return;
+
+    const match = input.match(Util.Regex.webhookURL);
+    if (!match)
+      return message.channel.createMessage(_('webhook_cmd.no_link'));
+
+    const discordWebhook = (await message.channel.guild.getWebhooks()).find(dwh => dwh.id === match[1]);
+
+    if (!discordWebhook)
+      return message.channel.createMessage(_('webhook_cmd.no_server_link'));
 
     return this.finalizeSetup(message, board, discordWebhook, userData, trello, _);
   }

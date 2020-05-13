@@ -3,7 +3,9 @@ module.exports = {
   discordConfig: {
     autoreconnect: true,
     allowedMentions: {
-      everyone: false
+      everyone: false,
+      roles: false,
+      users: true
     },
     maxShards: "auto",
     messageLimit: 0,

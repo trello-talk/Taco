@@ -78,8 +78,7 @@ module.exports = class Webhook extends Command {
         `**${_('words.channel.one')}:** <#${discordWebhook.channel_id}>\n` +
         `**${_('webhook_cmd.owned_by')}:** <@${discordWebhook.user.id}> (${
           Util.Escape.markdown(discordWebhook.user.username)}#${discordWebhook.user.discriminator})` :
-        `🛑 **${_('webhook_cmd.dwh_missing')}**\n` + _('webhook_cmd.try_repair'),
-      inline: true
+        `🛑 **${_('webhook_cmd.dwh_missing')}**\n` + _('webhook_cmd.try_repair', { id: webhook.id })
     });
 
     embed.fields.push({
@@ -87,8 +86,7 @@ module.exports = class Webhook extends Command {
       value: `**${_('words.id')}:** \`${webhook.trelloWebhookID}\`\n` +
         `**${_('words.board.one')}:** \`${webhook.modelID}\`\n` +
         (trelloMember ? `**${_('webhook_cmd.owned_by')}:** <@${trelloMember.userID}>` :
-          `🛑 **${_('webhook_cmd.twh_missing')}**\n` + _('webhook_cmd.try_repair')),
-      inline: true
+          `🛑 **${_('webhook_cmd.twh_missing')}**\n` + _('webhook_cmd.try_repair', { id: webhook.id }))
     });
 
     return message.channel.createMessage({ embed });
