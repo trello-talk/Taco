@@ -15,7 +15,7 @@
     "cat-loggr": "^1.1.0",
     "crypto": "^1.0.1",
     "dbots": "github:dbots-pkg/dbots.js#master",
-    "eris": "^0.12.0",
+    "eris": "^0.13.1",
     "eventemitter3": "^4.0.0",
     "express": "^4.17.1",
     "express-graceful-exit": "^0.5.0",
