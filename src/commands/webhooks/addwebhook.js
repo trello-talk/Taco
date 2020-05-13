@@ -167,6 +167,7 @@ module.exports = class AddWebhook extends Command {
       webhookID: webhook.id,
       guildID: message.guildID,
       filters: WebhookFilters.DEFAULT.toString(),
+      locale: _.locale,
       webhookToken: webhook.token
     });
 

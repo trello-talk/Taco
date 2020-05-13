@@ -53,6 +53,9 @@ module.exports = class Webhook extends Command {
 
     const filters = (new WebhookFilters(BigInt(webhook.filters))).toArray();
 
+    const locale = webhook.locale ?
+      (this.client.locale.locales.get(webhook.locale) || null) : null;
+
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const checkEmoji = emojiFallback('632444546684551183', '☑️');
     const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
@@ -61,6 +64,7 @@ module.exports = class Webhook extends Command {
       color: this.client.config.embedColor,
       description: `**${_('webhook_cmd.model_filter')}:** ${
         _(webhook.whitelist ? 'webhook_cmd.whitelist' : 'webhook_cmd.blacklist')}\n` +
+        `**${_('words.locale')}:** ${locale ? locale._.name : '*' + _('locale.unset') + '*'}\n` +
         `${webhook.active ? checkEmoji : uncheckEmoji} ${_('words.active')}\n\n` +
         `${_.toLocaleString(webhook.lists.length)} ${
           _.numSuffix('webhook_cmd.filtered_list', webhook.lists.length)}\n` +

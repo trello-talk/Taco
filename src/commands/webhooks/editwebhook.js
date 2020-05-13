@@ -46,9 +46,13 @@ module.exports = class EditWebhook extends Command {
     if (!webhook)
       return message.channel.createMessage(_('webhook_cmd.not_found'));
 
+    const locale = webhook.locale ?
+      (this.client.locale.locales.get(webhook.locale) || null) : null;
+
     const _this = this;
     const menu = new SubMenu(this.client, message, {
-      header: _('webhook_cmd.wywtd'), itemTitle: 'words.subcmd.many', _ });
+      header: `**${_('words.locale')}:** ${locale ? locale._.name : '*' + _('locale.unset') + '*'}\n\n` +
+        _('webhook_cmd.wywtd'), itemTitle: 'words.subcmd.many', _ });
     return menu.start(message.channel.id, message.author.id, args[1], [
       {
         // Activate/deactivate
@@ -67,6 +71,14 @@ module.exports = class EditWebhook extends Command {
         title: _('webhook_cmd.edit_menu.filter'),
         async exec() {
           return _this.editFilters(message, webhook, _);
+        }
+      },
+      {
+        // Change locale
+        names: ['locale', 'setlocale', 'lang', 'setlant'],
+        title: _('webhook_cmd.edit_menu.locale'),
+        async exec() {
+          return _this.changeLocale(message, args[2], webhook, _);
         }
       },
       {
@@ -118,7 +130,7 @@ module.exports = class EditWebhook extends Command {
       {
         // Filtered Lists
         names: ['editlists', 'lists', 'list'],
-        title: _('webhook_cmd.edit_menu.lists'),
+        title: _('webhook_cmd.edit_menu.lists') + ` (${_.toLocaleString(webhook.lists.length)})`,
         async exec() {
           return _this.editFilteredLists(message, webhook, trello, _);
         },
@@ -126,12 +138,25 @@ module.exports = class EditWebhook extends Command {
       {
         // Filtered Cards
         names: ['editcards', 'cards', 'card'],
-        title: _('webhook_cmd.edit_menu.cards'),
+        title: _('webhook_cmd.edit_menu.cards') + ` (${_.toLocaleString(webhook.cards.length)})`,
         async exec() {
           return _this.editFilteredCards(message, webhook, trello, _);
         },
       }
     ]);
+  }
+
+  async changeLocale(message, arg, webhook, _) {
+    const localeArray = [...this.client.locale.array(), ['unset', null]];
+    const localeCommand = this.client.cmds.get('locale');
+    const locale = await localeCommand.findLocale(arg, localeArray, message, _);
+    if (!locale) return;
+    await this.client.pg.models.get('webhook').update({ locale: locale[1] ? locale[0] : null },
+      { where: { id: webhook.id } });
+    return message.channel.createMessage(
+      _(locale[1] ? 'webhook_cmd.locale_set' : 'webhook_cmd.locale_unset', {
+        name: locale[1] ? locale[1]._.name : null
+      }));
   }
 
   async editFilteredLists(message, webhook, trello, _) {
