@@ -52,7 +52,12 @@ class Server extends Model {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: client.config.prefix
-      }
+      },
+      maxWebhooks: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 5
+      },
     });
   }
 

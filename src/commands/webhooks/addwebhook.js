@@ -31,7 +31,14 @@ module.exports = class AddWebhook extends Command {
     permissions: ['embed', 'webhooks', 'trelloRole', 'auth']
   }; }
 
-  async exec(message, { args, _, trello, userData }) {
+  async exec(message, { args, _, trello, userData, serverData }) {
+    const maxWebhooks = serverData ? serverData.maxWebhooks : 5;
+    const webhookCount = await this.client.pg.models.get('webhook').count({ where: {
+      guildID: message.guildID
+    }});
+    if (maxWebhooks <= webhookCount)
+      return message.channel.createMessage(_('webhook_cmd.max_wh'));
+
     const handle = await trello.handleResponse({
       response: await trello.getMember(userData.trelloID),
       client: this.client, message, _ });
