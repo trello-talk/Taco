@@ -158,6 +158,29 @@ module.exports = class EditCard extends Command {
         }
       });
 
+    menuOpts.push({
+      // Attach
+      names: ['attach'],
+      title: _('cards.menu.attach'),
+      async exec(client) {
+        const input = args[2] || await client.messageAwaiter.getInput(message, _, {
+          header: _('cards.input_attach')
+        });
+        if (!input) return;
+
+        const match = input.match(Util.Regex.url);
+        if (!match)
+          return message.channel.createMessage(_('cards.bad_attach'));
+
+        if ((await trello.handleResponse({
+          response: await trello.addAttachment(json.id, match[0]),
+          client, message, _ })).stop) return;
+        return message.channel.createMessage(_('cards.add_attach', {
+          name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+        }));
+      }
+    });
+
     return menu.start(message.channel.id, message.author.id, args[1], menuOpts);
   }
 
