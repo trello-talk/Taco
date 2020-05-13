@@ -46,7 +46,7 @@ module.exports = class ListArchive extends Command {
       const paginator = new GenericPager(this.client, message, {
         items: json,
         _, header: _('lists.arch_header'), itemTitle: 'words.arch_list.many',
-        display: (item) => `${item.subscribed ? '🔔 ' : ''}\`${item.id}\` ${
+        display: (item) => `${item.subscribed ? '🔔 ' : ''} ${
           Util.cutoffText(Util.Escape.markdown(item.name), 25)}`
       });
 

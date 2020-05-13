@@ -337,7 +337,7 @@ Util.Trello = {
           items: lists, itemTitle: 'words.list.many',
           header: _('lists.choose'),
           display: list => `${list.closed ? '🗃️ ' : ''}${
-            list.subscribed ? '🔔 ' : ''}\`${list.id}\` ${
+            list.subscribed ? '🔔 ' : ''} ${
             Util.cutoffText(Util.Escape.markdown(list.name), 25)}`,
           _
         });
@@ -364,7 +364,7 @@ Util.Trello = {
           header: _('cards.choose'),
           display: card => {
             const list = board.lists.find(list => list.id === card.idList);
-            return `\`${card.shortLink}\` ${card.closed ? '🗃️ ' : ''}${
+            return `${card.closed ? '🗃️ ' : ''}${
               card.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(card.name), 50)}` +
               (list ? ` (${_('words.in_lower')} ${
                 Util.cutoffText(Util.Escape.markdown(list.name), 25)})` : '');
@@ -393,8 +393,7 @@ Util.Trello = {
           items: boards, itemTitle: 'words.trello_board.many',
           header: _('boards.choose'),
           display: (item) => `${item.closed ? '🗃️ ' : ''}${item.subscribed ? '🔔 ' : ''}${
-            item.starred ? '⭐ ' : ''}\`${
-            item.shortLink}\` ${Util.cutoffText(Util.Escape.markdown(item.name), 50)}`,
+            item.starred ? '⭐ ' : ''} ${Util.cutoffText(Util.Escape.markdown(item.name), 50)}`,
           _
         });
         const promptResult = await prompter.search(query,

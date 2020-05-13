@@ -46,7 +46,7 @@ module.exports = class CardArchive extends Command {
       const paginator = new GenericPager(this.client, message, {
         items: json,
         _, header: _('cards.arch_header'), itemTitle: 'words.arch_card.many',
-        display: (item) => `${item.subscribed ? '🔔 ' : ''}\`${item.shortLink}\` ${
+        display: (item) => `${item.subscribed ? '🔔 ' : ''}  ${
           Util.cutoffText(Util.Escape.markdown(item.name), 50)}`
       });
 
