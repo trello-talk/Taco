@@ -278,7 +278,8 @@ Util.CommandPermissions = {
   },
   auth: (_, __, { userData }) => userData && userData.trelloToken && userData.trelloID,
   selectedBoard: (_, __, { userData }) => userData && userData.currentBoard,
-  discordAuth: (_, __, { userData }) => userData && userData.discordToken && userData.discordRefresh
+  discordAuth: (_, __, { userData }) => userData && userData.discordToken && userData.discordRefresh,
+  userData: (_, __, { userData }) => !!userData
 };
 
 /**
