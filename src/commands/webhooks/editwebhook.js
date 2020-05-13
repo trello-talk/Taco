@@ -483,6 +483,6 @@ module.exports = class EditWebhook extends Command {
   }
 
   get metadata() { return {
-    category: 'categories.edit',
+    category: 'categories.webhook',
   }; }
 };
