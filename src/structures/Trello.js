@@ -474,7 +474,7 @@ class Trello {
   updateWebhook(id, payload) {
     return this._request({
       method: 'put',
-      url: `/tokens/${this.token}/webhooks/${id}`,
+      url: `/webhooks/${id}`,
       bodyType: 'form',
       body: payload
     });

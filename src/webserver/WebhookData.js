@@ -270,7 +270,7 @@ class WebhookData {
    * @param {Object} embed The embed of the massage
    * @param {string} [content] The content of the message
    */
-  send(embed, content = undefined) {
+  async send(embed, content = undefined) {
     const defaultEmbed = {
       color: this.isChildAction() ? WebhookData.DEFAULT_COLORS.CHILD :
         WebhookData.DEFAULT_COLORS[this.filterFlag.split('_')[0]],
@@ -282,14 +282,22 @@ class WebhookData {
       description: embed.description || this.embedDescription(),
       type: 'rich',
       thumbnail: { url: this.invoker.avatar },
-      timestamp: new Date().toISOString()
+      timestamp: this.action.date
     };
     const body = {
       content,
       embeds: [lodash.defaultsDeep(embed, defaultEmbed)]
     };
-    return this.webserver.client.executeWebhook(this.webhook.webhookID,
-      this.webhook.webhookToken, body);
+    try {
+      return await this.webserver.client.executeWebhook(this.webhook.webhookID,
+        this.webhook.webhookToken, body);
+    } catch (e) {
+      console.webserv(`Discord webhook execution failed @ ${this.webhook.webhookID}:${this.webhook.id}`, e);
+      return await this.webserver.client.pg.models.get('webhook').update({
+        webhookID: null,
+        webhookToken: null
+      }, { where: { id: this.webhook.id } });
+    }
   }
 }
 

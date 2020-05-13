@@ -155,19 +155,21 @@ class WebServer {
       await Promise.all(webhooks.map(webhook => {
         const data = new WebhookData(request, webhook, this, filter);
         const filters = new WebhookFilters(BigInt(webhook.filters));
+        const list = request.body.action.data.list || request.body.action.data.listAfter;
+        const card = request.body.action.data.card;
         let allowed = true;
         
-        if (request.body.action.data.card || request.body.action.data.list) {
-          if (webhook.cards.length && request.body.action.data.card)
-            allowed = webhook.cards.includes(request.body.action.data.cards.id);
-          if (webhook.lists.length && request.body.action.data.list)
-            allowed = webhook.lists.includes(request.body.action.data.list.id);
+        if (card || list) {
+          if (webhook.cards.length && card)
+            allowed = webhook.cards.includes(card.id);
+          if (webhook.lists.length && list)
+            allowed = webhook.lists.includes(list.id);
         }
 
         if (!webhook.whitelist && (webhook.cards.length || webhook.lists.length))
           allowed = !allowed;
 
-        if (allowed && filters.has(filter))
+        if (allowed && filters.has(filter) && webhook.webhookID)
           return this.events.get(filter)(data);
       }));
   
