@@ -32,7 +32,7 @@ module.exports = class ReloadOne extends Command {
 
   async exec(message, { args, _ }) {
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const reloadingEmoji = emojiFallback('632444546961375232', ':recycle:');
+    const reloadingEmoji = emojiFallback('632444546961375232', '♻️', true);
     
     const commands = args.map(name => this.client.cmds.get(name));
     if (commands.includes(undefined))
@@ -58,7 +58,7 @@ module.exports = class ReloadOne extends Command {
       newCommand.preload();
       return newCommand;
     });
-    const reloadEmoji = emojiFallback('632444546684551183', ':white_check_mark:');
+    const reloadEmoji = emojiFallback('632444546684551183', '✅');
     return sentMessage.edit(`${reloadEmoji} ${_(
       'reloadone.done', { commands: reloadedCommands.map(c => `\`${c.name}\``).join(', ') })}`);
   }

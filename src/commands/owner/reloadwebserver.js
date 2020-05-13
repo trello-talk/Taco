@@ -33,7 +33,7 @@ module.exports = class ReloadWebServer extends Command {
     if (!this.client.webserver)
       return message.channel.createMessage(_('reloadwebserver.no'));
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
-    const reloadingEmoji = emojiFallback('632444546961375232', ':recycle:');
+    const reloadingEmoji = emojiFallback('632444546961375232', '♻️', true);
     const sentMessage = await message.channel.createMessage(
       `${reloadingEmoji} ${_('reloadwebserver.reloading')}`);
     await this.client.webserver.stop();
@@ -41,7 +41,7 @@ module.exports = class ReloadWebServer extends Command {
     reload.emptyCache(require);
     this.client.webserver = new (require('../../webserver'))(this.client);
     await this.client.webserver.start();
-    const reloadEmoji = emojiFallback('632444546684551183', ':white_check_mark:');
+    const reloadEmoji = emojiFallback('632444546684551183', '✅');
     return sentMessage.edit(`${reloadEmoji} ${_('reloadwebserver.done')}`);
   }
 
