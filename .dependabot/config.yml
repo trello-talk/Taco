@@ -1,0 +1,11 @@
+version: 1
+update_configs:
+  - package_manager: "javascript"
+    directory: "/"
+    update_schedule: "live"
+    commit_message:
+      prefix: "chore"
+      include_scope: true
+    default_reviewers:
+    - "Yamboy1"
+    - "Snazzah"
