@@ -4,7 +4,7 @@
   <img src="https://top.gg/api/widget/620126394390675466.svg" alt="Taco" align="right"/>
 </a>
 
-![Discord Shield](https://discordapp.com/api/guilds/617911034555924502/widget.png?style=shield) [![Discord Bots](https://top.gg/api/widget/servers/620126394390675466.svg?rightcolor=7289DA)](https://top.gg/bot/620126394390675466)[![Status Badge] (http://translate.trellobot.xyz/widgets/trellobot/-/bot/svg-badge.svg) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![Discord Shield](https://discordapp.com/api/guilds/617911034555924502/widget.png?style=shield) [![Discord Bots](https://top.gg/api/widget/servers/620126394390675466.svg?rightcolor=7289DA)](https://top.gg/bot/620126394390675466)![StatusWidget](http://translate.trellobot.xyz/widgets/trellobot/-/svg-badge.svg) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Introduction
 
