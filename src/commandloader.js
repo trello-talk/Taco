@@ -106,7 +106,7 @@ module.exports = class CommandLoader {
    * @param {Command} command
    */
   async processCooldown(message, command) {
-    if (message.author.id === this.client.config.owner) return true;
+    if (this.client.config.elevated.includes(message.author.id)) return true;
     const now = Date.now() - 1;
     const cooldown = command.cooldownAbs;
     let userCD = await this.client.db.hget(`cooldowns:${message.author.id}`, command.name) || 0;
