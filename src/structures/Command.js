@@ -74,7 +74,7 @@ class Command {
     } else {
       const cd = await this.client.db.hget(`cooldowns:${message.author.id}`, this.name);
       return message.channel.createMessage(
-        `:watch: ${opts._('cooldown', { seconds: Math.ceil(this.cooldownAbs - (Date.now() - cd))})}`);
+        `:watch: ${opts._('cooldown_msg', { seconds: Math.ceil(this.cooldownAbs - (Date.now() - cd))})}`);
     }
   }
 
