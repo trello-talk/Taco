@@ -141,7 +141,7 @@ Util.Regex = {
   escape: /[-/\\^$*+?.()|[\]{}]/g,
   url: /https?:\/\/(-\.)?([^\s/?.#-]+\.?)+(\/[^\s]*)?/gi,
   userMention: /<@!?(\d+)>/gi,
-  webhookURL: /(?:https?:\/\/)(?:canary\.|ptb\.)discord(?:app)\.com\/api\/webhooks\/(\d{17,18})\/([\w-]{68})/
+  webhookURL: /(?:https?:\/\/)(?:canary\.|ptb\.)discord(?:app)?\.com\/api\/webhooks\/(\d{17,18})\/([\w-]{68})/
 };
   
 /**
