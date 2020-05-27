@@ -28,7 +28,7 @@ module.exports = (request, webserver) => {
   if (WebhookFilters.FLAGS[snakeCaseAction] && webserver.events.has(snakeCaseAction))
     return snakeCaseAction;
 
-  if (exports.PARENT_FILTERS.includes(snakeCaseAction)) {
+  if (exports.PARENT_FILTERS.includes(snakeCaseAction) && request.body.action.data.old) {
     const keyChanged = Object.keys(request.body.action.data.old)[0];
     const childAction = snakeCaseAction + '_' +
       (keyMap[keyChanged] || keyChanged).toUpperCase();
