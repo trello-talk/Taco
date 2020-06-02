@@ -83,7 +83,7 @@ class Command {
   exec(Message, opts) { }
 
   /**
-   * The optoins for the command
+   * The options for the command
    * @type {Object}
    */
   get options() {
