@@ -2,7 +2,8 @@
 
 /*
  This file is part of TrelloBot.
- Copyright (c) Snazzah (and contributors) 2016-2020
+ Copyright (c) Snazzah 2016 - 2019
+ Copyright (c) Trello Talk Team 2019 - 2020
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
