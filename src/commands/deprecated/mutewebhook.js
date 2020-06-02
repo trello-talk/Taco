@@ -17,7 +17,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const Command = require('../structures/DeprecatedCommand');
+const Command = require('../../structures/DeprecatedCommand');
 
 module.exports = class MuteWebhook extends Command {
   get name() { return 'mutewebhook'; }
