@@ -90,33 +90,6 @@ module.exports = class EditWebhook extends Command {
         }
       },
       {
-        // Delete
-        names: ['delete', 'remove'],
-        title: _('webhook_cmd.edit_menu.delete') + '\n',
-        async exec(client) {
-          if (await client.messageAwaiter.confirm(message, _, {
-            header: _('webhook_cmd.confirm_delete')
-          })) {
-            await client.pg.models.get('webhook').destroy({ where: { id: webhook.id } });
-            
-            // Remove the internal webhook if there are no more webhooks depenging on it
-            const trelloMember = await client.pg.models.get('user').findOne({ where: {
-              trelloID: webhook.memberID
-            }});
-            if (trelloMember) {
-              const trello = new Trello(client, trelloMember.trelloToken);
-              const webhooks = await client.pg.models.get('webhook').findAll({ where: {
-                trelloWebhookID: webhook.trelloWebhookID
-              }});
-              if (!webhooks.length)
-                await trello.deleteWebhook(webhook.trelloWebhookID);
-            }
-
-            return message.channel.createMessage(_('webhook_cmd.deleted'));
-          }
-        },
-      },
-      {
         // Whitelist/Blacklist
         names: ['whitelist', 'wlist', 'blacklist', 'blist'],
         title: _(webhook.whitelist ? 'webhook_cmd.edit_menu.blist' : 'webhook_cmd.edit_menu.wlist'),
