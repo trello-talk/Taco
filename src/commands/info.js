@@ -64,7 +64,7 @@ module.exports = class Info extends Command {
         + (hasDonationLinks ? `**${donateEmoji} ${_('words.donate')}**: ${
           this.client.config.donate[0]}\n` : ''),
       thumbnail: {
-        url: this.client.config.iconURL
+        url: this.client.user.dynamicAvatarURL('png', 1024)
       }
     };
     return message.channel.createMessage({ embed });
