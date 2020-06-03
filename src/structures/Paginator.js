@@ -188,6 +188,7 @@ class Paginator extends EventEmitter {
       this._change();
     if ([Paginator.PREV, Paginator.STOP, Paginator.NEXT].includes(emoji.name) && this.canManage())
       this.message.removeReaction(emoji.name, userID);
+    this.collector.restart();
   }
 }
 

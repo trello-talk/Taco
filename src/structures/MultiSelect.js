@@ -107,6 +107,9 @@ class MultiSelect extends EventEmitter {
           this.pager.items.splice(chosenIndex - 1, 1, chosenItem);
           this.pager.updateMessage();
         }
+
+        this.halt.restart();
+        this.pager.collector.restart();
       });
 
       this.halt.on('end', () => {
@@ -140,6 +143,8 @@ class MultiSelect extends EventEmitter {
             result = this.pager.items;
             this.halt.end();
           }
+
+          this.halt.restart();
         });
       }
     });
