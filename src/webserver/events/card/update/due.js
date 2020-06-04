@@ -33,15 +33,15 @@ exports.exec = async data => {
         card: data.util.cutoffText(data.card.name, 50)
       }),
       description: data.embedDescription(['card', 'list']),
-      fields: [{
+      fields: [data.oldData.due ? {
         name: '*' + _('trello.old_due') + '*',
         value: `${oldDue.format('LLLL')} *(${oldDue.fromNow()})*`,
         inline: true
-      }, {
+      } : null, data.card.due ? {
         name: '*' + _('trello.new_due') + '*',
         value: `${newDue.format('LLLL')} *(${newDue.fromNow()})*`,
         inline: true
-      }].filter(v => !!v.value)
+      } : null].filter(v => !!v.value)
     });
   } else if (changedKey === 'dueComplete')
     return data.send({
