@@ -20,8 +20,8 @@
 const Command = require('../../structures/Command');
 const Trello = require('../../structures/Trello');
 
-module.exports = class EditWebhook extends Command {
-  get name() { return 'editwebhook'; }
+module.exports = class RemWebhook extends Command {
+  get name() { return 'remwebhook'; }
 
   get _options() { return {
     aliases: ['rwebhook', 'rwh', '-wh', '-webhook', 'delwebhook', 'removewebhook', 'deletewebhook'],
