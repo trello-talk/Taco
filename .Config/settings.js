@@ -1,13 +1,22 @@
-// These are discord.js related settings
 module.exports = {
-  clientOptions: {
-    autoReconnect: true,
-    disableEveryone: true, // Whether the bot should be able to ping @everyone
-    disabledEvents: ["TYPING_START", "TYPING_STOP"],
-    maxCachedMessages: 250
-  },
-  sharding: {
-    totalShards: "auto",
-    delay: 7500
+  // [Object] Eris client options (https://abal.moe/Eris/docs/Client)
+  discordConfig: {
+    autoreconnect: true,
+    allowedMentions: {
+      everyone: false,
+      roles: false,
+      users: true
+    },
+    maxShards: "auto",
+    messageLimit: 0,
+    intents: [
+      "guilds",
+      "guildEmojis",
+      "guildWebhooks",
+      "guildMessages",
+      "guildMessageReactions",
+      "directMessages",
+      "directMessageReactions"
+    ] // 13865 - Intent Raw.
   }
 };
