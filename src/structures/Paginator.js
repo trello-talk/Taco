@@ -154,7 +154,7 @@ class Paginator extends EventEmitter {
             this.message.removeReaction(Paginator.PREV).catch(() => {})
           ]);
         else
-          await this.message.removeReactions();
+          await this.message.removeReactions().catch(() => {});
       } catch (e) {
         // Do nothing
       }
@@ -190,7 +190,7 @@ class Paginator extends EventEmitter {
     if (this.pageNumber !== oldPage)
       this._change();
     if ([Paginator.PREV, Paginator.STOP, Paginator.NEXT].includes(emoji.name) && this.canManage())
-      this.message.removeReaction(emoji.name, userID);
+      this.message.removeReaction(emoji.name, userID).catch(() => {});
     this.collector.restart();
   }
 }
