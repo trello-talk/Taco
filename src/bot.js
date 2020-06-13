@@ -89,9 +89,10 @@ class TrelloBot extends Eris.Client {
     this.on('shardDisconnect', (error, id) => console.warn(`Shard ${id} disconnected`, error));
 
     // SIGINT & uncaught exceptions
-    process.once('uncaughtException', err => {
+    process.once('uncaughtException', async err => {
       console.error('Uncaught Exception', err.stack);
-      setTimeout(() => process.exit(0), 2500);
+      await this.dieGracefully();
+      process.exit(0);
     });
 
     process.once('SIGINT', async () => {

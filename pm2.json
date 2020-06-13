@@ -2,8 +2,8 @@
 	"apps": [
 		{
 			"name": "TrelloBot",
-			"script": "yarn",
-			"args": "start"
+			"script": "node",
+			"args": "src/bot.js"
 		}
 	]
 }
