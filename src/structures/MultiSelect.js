@@ -109,7 +109,8 @@ class MultiSelect extends EventEmitter {
         }
 
         this.halt.restart();
-        this.pager.collector.restart();
+        if (this.pager.collector)
+          this.pager.collector.restart();
       });
 
       this.halt.on('end', () => {
