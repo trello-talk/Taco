@@ -181,7 +181,7 @@ module.exports = class EditWebhook extends Command {
       path: 'value', checkEmoji, uncheckEmoji,
       header: _('webhook_cmd.choose_cards')
     }, {
-      items: handle.body.map(item => ({
+      items: handle.body.cards.map(item => ({
         ...item,
         value: webhook.cards.includes(item.id)
       })), _,
