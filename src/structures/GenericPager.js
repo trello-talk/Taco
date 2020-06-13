@@ -65,7 +65,7 @@ class GenericPager extends Paginator {
    * @returns {Promise}
    */
   updateMessage() {
-    return this.message.edit(this.currentMessage);
+    return this.message.edit(this.currentMessage).catch(() => {});
   }
 
   /**

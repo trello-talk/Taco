@@ -76,7 +76,7 @@ class GenericPrompt {
 
       this.halt.on('message', nextMessage => {
         if (this.pager.canManage())
-          nextMessage.delete();
+          nextMessage.delete().catch(() => {});
 
         if (GenericPrompt.CANCEL_TRIGGERS.includes(nextMessage.content.toLowerCase())) {
           foundItem = { _canceled: true };
@@ -96,13 +96,13 @@ class GenericPrompt {
         this.pager.reactionsCleared = true;
         if (this.pager.collector) 
           this.pager.collector.end();
-        this.pager.message.delete();
+        this.pager.message.delete().catch(() => {});
 
         if (foundItem && foundItem._canceled)
           foundItem = null;
         else if (foundItem === null)
           this.pager.message.channel.createMessage(
-            `<@${userID}>, ${this.pagerOptions._('prompt.timeout')}`);
+            `<@${userID}>, ${this.pagerOptions._('prompt.timeout')}`).catch(() => {});
 
         resolve(foundItem);
       });
