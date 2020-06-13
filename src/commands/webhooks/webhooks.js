@@ -52,12 +52,12 @@ module.exports = class Webhooks extends Command {
       items: webhooks,
       _, header: _('webhook_cmd.header'), itemTitle: 'words.webhook.many',
       display: (item) => {
-        let result = `\`${item.id}\` ${item.active ? checkEmoji : uncheckEmoji} `;
+        let result = `${item.active ? checkEmoji : uncheckEmoji} \`ID: ${item.id}\` `;
         
         if (item.discordWebhook)
           result += `${
             Util.cutoffText(Util.Escape.markdown(item.discordWebhook.name), 50)} ` + 
-            `(${_('words.board.one')} \`${item.modelID}\`, <@${item.discordWebhook.user.id}>)`;
+            `(<@${item.discordWebhook.user.id}>)`;
         else
           result += `[${_('webhook_cmd.unknown')}] (${_('words.board.one')} \`${item.modelID}\`)`;
 
