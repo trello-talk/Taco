@@ -141,20 +141,23 @@ class Paginator extends EventEmitter {
 
   /**
    * Clears reaction from the message
-   * @return {boolean}
    */
-  clearReactions() {
+  async clearReactions() {
     if (!this.reactionsCleared) {
       this.reactionsCleared = true;
       this.emit('clearReactions');
-      if (!this.canManage())
-        return Promise.all([
-          this.message.removeReaction(Paginator.NEXT).catch(() => {}),
-          this.message.removeReaction(Paginator.STOP).catch(() => {}),
-          this.message.removeReaction(Paginator.PREV).catch(() => {})
-        ]);
-      else
-        return this.message.removeReactions();
+      try {
+        if (!this.canManage())
+          await Promise.all([
+            this.message.removeReaction(Paginator.NEXT).catch(() => {}),
+            this.message.removeReaction(Paginator.STOP).catch(() => {}),
+            this.message.removeReaction(Paginator.PREV).catch(() => {})
+          ]);
+        else
+          await this.message.removeReactions();
+      } catch (e) {
+        // Do nothing
+      }
     }
   }
 
