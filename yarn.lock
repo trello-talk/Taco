@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airbrake/browser@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@airbrake/browser/-/browser-1.1.2.tgz#12a2d698afa69ec471c45520b3f03747a66f14a1"
-  integrity sha512-qQe5GlJo4UYGNNwGFntGtmG2oTytSP+AZZch1Tgc+KcEl9eQwvvo8PZciRlkvvnmbkvHgpE+25EwyGXduetJOA==
+"@airbrake/browser@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@airbrake/browser/-/browser-1.2.0.tgz#5ad3985457003fa16974123d840b95359c668839"
+  integrity sha512-jD7TVSer3wrmsCX0zgT/4ZStIsIR+7KrUFLEVpCTErwlloP2p0RTIQ5gjaut1k8rHh33v4I5UPYSPiUVsOyHXw==
   dependencies:
     "@types/promise-polyfill" "^6.0.3"
-    "@types/request" "2.48.4"
+    "@types/request" "2.48.5"
     cross-fetch "^3.0.4"
     error-stack-parser "^2.0.4"
     promise-polyfill "^8.1.3"
     tdigest "^0.1.1"
 
-"@airbrake/node@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@airbrake/node/-/node-1.1.2.tgz#4ffe2b12c71a5330dc3ad760646a6a38d3b7ee98"
-  integrity sha512-oRXhAQFx8EOZ3AUIDYptR0kAyB9VibFp2/ismjnJ5oSGZBS69wIn1AaigH8mqAp8y8Kz9/9bTElLlWFCyiJz3w==
+"@airbrake/node@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@airbrake/node/-/node-1.2.0.tgz#2c7e5ca37c2ebdc950672c3bcfabde042c514c27"
+  integrity sha512-4mJQkdHGZUC+Ldna5iaSFT/RfpWjs2dG25egKNw5l7aupKLgawQJXnGZEWcNzQ4RrvxeVdSnFmSDNHtUwc/4JQ==
   dependencies:
-    "@airbrake/browser" "^1.1.2"
+    "@airbrake/browser" "^1.2.0"
     cross-fetch "^3.0.4"
     error-stack-parser "^2.0.4"
     tdigest "^0.1.1"
@@ -65,10 +65,10 @@
   resolved "https://registry.yarnpkg.com/@types/promise-polyfill/-/promise-polyfill-6.0.3.tgz#e2f38fcd244a9e0df2cc7528e0711abcbc707b5e"
   integrity sha512-f/BFgF9a+cgsMseC7rpv9+9TAE3YNjhfYrtwCo/pIeCDDfQtE6PY0b5bao2eIIEpZCBUy8Y5ToXd4ObjPSJuFw==
 
-"@types/request@2.48.4":
-  version "2.48.4"
-  resolved "https://registry.yarnpkg.com/@types/request/-/request-2.48.4.tgz#df3d43d7b9ed3550feaa1286c6eabf0738e6cf7e"
-  integrity sha512-W1t1MTKYR8PxICH+A4HgEIPuAC3sbljoEVfyZbeFJJDbr30guDspJri2XOaM2E+Un7ZjrihaDi7cf6fPa2tbgw==
+"@types/request@2.48.5":
+  version "2.48.5"
+  resolved "https://registry.yarnpkg.com/@types/request/-/request-2.48.5.tgz#019b8536b402069f6d11bee1b2c03e7f232937a0"
+  integrity sha512-/LO7xRVnL3DxJ1WkPGDQrp4VTV1reX9RkC85mJ+Qzykj2Bdw+mG15aAfDahc76HtknjzE16SX/Yddn6MxVbmGQ==
   dependencies:
     "@types/caseless" "*"
     "@types/node" "*"
