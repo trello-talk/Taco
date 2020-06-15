@@ -1,13 +1,32 @@
 version: 2
 updates:
+# Update packages
 - package-ecosystem: npm
   directory: "/"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  target-branch: dev
+  reviewers:
+  - Yamboy1
+  - Snazzah
+  ignore:
+    - dependency-name: "dbots"
+  commit-message:
+    prefix: chore
+    include: scope
+# Update locale submodule
+- package-ecosystem: gitsubmodule
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 2
+  target-branch: dev
   reviewers:
   - Yamboy1
   - Snazzah
   commit-message:
     prefix: chore
     include: scope
+  labels:
+    - "dependabot-submodules"
