@@ -48,6 +48,7 @@ class TrelloBot extends Eris.Client {
         { name: 'init', color: CatLoggr._chalk.black.bgGreen },
         { name: 'webserv', color: CatLoggr._chalk.black.bgBlue },
         { name: 'info', color: CatLoggr._chalk.black.bgCyan },
+        { name: 'assert', color: CatLoggr._chalk.Cyan.bgBlack },
         { name: 'poster', color: CatLoggr._chalk.yellow.bgBlack },
         { name: 'debug', color: CatLoggr._chalk.magenta.bgBlack, aliases: ['log', 'dir'] },
         { name: 'limiter', color: CatLoggr._chalk.gray.bgBlack },
