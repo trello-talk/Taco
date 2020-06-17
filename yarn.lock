@@ -543,10 +543,10 @@ env-variable@0.0.x:
   resolved "https://registry.yarnpkg.com/env-variable/-/env-variable-0.0.6.tgz#74ab20b3786c545b62b4a4813ab8cf22726c9808"
   integrity sha512-bHz59NlBbtS0NhftmR8+ExBEekE7br0e01jw+kk0NDro7TtZzBYZ5ScGPs3OmwnpyfHTHOtr1Y6uedCdrIldtg==
 
-eris@^0.13.1:
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/eris/-/eris-0.13.1.tgz#cdf6af407faafefee6242b7785297db9e14d484c"
-  integrity sha512-c/059ie4W/NfPufFCsEFdgbvEVjEpcttAZijQ33P+3EemCMUfuehp1qFq1WcrAHYU+y0lCOqQDw2YdkGjgYdUQ==
+eris@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/eris/-/eris-0.13.2.tgz#3a3008fede4360f8c6c6d96a65adcbe8bd7f4910"
+  integrity sha512-/MAio73lCpgzREqMlrk3UhKt7bBc1VRPnotCnqzTaicHxIYhg3Ghh6jzT1hB36wDcdPCLx6UMzzcDFpxLZtuzA==
   dependencies:
     ws "^7.2.1"
   optionalDependencies:
