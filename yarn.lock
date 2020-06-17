@@ -431,7 +431,6 @@ cross-spawn@^7.0.2:
 
 "dbots@github:dbots-pkg/dbots.js#master":
   version "4.0.0"
-  uid "4eb539e4782dd41e0dcb465d40eb1d0a310f5f59"
   resolved "https://codeload.github.com/dbots-pkg/dbots.js/tar.gz/4eb539e4782dd41e0dcb465d40eb1d0a310f5f59"
   dependencies:
     axios "^0.19.0"
