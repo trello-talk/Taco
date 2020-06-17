@@ -131,7 +131,7 @@ class TrelloBot extends Eris.Client {
       reservoir: 300,
       reservoirRefreshAmount: 300,
       reservoirRefreshInterval: 10000,
-      maxConcurrent: 1,
+      maxConcurrent: 15,
 
       // Clustering options
       id: 'trello-bot',
