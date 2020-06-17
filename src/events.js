@@ -35,10 +35,11 @@ module.exports = class Events {
     if (message.channel.type !== 1 &&
       !message.channel.permissionsOf(this.client.user.id).has('sendMessages')) return;
 
-    // Don't parse if Taco is in the guild
+    // Don't parse if Taco is in the guild and not using a mention prefix
     if (this.client.config.sudoID &&
       this.client.user.id !== this.client.config.sudoID &&
-      message.channel.guild) {
+      message.guildID &&
+      !new RegExp(`^<@!?${this.client.user.id}>`).test(message.content)) {
       const sudoBot = message.channel.guild.members.has(this.client.config.sudoID);
       if (sudoBot) return;
     }
