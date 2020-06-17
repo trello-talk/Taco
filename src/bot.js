@@ -127,7 +127,7 @@ class TrelloBot extends Eris.Client {
 
     // Bottleneck
     this.limiterConnection = new Bottleneck.RedisConnection({
-      client: this.db.client
+      client: this.db.redis
     });
     this.limiter = new Bottleneck({
       // Per API key: https://help.trello.com/article/838-api-rate-limits
