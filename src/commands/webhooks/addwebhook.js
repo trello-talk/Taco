@@ -98,7 +98,8 @@ module.exports = class AddWebhook extends Command {
     const prompter = new GenericPrompt(this.client, message, {
       items: availableChannels, itemTitle: 'words.channel.many',
       header: _('webhook_cmd.choose_channel'),
-      display: (item) => item.mention,
+      display: (item) => `${item.mention}${item.parentID ?
+        ` (${Util.cutoffText(message.channel.guild.channels.get(item.parentID).name, 32)})` : ''}`,
       _
     });
     const channel = await prompter.choose(message.channel.id, message.author.id);
