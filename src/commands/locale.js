@@ -21,6 +21,7 @@ const Command = require('../structures/Command');
 const GenericPrompt = require('../structures/GenericPrompt');
 const GenericPager = require('../structures/GenericPager');
 const Util = require('../util');
+const lodash = require('lodash');
 
 module.exports = class Locale extends Command {
   get name() { return 'locale'; }
@@ -45,7 +46,11 @@ module.exports = class Locale extends Command {
         _
       });
       const promptResult = await prompter.search(query,
-        { channelID: message.channel.id, userID: message.author.id }, '[1]._.name');
+        { channelID: message.channel.id, userID: message.author.id }, item => {
+          if (item[0] === 'unset')
+            return _('locale.unset_l');
+          else return lodash.get(item, '[1]._.name');
+        });
       if (promptResult && promptResult._noresults) {
         await message.channel.createMessage(_('prompt.no_search'));
         return;
