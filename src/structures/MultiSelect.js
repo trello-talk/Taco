@@ -118,7 +118,7 @@ class MultiSelect extends EventEmitter {
         this.pager.reactionsCleared = true;
         if (this.pager.collector) 
           this.pager.collector.end();
-        this.pager.message.delete();
+        this.pager.message.delete().catch(() => {});
 
         if (result && result._canceled) {
           this.pager.message.channel.createMessage(
