@@ -126,6 +126,9 @@ class TrelloBot extends Eris.Client {
     await this.pg.connect(this.config.pg);
 
     // Bottleneck
+    this.limiterConnection = new Bottleneck.RedisConnection({
+      client: this.db.client
+    });
     this.limiter = new Bottleneck({
       // Per API key: https://help.trello.com/article/838-api-rate-limits
       reservoir: 300,
@@ -137,7 +140,7 @@ class TrelloBot extends Eris.Client {
       id: 'trello-bot',
       datastore: 'redis',
       clearDatastore: false,
-      clientOptions: this.config.redis
+      connection: this.limiterConnection
     });
     this.limiter.on('error', err => console.error('Limiter Error', err));
     this.limiter.on('debug', (message, data) => console.limiter(message, data));
