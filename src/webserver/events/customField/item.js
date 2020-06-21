@@ -29,7 +29,7 @@ exports.exec = async data => {
   const removed = !data.oldData.value;
   switch (data.customField.type) {
   case 'checkbox':
-    resultData.title = _(`webhooks.customfielditem_checkbox_${!removed}`, {
+    resultData.title = _(`webhooks.customfielditem_checkbox_${removed}`, {
       member: data.invoker.webhookSafeName,
       card: data.util.cutoffText(data.card.name, 50),
       customField: data.util.cutoffText(data.customField.name, 50)
@@ -93,7 +93,7 @@ exports.exec = async data => {
       });
     break;
   case 'list':
-    resultData.title = _(`webhooks.customfielditem_${!removed ? 'update' : 'remove'}`, {
+    resultData.title = _(`webhooks.customfielditem_${data.oldData.idValue ? 'update' : 'remove'}`, {
       member: data.invoker.webhookSafeName,
       card: data.util.cutoffText(data.card.name, 50),
       customField: data.util.cutoffText(data.customField.name, 50)
