@@ -64,7 +64,7 @@ module.exports = class Locale extends Command {
     const jsonLines = Object.keys(Util.flattenObject(json)).length;
     return `${
       json._.emoji.startsWith('$') ? `:${json._.emoji.slice(1)}:` : `:flag_${json._.emoji}:`
-    } \`${locale}\` ${json._.name} \`${((jsonLines / sourceLines) * 100).toFixed(2)}%\``;
+    } \`${locale}\` ${json._.name} \`${Math.min((jsonLines / sourceLines) * 100, 100).toFixed(2)}%\``;
   }
 
   async exec(message, { args, _, userData, serverData }) {
