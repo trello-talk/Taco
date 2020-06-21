@@ -231,6 +231,22 @@ class WebhookData {
   get checklistItem() {
     return this.request.body.action.data.checkItem;
   }
+
+  /**
+   * The custom field represented from the action
+   * @type {?Object}
+   */
+  get customField() {
+    return this.request.body.action.data.customField;
+  }
+
+  /**
+   * The custom field item represented from the action
+   * @type {?Object}
+   */
+  get customFieldItem() {
+    return this.request.body.action.data.customFieldItem;
+  }
   // #endregion
 
   embedDescription(fields = null) {
@@ -254,6 +270,9 @@ class WebhookData {
       checklistItem: (this.checklistItem && this.checklistItem.name ?
         `**${_('words.checklist_item.one')}:** ${
           Util.cutoffText(Util.Escape.markdown(this.checklistItem.name, 50))}` : ''),
+      customField: (this.customField && this.customField.type ?
+        `**${_('trello.custom_field')} (${_(`custom_field_types.${this.customField.type}`)}):** ${
+          Util.cutoffText(Util.Escape.markdown(this.customField.name, 50))}` : ''),
       label: (this.label && this.label.name ?
         `**${_('words.label.one')}${this.label.color ? ` (${_(`trello.label_color.${this.label.color}`)})` :
           ''}:** ${Util.cutoffText(Util.Escape.markdown(this.label.name), 50)}` : ''),

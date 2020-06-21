@@ -278,6 +278,15 @@ module.exports = class EditWebhook extends Command {
         'UPDATE_LIST_NAME',
         'UPDATE_LIST_POS',
         'UPDATE_LIST_CLOSED',
+      ],
+      customField: [
+        'CREATE_CUSTOM_FIELD',
+        'DELETE_CUSTOM_FIELD',
+        'UPDATE_CUSTOM_FIELD_ITEM',
+      ],
+      customFieldUpdate: [
+        'UPDATE_CUSTOM_FIELD_NAME',
+        'UPDATE_CUSTOM_FIELD_DISPLAY',
       ]
     };
   }
