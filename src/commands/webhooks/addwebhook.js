@@ -125,7 +125,7 @@ module.exports = class AddWebhook extends Command {
       items: discordWebhooks, itemTitle: 'webhook_cmd.dwh.many',
       header: _('webhook_cmd.choose_existwh'),
       display: (item) => `${
-        Util.cutoffText(Util.Escape.markdown(item.name), 50)} (<#${item.channel_id}>, <@${item.user.id}>)`,
+        Util.cutoffText(Util.Escape.markdown(item.name), 25)} (<#${item.channel_id}>, <@${item.user.id}>)`,
       _
     });
     const discordWebhook = await prompter.choose(message.channel.id, message.author.id);
