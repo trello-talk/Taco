@@ -556,7 +556,7 @@ class Trello {
       return { body, response, stop: true };
     } else if (response >= 500) {
       await client.createMessage(message.channel.id, _('trello_response.internal'));
-      return { body, response, top: true };
+      return { body, response, stop: true };
     }
 
     return { body, response, stop: false };
