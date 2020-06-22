@@ -417,6 +417,10 @@ Util.Trello = {
       await message.channel.createMessage(_('boards.none'));
       return;
     }
+  },
+  cannotUseBoard(handle) {
+    return handle.response.status === 404 ||
+      handle.response.status === 401 && handle.body === 'unauthorized permission requested';
   }
 };
 

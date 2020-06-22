@@ -35,7 +35,7 @@ module.exports = class Lists extends Command {
       response: await trello.getLists(userData.currentBoard),
       client: this.client, message, _ });
     if (handle.stop) return;
-    if (handle.response.status === 404) {
+    if (Util.Trello.cannotUseBoard(handle)) {
       await this.client.pg.models.get('user').update({ currentBoard: null },
         { where: { userID: message.author.id } });
       return message.channel.createMessage(_('boards.gone'));
