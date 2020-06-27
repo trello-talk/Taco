@@ -41,7 +41,7 @@ exports.exec = async data => {
         name: '*' + _('trello.new_due') + '*',
         value: `${newDue.format('LLLL')} *(${newDue.fromNow()})*`,
         inline: true
-      } : null].filter(v => !!v.value)
+      } : null].filter(v => !!v)
     });
   } else if (changedKey === 'dueComplete')
     return data.send({
