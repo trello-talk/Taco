@@ -27,7 +27,8 @@ module.exports = class Help extends Command {
     aliases: [
       '?', 'h', 'commands', 'cmds', // English
       'yardim', 'yardım', 'komutlar', // Turkish
-      'ajuda' // Spanish
+      'ayuda', // Spanish
+      'ajuda' // Catalan & Portuguese
     ],
     permissions: ['embed'],
     cooldown: 0,
