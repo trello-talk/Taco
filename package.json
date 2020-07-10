@@ -23,7 +23,7 @@
     "moment": "^2.27.0",
     "mustache": "^4.0.1",
     "node-fetch": "^2.3.0",
-    "pg": "^8.2.2",
+    "pg": "^8.3.0",
     "redis": "^3.0.2",
     "require-reload": "^0.2.2",
     "sequelize": "^6.3.0",
