@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@airbrake/browser@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@airbrake/browser/-/browser-1.3.0.tgz#3e245a227c986609c021e37d4bc955f53d6d550d"
-  integrity sha512-ioD0fa6tFA12hYrBBldzr5bGsi/9S17CTHpefy0u6irbtQ3/cXm6FxGP1qYoX5NN1tHlSFf1ZJe74YTUmunZVg==
+"@airbrake/browser@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@airbrake/browser/-/browser-1.4.0.tgz#0b3cf20ccd7a5fd88e340de98af02c3e3326ef4a"
+  integrity sha512-JKPK8qgOkhz8YOnOH3Uo7b5FiBndCu5MGgiXM4NVw+GYLP/RvW2s9EkQuklW69xJt6XZp8N9SzJ1OPDWaF1K7Q==
   dependencies:
     "@types/promise-polyfill" "^6.0.3"
     "@types/request" "2.48.5"
@@ -14,12 +14,12 @@
     promise-polyfill "^8.1.3"
     tdigest "^0.1.1"
 
-"@airbrake/node@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@airbrake/node/-/node-1.3.0.tgz#980ec0e89f8b160b29073af1bfddd01f1618d362"
-  integrity sha512-xduF46UXEn5kCs0cMRSi4vPFIHx5ujeovMpRiw0RjUl7TDFR3fG0OT0KkPYEn2nMf2yWZ/ubDRsrP2sW+jOvVg==
+"@airbrake/node@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@airbrake/node/-/node-1.4.0.tgz#643a4a9e4cc6d126f13bf5d1b65d189ad382778c"
+  integrity sha512-kduyRZtN2GMO+WjMZ/MmuFJ+YMdhkelvlMkRpREJQ2/qF1sPMuJlY//jx0Xfy4tkeu5wb6HOs0mRONkHN/bRKQ==
   dependencies:
-    "@airbrake/browser" "^1.3.0"
+    "@airbrake/browser" "^1.4.0"
     cross-fetch "^3.0.4"
     error-stack-parser "^2.0.4"
     tdigest "^0.1.1"
