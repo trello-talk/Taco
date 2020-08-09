@@ -151,11 +151,13 @@ module.exports = class EditCard extends Command {
         if (!input) return;
 
         const match = input.match(Util.Regex.url);
-        if (!match)
+        if (!match && !message.attachments[0])
           return message.channel.createMessage(_('cards.bad_attach'));
 
+        const attachment = match ? match[0] : message.attachments[0].url;
+
         if ((await trello.handleResponse({
-          response: await trello.addAttachment(json.id, match[0]),
+          response: await trello.addAttachment(json.id, attachment),
           client, message, _ })).stop) return;
         return message.channel.createMessage(_('cards.add_attach', {
           name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
