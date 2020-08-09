@@ -1,32 +1,7 @@
-/*
-This file is part of Taco
-
-MIT License
-
-Copyright (c) 2020 Trello Talk
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
 const Command = require('../../structures/Command');
 const SubMenu = require('../../structures/SubMenu');
 const Util = require('../../util');
+require('datejs');
 
 module.exports = class EditCard extends Command {
   get name() { return 'editcard'; }
@@ -117,6 +92,28 @@ module.exports = class EditCard extends Command {
             name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
           }));
         }
+      },
+      {
+        // Set due date
+        names: ['due'],
+        title: _('cards.menu.due'),
+        async exec(client) {
+          const input = args[2] || await client.messageAwaiter.getInput(message, _, {
+            header: _('cards.input_due')
+          });
+          if (!input) return;
+          const newDue = _.dateJS(Date, input);
+
+          if (!newDue)
+            return message.channel.createMessage(_('cards.bad_due'));
+
+          if ((await trello.handleResponse({
+            response: await trello.updateCard(json.id, { due: newDue.toISOString() }),
+            client, message, _ })).stop) return;
+          return message.channel.createMessage(_('cards.set_due', {
+            date: _.moment(newDue).format('LLLL')
+          }));
+        }
       }
     ];
 
@@ -171,9 +168,10 @@ module.exports = class EditCard extends Command {
       names: ['attach'],
       title: _('cards.menu.attach'),
       async exec(client) {
-        const input = args[2] || await client.messageAwaiter.getInput(message, _, {
-          header: _('cards.input_attach')
-        });
+        const input = (message.attachments[0] ? message.attachments[0].url : args[2]) ||
+          await client.messageAwaiter.getInputOrAttachment(message, _, {
+            header: _('cards.input_attach')
+          });
         if (!input) return;
 
         const match = input.match(Util.Regex.url);

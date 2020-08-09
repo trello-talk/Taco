@@ -1,6 +1,4 @@
 /*
-This file is part of Taco
-
 MIT License
 
 Copyright (c) 2020 Trello Talk
