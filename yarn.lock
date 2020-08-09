@@ -391,6 +391,11 @@ cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+datejs@^1.0.0-rc3:
+  version "1.0.0-rc3"
+  resolved "https://registry.yarnpkg.com/datejs/-/datejs-1.0.0-rc3.tgz#bffa1efedefeb41fdd8a242af55afa01fb58de57"
+  integrity sha1-v/oe/t7+tB/diiQq9Vr6AftY3lc=
+
 "dbots@github:dbots-pkg/dbots.js#master":
   version "4.0.0"
   resolved "https://codeload.github.com/dbots-pkg/dbots.js/tar.gz/4eb539e4782dd41e0dcb465d40eb1d0a310f5f59"

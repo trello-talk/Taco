@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
 const SubMenu = require('../../structures/SubMenu');
 const Util = require('../../util');
+require('datejs');
 
 module.exports = class EditCard extends Command {
   get name() { return 'editcard'; }
@@ -89,6 +90,28 @@ module.exports = class EditCard extends Command {
             client, message, _ })).stop) return;
           return message.channel.createMessage(_('cards.set_desc', {
             name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+          }));
+        }
+      },
+      {
+        // Set due date
+        names: ['due'],
+        title: _('cards.menu.due'),
+        async exec(client) {
+          const input = args[2] || await client.messageAwaiter.getInput(message, _, {
+            header: _('cards.input_due')
+          });
+          if (!input) return;
+          const newDue = _.dateJS(Date, input);
+
+          if (!newDue)
+            return message.channel.createMessage(_('cards.bad_due'));
+
+          if ((await trello.handleResponse({
+            response: await trello.updateCard(json.id, { due: newDue.toISOString() }),
+            client, message, _ })).stop) return;
+          return message.channel.createMessage(_('cards.set_due', {
+            date: _.moment(newDue).format('LLLL')
           }));
         }
       }

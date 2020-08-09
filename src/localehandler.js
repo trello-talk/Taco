@@ -117,6 +117,24 @@ class LocaleHandler {
     _.moment = (...args) =>
       moment(...args).locale((locale || this.config.sourceLocale).replace('_', '-'));
 
+    _.dateJS = (date, query) => {
+      const countryCodeMap = {
+        da: 'da-DK',
+        fil: 'en-US', // Does not have a translation in DateJS
+        ko: 'ko-KR',
+        ms: 'ms-MY',
+        sv: 'sv-SE',
+        uk: 'uk-UA'
+      };
+
+      const currentLocale = (locale || this.config.sourceLocale).replace('_', '-');
+      const countryCode = countryCodeMap[currentLocale] ||
+        !currentLocale.includes('-') ? `${currentLocale}-${currentLocale.toUpperCase()}` : currentLocale;
+
+      date.i18n.setLanguage(countryCode);
+      return Date.parse(query);
+    };
+
     _.locale = locale || this.config.sourceLocale;
 
     _.prefixes = prefixes;
