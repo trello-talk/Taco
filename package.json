@@ -16,7 +16,7 @@
     "datejs": "^1.0.0-rc3",
     "dbots": "github:dbots-pkg/dbots.js#master",
     "eris": "^0.13.3",
-    "eventemitter3": "^4.0.5",
+    "eventemitter3": "^4.0.6",
     "express": "^4.17.1",
     "express-graceful-exit": "^0.5.0",
     "fuzzy": "^0.1.3",
