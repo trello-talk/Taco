@@ -91,6 +91,7 @@ class GenericPrompt {
 
       if (this.pager.collector)
         this.pager.collector.on('reaction', emoji => {
+          this.halt.restart();
           if (Paginator.STOP === emoji.name) {
             foundItem = { _canceled: true };
             this.halt.end();
