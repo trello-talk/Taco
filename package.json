@@ -23,7 +23,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "mustache": "^4.0.1",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.1",
     "pg": "^8.3.3",
     "redis": "^3.0.2",
     "require-reload": "^0.2.2",
