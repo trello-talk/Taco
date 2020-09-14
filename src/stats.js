@@ -41,7 +41,7 @@ module.exports = class StatsManager extends EventEmitter {
    */
   connect() {
     const influxConfig = this.client.config.influx;
-    this.Influx = new Influx.InfluxDB({
+    this.influx = new Influx.InfluxDB({
       ...influxConfig.options,
       schema: [{
         measurement: 'shards',
