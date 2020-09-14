@@ -7,6 +7,7 @@ const Webserver = require('./webserver');
 const CommandLoader = require('./commandloader');
 const LocaleHandler = require('./localehandler');
 const MessageAwaiter = require('./messageawaiter');
+const StatsManager = require('./stats');
 const path = require('path');
 const Airbrake = require('@airbrake/node');
 const Bottleneck = require('bottleneck');
@@ -39,6 +40,7 @@ class TrelloBot extends Eris.Client {
     this.logger.setGlobal();
     this.config = config;
     this.typingIntervals = new Map();
+    this.stats = new StatsManager(this);
 
     if (config.airbrake)
       this.airbrake = new Airbrake.Notifier({
@@ -153,6 +155,9 @@ class TrelloBot extends Eris.Client {
 
     if (this.webserver)
       await this.webserver.start();
+
+    if (this.config.influx.enabled)
+      this.stats.cron.start();
   }
 
   /**

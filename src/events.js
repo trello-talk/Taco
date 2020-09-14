@@ -10,6 +10,7 @@ module.exports = class Events {
   }
 
   async onMessage(message) {
+    this.client.stats.messagesRecieved++;
     if (message.author.bot || message.author.system) return;
 
     // Check to see if bot can send messages
@@ -56,6 +57,7 @@ module.exports = class Events {
     const trello = new Trello(this.client, userData ? userData.trelloToken : null);
 
     try {
+      this.client.stats.onCommandRun(message.author.id, command.name);
       await command._exec(message, {
         args, _, trello,
         userData, serverData,

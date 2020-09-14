@@ -152,8 +152,10 @@ class WebServer {
         if (!webhook.whitelist && (webhook.cards.length || webhook.lists.length))
           allowed = !allowed;
 
-        if (allowed && filters.has(filter) && webhook.webhookID)
+        if (allowed && filters.has(filter) && webhook.webhookID) {
+          this.client.stats.onWebhookSend(webhook.webhookID);
           return this.events.get(filter)(data);
+        }
       }));
   
       response.status(200).send('Recieved');
