@@ -218,7 +218,7 @@ module.exports = class StatsManager extends EventEmitter {
     this.messagesRecieved = 0;
 
     // Send to influx    
-    await Influx.writePoints(influxPoints);
+    await this.influx.writePoints(influxPoints);
   }
 
   /**
