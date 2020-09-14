@@ -387,7 +387,7 @@ module.exports = class EditWebhook extends Command {
       },
     ]);
 
-    if (result.guild_id)
+    if (result && result.id)
       return result;
     else return false;
   }
