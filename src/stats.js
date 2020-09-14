@@ -202,7 +202,7 @@ module.exports = class StatsManager extends EventEmitter {
         tags: { cluster: influxConfig.clusterTag },
         fields: {
           activeMemory: mem.active,
-          memory: Math.round(mem.active / mem.total * 100),
+          memory: mem.active / mem.total * 100,
           cpuLoad: currentLoad ? currentLoad.currentload : 0
         },
         timestamp
