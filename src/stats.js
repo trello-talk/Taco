@@ -11,7 +11,7 @@ module.exports = class StatsManager extends EventEmitter {
   constructor(client) {
     super();
     this.client = client;
-    this.cron = new CronJob('*/30 * * * *', this._cronTick.bind(this));
+    this.cron = new CronJob('*/10 * * * *', this._cronTick.bind(this));
 
     /**
      * Array of user IDs that have used a command between crons
@@ -29,7 +29,7 @@ module.exports = class StatsManager extends EventEmitter {
     this.activeWebhooks = [];
 
     this.webhooksSent = 0;
-    this.commandsSent = 0;
+    this.commandsRan = 0;
     this.messagesRecieved = 0;
 
 
@@ -101,7 +101,7 @@ module.exports = class StatsManager extends EventEmitter {
       commandCount.users.push(userID);
     
     commandCount.used++;
-    this.commandsSent++;
+    this.commandsRan++;
 
     if (!this.activeUsers.includes(userID))
       this.activeUsers.push(userID);
@@ -146,7 +146,7 @@ module.exports = class StatsManager extends EventEmitter {
         channels: this.client.guilds.reduce((prev, val) => prev + val.channels.size, 0),
         webhooks: webhookCount,
         databaseUsers: dbUserCount,
-        commandsRan: this.commandsSent,
+        commandsRan: this.commandsRan,
         processMemUsage: process.memoryUsage().heapUsed / 1000000
       },
       timestamp
@@ -213,7 +213,7 @@ module.exports = class StatsManager extends EventEmitter {
     this.activeUsers = [];
     this.activeWebhooks = [];
     this.commandCounts.clear();
-    this.commandsSent = 0;
+    this.commandsRan = 0;
     this.webhooksSent = 0;
     this.messagesRecieved = 0;
 
