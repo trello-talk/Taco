@@ -156,8 +156,10 @@ class TrelloBot extends Eris.Client {
     if (this.webserver)
       await this.webserver.start();
 
-    if (this.config.influx.enabled)
+    if (this.config.influx.enabled) {
+      this.stats.connect();
       this.stats.cron.start();
+    }
   }
 
   /**
