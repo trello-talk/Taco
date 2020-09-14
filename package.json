@@ -31,7 +31,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "eslint": "^7.8.1"
+    "eslint": "^7.9.0"
   },
   "repository": {
     "type": "git",
