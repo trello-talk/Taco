@@ -143,7 +143,7 @@ module.exports = class StatsManager extends EventEmitter {
         users: this.client.users.size,
         activeUsers: this.activeUsers.length,
         messagesRecieved: this.messagesRecieved,
-        channels: this.client.channels.size,
+        channels: this.client.guilds.reduce((prev, val) => prev + val.channels.size, 0),
         webhooks: webhookCount,
         databaseUsers: dbUserCount,
         commandsRan: this.commandsSent,
@@ -216,6 +216,9 @@ module.exports = class StatsManager extends EventEmitter {
     this.commandsSent = 0;
     this.webhooksSent = 0;
     this.messagesRecieved = 0;
+
+    // Send to influx    
+    await Influx.writePoints(influxPoints);
   }
 
   /**
