@@ -94,6 +94,33 @@ module.exports = class EditCard extends Command {
         }
       },
       {
+        // Move to a different list
+        names: ['move', 'mv'],
+        title: _('cards.menu.move'),
+        async exec(client) {
+          const listHandle = await trello.handleResponse({
+            response: await trello.getAllLists(userData.currentBoard),
+            client: this.client, message, _ });
+          if (listHandle.stop) return;
+
+          const listJson = listHandle.body;
+          const list = await Util.Trello.findList(args[2],
+            listJson.filter(list => !list.closed), client, message, _);
+          if (!list) return;
+
+          if (list.id === json.idList)
+            return message.channel.createMessage(_('cards.same_list_move'));
+
+          if ((await trello.handleResponse({
+            response: await trello.updateCard(json.id, { idList: list.id, pos: 'top' }),
+            client, message, _ })).stop) return;
+          return message.channel.createMessage(_('cards.move', {
+            list: Util.cutoffText(Util.Escape.markdown(list.name), 50),
+            card: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+          }));
+        }
+      },
+      {
         // Set due date
         names: ['due'],
         title: _('cards.menu.due'),
