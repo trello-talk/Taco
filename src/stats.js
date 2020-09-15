@@ -11,7 +11,7 @@ module.exports = class StatsManager extends EventEmitter {
   constructor(client) {
     super();
     this.client = client;
-    this.cron = new CronJob('*/10 * * * *', this._cronTick.bind(this));
+    this.cron = new CronJob('*/5 * * * *', this._cronTick.bind(this));
 
     /**
      * Array of user IDs that have used a command between crons
