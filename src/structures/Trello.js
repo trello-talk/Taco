@@ -123,7 +123,7 @@ class Trello {
           'closed'
         ],
         labels: 'all',
-        label_fields: [],
+        label_fields: ['name', 'color'],
         organization: true
       }
     });
@@ -139,7 +139,7 @@ class Trello {
       query: {
         fields: ['name'],
         lists: 'all',
-        list_fields: ['name'],
+        list_fields: ['name', 'closed'],
         cards: 'all',
         card_fields: [
           'name', 'idList', 'shortLink', 'subscribed',
@@ -229,7 +229,7 @@ class Trello {
         fields: [
           'name', 'subscribed', 'desc', 'labels',
           'shortLink', 'shortUrl', 'due', 'dueComplete',
-          'cover', 'dateLastActivity', 'closed'
+          'cover', 'dateLastActivity', 'closed', 'idList'
         ]
       }
     });

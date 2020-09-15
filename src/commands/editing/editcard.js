@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SubMenu = require('../../structures/SubMenu');
+const MultiSelect = require('../../structures/MultiSelect');
 const Util = require('../../util');
 require('datejs');
 
@@ -15,7 +16,7 @@ module.exports = class EditCard extends Command {
   async exec(message, { args, _, trello, userData }) {
     // Get all cards for search
     const handle = await trello.handleResponse({
-      response: await trello.getSlimBoard(userData.currentBoard),
+      response: await trello.getBoard(userData.currentBoard),
       client: this.client, message, _ });
     if (handle.stop) return;
     if (Util.Trello.cannotUseBoard(handle)) {
@@ -94,18 +95,24 @@ module.exports = class EditCard extends Command {
         }
       },
       {
+        // Member management
+        names: ['member', 'm'],
+        title: _('cards.menu.member') + ` (${_.toLocaleString(json.members.length)})`,
+        exec: this.manageMembers.bind(this, userData, json, boardJson, trello, message, _)
+      },
+      boardJson.labels.length ? {
+        // Label management
+        names: ['label', 'lb'],
+        title: _('cards.menu.label') + ` (${_.toLocaleString(json.labels.length)})`,
+        exec: this.manageLabels.bind(this, json, boardJson, trello, message, _)
+      } : null,
+      {
         // Move to a different list
         names: ['move', 'mv'],
         title: _('cards.menu.move'),
         async exec(client) {
-          const listHandle = await trello.handleResponse({
-            response: await trello.getAllLists(userData.currentBoard),
-            client: this.client, message, _ });
-          if (listHandle.stop) return;
-
-          const listJson = listHandle.body;
           const list = await Util.Trello.findList(args[2],
-            listJson.filter(list => !list.closed), client, message, _);
+            boardJson.lists.filter(list => !list.closed), client, message, _);
           if (!list) return;
 
           if (list.id === json.idList)
@@ -214,7 +221,65 @@ module.exports = class EditCard extends Command {
       }
     });
 
-    return menu.start(message.channel.id, message.author.id, args[1], menuOpts);
+    return menu.start(message.channel.id, message.author.id, args[1], menuOpts.filter(v => !!v));
+  }
+
+  async manageLabels(card, board, trello, message, _) {
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
+    const checkEmoji = emojiFallback('632444546684551183', '☑️');
+    const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
+
+    const selector = new MultiSelect(this.client, message, {
+      path: 'value', checkEmoji, uncheckEmoji
+    }, {
+      items: board.labels.map(label => ({ ...label, value: card.labels.find(lb => lb.id === label.id) })),
+      itemTitle: 'words.label.many',
+      _, display: (item) => `${
+        Util.cutoffText(Util.Escape.markdown(item.name), 25)}${item.color ?
+        ` \`${_(`trello.label_color.${item.color}`)}\` ` :
+        ''}`
+    });
+    const newLabels = await selector.start(message.channel.id, message.author.id);
+    if (!newLabels) return;
+
+    if ((await trello.handleResponse({
+      response: await trello.updateCard(card.id,
+        { idLabels: newLabels.filter(lb => lb.value).map(lb => lb.id).join(',') }),
+      client: this.client, message, _ })).stop) return;
+
+    return message.channel.createMessage(_('cards.labels_updated', {
+      name: Util.cutoffText(Util.Escape.markdown(card.name), 50)
+    }));
+  }
+
+  async manageMembers(userData, card, board, trello, message, _) {
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
+    const checkEmoji = emojiFallback('632444546684551183', '☑️');
+    const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
+
+    const selector = new MultiSelect(this.client, message, {
+      path: 'value', checkEmoji, uncheckEmoji
+    }, {
+      items: board.members.map(
+        member => ({ ...member, value: card.members.find(mbr => mbr.id === member.id) })),
+      itemTitle: 'words.member.many',
+      _, display: member => {
+        const result = `${Util.cutoffText(Util.Escape.markdown(member.fullName),
+          50)} (${member.username})`;
+        return member.id === userData.trelloID ? `**${result}**` : result;
+      }
+    });
+    const newMembers = await selector.start(message.channel.id, message.author.id);
+    if (!newMembers) return;
+
+    if ((await trello.handleResponse({
+      response: await trello.updateCard(card.id,
+        { idMembers: newMembers.filter(mbr => mbr.value).map(mbr => mbr.id).join(',') }),
+      client: this.client, message, _ })).stop) return;
+
+    return message.channel.createMessage(_('cards.members_updated', {
+      name: Util.cutoffText(Util.Escape.markdown(card.name), 50)
+    }));
   }
 
   get metadata() { return {
