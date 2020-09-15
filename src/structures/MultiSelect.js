@@ -16,22 +16,25 @@ class MultiSelect extends EventEmitter {
    * @param {string} [options.uncheckEmoji] The emoji that resembles false
    * @param {Object} pagerOptions The options for the pager
    */
-  constructor(client, message, { path, checkEmoji = '☑️', uncheckEmoji = '⬜' }, pagerOptions = {}) {
+  constructor(client, message,
+    { path, checkEmoji = '☑️', uncheckEmoji = '⬜', asyncChanges = false }, pagerOptions = {}) {
     super();
     this.client = client;
     this.message = message;
     this.pagerOptions = pagerOptions;
     this.displayFunc = pagerOptions.display || ((item) => item.toString());
     this.boolPath = path;
+    this.asyncChanges = asyncChanges;
 
     // Override some pager options
     this.pagerOptions.display = (item, i, ai) => {
       const value = lodash.get(item, this.boolPath);
       return `\`[${ai + 1}]\` ${value ? checkEmoji : uncheckEmoji} ${this.displayFunc(item, i, ai)}`;
     };
-    this.pagerOptions.header = pagerOptions.header || pagerOptions._('prompt.select');
+    this.pagerOptions.header = pagerOptions.header ||
+      pagerOptions._(asyncChanges ? 'prompt.async_select' : 'prompt.select');
     this.pagerOptions.footer = (pagerOptions.footer ? pagerOptions.footer + '\n\n' : '') +
-      pagerOptions._('prompt.select_cancel');
+      pagerOptions._(asyncChanges ? 'prompt.cancel' : 'prompt.select_cancel');
     this.pagerOptions.embedExtra = this.pagerOptions.embedExtra || {};
     this.pagerOptions.embedExtra.author = {
       name: `${message.author.username}#${message.author.discriminator}`,
@@ -104,11 +107,13 @@ class MultiSelect extends EventEmitter {
 
         if (result && result._canceled) {
           this.pager.message.channel.createMessage(
-            `<@${userID}>, ${this.pagerOptions._('prompt.select_canceled')}`);
+            `<@${userID}>, ${this.pagerOptions._(
+              this.asyncChanges ? 'prompt.canceled' : 'prompt.select_canceled')}`);
           result = null;
         } else if (result === null)
           this.pager.message.channel.createMessage(
-            `<@${userID}>, ${this.pagerOptions._('prompt.select_timeout')}`);
+            `<@${userID}>, ${this.pagerOptions._(
+              this.asyncChanges ? 'prompt.timeout' : 'prompt.select_timeout')}`);
 
         resolve(result);
       });
