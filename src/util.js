@@ -369,6 +369,33 @@ Util.Trello = {
       return;
     }
   },
+  async findLabel(query, labels, client, message, _) {
+    if (labels.length) {
+      const foundLabel = labels.find(label => label.id === query);
+      if (foundLabel) return foundLabel;
+      else {
+        const prompter = new GenericPrompt(client, message, {
+          items: labels, itemTitle: 'words.label.many',
+          header: _('labels.choose'),
+          display: label => `${
+            Util.cutoffText(Util.Escape.markdown(label.name), 50)}${label.color ?
+            ` \`${_(`trello.label_color.${label.color}`)}\` ` :
+            ''}`,
+          _
+        });
+        const promptResult = await prompter.search(query,
+          { channelID: message.channel.id, userID: message.author.id });
+        if (promptResult && promptResult._noresults) {
+          await message.channel.createMessage(_('prompt.no_search'));
+          return;
+        } else
+          return promptResult;
+      }
+    } else {
+      await message.channel.createMessage(_('labels.none'));
+      return;
+    }
+  },
   async findBoard(query, boards, client, message, _, userData) {
     if (boards.length) {
       const foundBoard = boards.find(board => board.shortLink === query || board.id === query);

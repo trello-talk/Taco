@@ -27,8 +27,8 @@ module.exports = class Labels extends Command {
     if (json.length) {
       const paginator = new GenericPager(this.client, message, {
         items: json,
-        _, itemTitle: 'words.label.many',
-        display: (item) => `*\`ID: ${item.id}\`* ${
+        _, header: _('labels.header'), itemTitle: 'words.label.many',
+        display: (item) => `${
           Util.cutoffText(Util.Escape.markdown(item.name), 25)}${item.color ?
           ` \`${_(`trello.label_color.${item.color}`)}\` ` :
           ''}`
