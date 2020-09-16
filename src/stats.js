@@ -219,6 +219,7 @@ module.exports = class StatsManager extends EventEmitter {
 
     // Send to influx    
     await this.influx.writePoints(influxPoints);
+    console.log('Sent stats to Influx.');
   }
 
   /**
