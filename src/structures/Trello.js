@@ -348,6 +348,20 @@ class Trello {
   }
 
   /**
+   * Creates a label on the board
+   * @param {string} id The board's ID
+   * @param {Object} payload The card to add
+   */
+  addLabel(id, payload) {
+    return this._request({
+      method: 'post',
+      url: '/labels',
+      bodyType: 'form',
+      body: { ...payload, idBoard: id }
+    });
+  }
+
+  /**
    * Creates a comment on a card
    * @param {string} id The card's ID
    * @param {string} text The text to post
