@@ -71,7 +71,8 @@ Util.Constants = {
     sky: 0x00c2e0,
     pink: 0xc9558f,
     black: 0x344563
-  }
+  },
+  IMAGE_ATTACHMENT_HOST: 'https://trello-attachments.s3.amazonaws.com/'
 };
 
 /**
@@ -182,7 +183,7 @@ Util.Prefix = {
  */
 Util.Regex = {
   escape: /[-/\\^$*+?.()|[\]{}]/g,
-  url: /https?:\/\/(-\.)?([^\s/?.#-]+\.?)+(\/[^\s]*)?/gi,
+  url: /https?:\/\/(-\.)?([^\s/?.#]+\.?)+(\/[^\s]*)?/gi,
   userMention: /<@!?(\d+)>/gi,
   webhookURL:
     /(?:https?:\/\/)(?:canary\.|ptb\.|)discord(?:app)?\.com\/api\/webhooks\/(\d{17,18})\/([\w-]{68})/

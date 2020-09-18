@@ -9,6 +9,7 @@ exports.exec = async data => {
       attachment: data.util.cutoffText(data.attachment.name, 50)
     }),
     description: data.embedDescription(['attachment', 'card', 'list']),
-    image: { url: data.attachment.url }
+    image: data.attachment.url.startsWith(data.util.Constants.IMAGE_ATTACHMENT_HOST) ?
+      { url: data.attachment.url } : null
   });
 };
