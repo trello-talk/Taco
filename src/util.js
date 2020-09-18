@@ -313,18 +313,15 @@ Util.cutoffArray = (texts, limit = 2000, rollbackAmount = 1, paddingAmount = 1) 
  * @memberof Util.
  */
 Util.Trello = {
-  async findList(query, lists, client, message, _) {
-    if (lists.length) {
-      const foundList = lists.find(list => list.id === query);
-      if (foundList) return foundList;
+  async _find({ query, items, promptOptions, exactMatchKeys = ['id'], noneString,
+    client, message, _ }) {
+    if (items.length) {
+      const foundItem = items.find(item => exactMatchKeys.map(key => item[key] === query).includes(true));
+      if (foundItem) return foundItem;
       else {
         const prompter = new GenericPrompt(client, message, {
-          items: lists, itemTitle: 'words.list.many',
-          header: _('lists.choose'),
-          display: list => `${list.closed ? '🗃️ ' : ''}${
-            list.subscribed ? '🔔 ' : ''}${
-            Util.cutoffText(Util.Escape.markdown(list.name), 50)}`,
-          _
+          items, _,
+          ...promptOptions
         });
         const promptResult = await prompter.search(query,
           { channelID: message.channel.id, userID: message.author.id });
@@ -335,68 +332,61 @@ Util.Trello = {
           return promptResult;
       }
     } else {
-      await message.channel.createMessage(_('lists.none'));
+      await message.channel.createMessage(noneString);
       return;
     }
   },
-  async findCard(query, board, client, message, _) {
-    if (board.cards.length) {
-      const foundCard = board.cards.find(card => card.id === query || card.shortLink === query);
-      if (foundCard) return foundCard;
-      else {
-        const prompter = new GenericPrompt(client, message, {
-          items: board.cards, itemTitle: 'words.card.many',
-          header: _('cards.choose'),
-          display: card => {
-            const list = board.lists.find(list => list.id === card.idList);
-            return `${card.closed ? '🗃️ ' : ''}${
-              card.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(card.name), 40)}` +
-              (list ? ` (${_('words.in_lower')} ${
-                Util.cutoffText(Util.Escape.markdown(list.name), 25)})` : '');
-          },
-          _
-        });
-        const promptResult = await prompter.search(query,
-          { channelID: message.channel.id, userID: message.author.id });
-        if (promptResult && promptResult._noresults) {
-          await message.channel.createMessage(_('prompt.no_search'));
-          return;
-        } else
-          return promptResult;
+  findList(query, lists, client, message, _) {
+    return Util.Trello._find({
+      query, _, client, message,
+      items: lists,
+      noneString: _('lists.none'),
+      promptOptions: {
+        itemTitle: 'words.list.many',
+        header: _('lists.choose'),
+        display: list => `${list.closed ? '🗃️ ' : ''}${
+          list.subscribed ? '🔔 ' : ''}${
+          Util.cutoffText(Util.Escape.markdown(list.name), 50)}`
       }
-    } else {
-      await message.channel.createMessage(_('cards.none'));
-      return;
-    }
+    });
   },
-  async findLabel(query, labels, client, message, _) {
-    if (labels.length) {
-      const foundLabel = labels.find(label => label.id === query);
-      if (foundLabel) return foundLabel;
-      else {
-        const prompter = new GenericPrompt(client, message, {
-          items: labels, itemTitle: 'words.label.many',
-          header: _('labels.choose'),
-          display: label => `${
-            Util.cutoffText(Util.Escape.markdown(label.name), 50)}${label.color ?
-            ` \`${_(`trello.label_color.${label.color}`)}\` ` :
-            ''}`,
-          _
-        });
-        const promptResult = await prompter.search(query,
-          { channelID: message.channel.id, userID: message.author.id });
-        if (promptResult && promptResult._noresults) {
-          await message.channel.createMessage(_('prompt.no_search'));
-          return;
-        } else
-          return promptResult;
+  findCard(query, board, client, message, _) {
+    return Util.Trello._find({
+      query, _, client, message,
+      items: board.cards,
+      noneString: _('cards.none'),
+      exactMatchKeys: ['id', 'shortLink'],
+      promptOptions: {
+        itemTitle: 'words.card.many',
+        header: _('cards.choose'),
+        display: card => {
+          const list = board.lists.find(list => list.id === card.idList);
+          return `${card.closed ? '🗃️ ' : ''}${
+            card.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(card.name), 40)}` +
+            (list ? ` (${_('words.in_lower')} ${
+              Util.cutoffText(Util.Escape.markdown(list.name), 25)})` : '');
+        }
       }
-    } else {
-      await message.channel.createMessage(_('labels.none'));
-      return;
-    }
+    });
+  },
+  findLabel(query, labels, client, message, _) {
+    return Util.Trello._find({
+      query, _, client, message,
+      items: labels,
+      noneString: _('labels.none'),
+      promptOptions: {
+        itemTitle: 'words.label.many',
+        header: _('labels.choose'),
+        display: label => `${
+          Util.cutoffText(Util.Escape.markdown(label.name), 50)}${label.color ?
+          ` \`${_(`trello.label_color.${label.color}`)}\` ` :
+          ''}`
+      }
+    });
   },
   async findBoard(query, boards, client, message, _, userData) {
+    // This wont use Util._find since it has a special clause when no
+    // boards are shown.
     if (boards.length) {
       const foundBoard = boards.find(board => board.shortLink === query || board.id === query);
       if (foundBoard) return foundBoard;
