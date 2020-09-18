@@ -36,7 +36,6 @@ module.exports = class Attachment extends Command {
       return message.channel.createMessage(_('cards.error'));
 
     const json = cardHandle.body;
-    console.log(json.attachments);
 
     const attachment = await Util.Trello.findAttachment(args[1], json.attachments, this.client, message, _);
     if (!attachment) return;
