@@ -71,10 +71,13 @@ module.exports = class Card extends Command {
     };
 
     // Cover
-    if (json.cover.scaled) {
+    if (json.cover) {
       embed.color = json.cover.edgeColor ?
-        Util.toColorInt(json.cover.edgeColor) : this.client.config.embedColor;
-      embed.thumbnail = { url: json.cover.scaled.reverse()[0].url };
+        Util.toColorInt(json.cover.edgeColor) :
+        (json.cover.color ? Util.Constants.LABEL_COLORS[json.cover.color] : this.client.config.embedColor);
+      if (json.cover.scaled)
+        embed.thumbnail = {
+          url: json.cover.scaled.reverse()[json.cover.idAttachment ? 0 : 1].url };
     }
 
     // Labels

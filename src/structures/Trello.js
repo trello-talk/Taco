@@ -223,13 +223,14 @@ class Trello {
         stickers: 'true',
         sticker_fields: ['image'],
         attachments: 'true',
-        attachment_fields: ['url', 'name'],
+        attachment_fields: ['url', 'name', 'edgeColor'],
         checklists: 'all',
         checklist_fields: ['name'],
         fields: [
           'name', 'subscribed', 'desc', 'labels',
           'shortLink', 'shortUrl', 'due', 'dueComplete',
-          'cover', 'dateLastActivity', 'closed', 'idList'
+          'cover', 'dateLastActivity', 'closed', 'idList',
+          'idAttachmentCover'
         ]
       }
     });
