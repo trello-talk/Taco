@@ -10,22 +10,6 @@ module.exports = class Label extends Command {
     permissions: ['embed', 'auth', 'selectedBoard']
   }; }
 
-  get colorMap() {
-    return {
-      [null]: 0,
-      green: 0x61bd4f,
-      yellow: 0xf2d600,
-      red: 0xeb5a46,
-      orange: 0xff9f1a,
-      lime: 0x51e898,
-      purple: 0xc377e0,
-      blue: 0x0079bf,
-      sky: 0x00c2e0,
-      pink: 0xc9558f,
-      black: 0x344563
-    };
-  }
-
   async exec(message, { args, _, trello, userData }) {
     const handle = await trello.handleResponse({
       response: await trello.getLabels(userData.currentBoard),
@@ -43,7 +27,7 @@ module.exports = class Label extends Command {
 
     const embed = {
       title: Util.cutoffText(Util.Escape.markdown(label.name), 256),
-      color: this.colorMap[label.color],
+      color: Util.Constants.LABEL_COLORS[label.color],
       description: `**${_('words.id')}:** \`${label.id}\`\n` +
         (label.color ? `**${_('words.color.one')}:** ${_(`trello.label_color.${label.color}`)}\n` : '')
     };

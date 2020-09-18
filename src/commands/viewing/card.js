@@ -10,56 +10,6 @@ module.exports = class Card extends Command {
     permissions: ['embed', 'auth', 'selectedBoard']
   }; }
 
-  get stickerMap() {
-    return {
-      thumbsup: '632444552845852682',
-      thumbsdown: '632444552845721602',
-      heart: '632444546650996746',
-      star: '632444550597574666',
-      clock: '632444546348744717',
-      huh: '632444546583887873',
-      rocketship: '632444552942452736',
-      warning: '632444552837595146',
-      smile: '632444553051504640',
-      laugh: '632444546428436492',
-      frown: '632444546634219520',
-      check: '632444546684551183',
-
-      'pete-alert': '632444547086942217',
-      'pete-award': '632444547154051118',
-      'pete-broken': '632444552518828033',
-      'pete-busy': '632444553441443882',
-      'pete-completed': '632444550018891777',
-      'pete-confused': '632444550337527818',
-      'pete-ghost': '632444553101705217',
-      'pete-happy': '632444550337658890',
-      'pete-love': '632444550413156363',
-      'pete-music': '632444553239986176',
-      'pete-shipped': '632444550362693642',
-      'pete-sketch': '632444555668619274',
-      'pete-space': '632444553311289354',
-      'pete-talk': '632444553324134420',
-      'pete-vacation': '632444553349169162',
-
-      'taco-active': '632444556264210439',
-      'taco-alert': '632444556276924437',
-      'taco-angry': '632444553412083742',
-      'taco-celebrate': '632444557920829450',
-      'taco-clean': '632444555760762894',
-      'taco-confused': '632444555911888898',
-      'taco-cool': '632444553714204672',
-      'taco-embarrassed': '632444553625993216',
-      'taco-love': '632444556352421898',
-      'taco-money': '632444555911757834',
-      'taco-pixel': '632444550069223437',
-      'taco-proto': '632444556192776205',
-      'taco-reading': '632444553819062282',
-      'taco-robot': '632444553810411559',
-      'taco-sleeping': '632444556092112927',
-      'taco-trophy': '632444556025135124'
-    };
-  }
-
   async exec(message, { args, _, trello, userData }) {
     // Get all cards for search
     const handle = await trello.handleResponse({
@@ -123,7 +73,7 @@ module.exports = class Card extends Command {
     // Cover
     if (json.cover.scaled) {
       embed.color = json.cover.edgeColor ?
-        parseInt(json.cover.edgeColor.slice(1), 16) : this.client.config.embedColor;
+        Util.toColorInt(json.cover.edgeColor) : this.client.config.embedColor;
       embed.thumbnail = { url: json.cover.scaled.reverse()[0].url };
     }
 
@@ -168,7 +118,7 @@ module.exports = class Card extends Command {
       embed.fields.push({
         name: '*' + _.numSuffix('words.sticker', json.stickers.length) + '*',
         value: Util.keyValueForEach(stickers, (key, value) =>
-          `${this.stickerMap[key] ? `<:_:${this.stickerMap[key]}>` : key}${
+          `${Util.Constants.STICKER_EMOJIS[key] ? `<:_:${Util.Constants.STICKER_EMOJIS[key]}>` : key}${
             value > 1 ? ' ' + _.toLocaleString(value) : ''}`).join(', '),
         inline: true
       });
