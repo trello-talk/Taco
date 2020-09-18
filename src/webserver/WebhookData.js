@@ -7,6 +7,7 @@ class WebhookData {
     this.request = request;
     this.webhook = webhook;
     this.webserver = webserver;
+    this.client = webserver.client;
 
     /**
      * The filter flag this is representing
@@ -306,11 +307,27 @@ class WebhookData {
         return await this.webserver.client.executeWebhook(this.webhook.webhookID,
           this.webhook.webhookToken, { embeds });
       } catch (e) {
-        console.webserv(`Discord webhook execution failed @ ${this.webhook.webhookID}:${this.webhook.id}`, e);
-        return await this.webserver.client.pg.models.get('webhook').update({
-          webhookID: null,
-          webhookToken: null
-        }, { where: { id: this.webhook.id } });
+        if (e.name === 'DiscordRESTError') {
+          if (e.code === 10015) //  Unknown Webhook
+            return await this.webserver.client.pg.models.get('webhook').update({
+              webhookID: null,
+              webhookToken: null
+            }, { where: { id: this.webhook.id } });
+          console.webserv(
+            `Discord webhook execution failed @ ${this.webhook.webhookID}:${this.webhook.id}`, e);
+        } else {
+          if (this.client.airbrake) {
+            await this.client.airbrake.notify({
+              error: e,
+              params: {
+                type: 'webhook'
+              }
+            });
+          } else if (this.client.config.debug) {
+            console.error(`Webhook execution failed @ ${this.webhook.webhookID}:${this.webhook.id}`);
+            console.log(e);
+          }
+        }
       }
     });
 
