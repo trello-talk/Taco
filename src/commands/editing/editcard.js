@@ -148,42 +148,40 @@ module.exports = class EditCard extends Command {
             date: _.moment(newDue).format('LLLL')
           }));
         }
-      }
-    ];
-
-    if (json.due) {
-      menuOpts.push({
-        // Remove due date
-        names: ['removedue', 'rdue'],
-        title: _('cards.menu.remove_due'),
-        async exec(client) {
-          if ((await trello.handleResponse({
-            response: await trello.updateCard(json.id, { due: null }),
-            client, message, _ })).stop) return;
-          return message.channel.createMessage(_('cards.removed_due', {
-            name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
-          }));
-        }
-      });
-      menuOpts.push({
-        // Toggle due complete
-        names: ['duecomplete', 'duedone'],
-        title: _(json.dueComplete ? 'cards.menu.due_off' : 'cards.menu.due_on'),
-        async exec(client) {
-          if ((await trello.handleResponse({
-            response: await trello.updateCard(json.id, { dueComplete: !json.dueComplete }),
-            client, message, _ })).stop) return;
-          
-          return message.channel.createMessage(
-            _(json.dueComplete ? 'cards.due_off' : 'cards.due_on', {
-              name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
-            }));
-        }
-      });
-    }
-
-    if (json.desc)
-      menuOpts.push({
+      },
+      ...(json.due ?
+        [
+          {
+            // Remove due date
+            names: ['removedue', 'rdue'],
+            title: _('cards.menu.remove_due'),
+            async exec(client) {
+              if ((await trello.handleResponse({
+                response: await trello.updateCard(json.id, { due: null }),
+                client, message, _ })).stop) return;
+              return message.channel.createMessage(_('cards.removed_due', {
+                name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+              }));
+            }
+          },
+          {
+            // Toggle due complete
+            names: ['duecomplete', 'duedone'],
+            title: _(json.dueComplete ? 'cards.menu.due_off' : 'cards.menu.due_on'),
+            async exec(client) {
+              if ((await trello.handleResponse({
+                response: await trello.updateCard(json.id, { dueComplete: !json.dueComplete }),
+                client, message, _ })).stop) return;
+              
+              return message.channel.createMessage(
+                _(json.dueComplete ? 'cards.due_off' : 'cards.due_on', {
+                  name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+                }));
+            }
+          }
+        ] : []
+      ),
+      json.desc ? {
         // Remove Description
         names: ['removedesc', 'removedescription', 'rdesc'],
         title: _('cards.menu.remove_desc'),
@@ -195,31 +193,37 @@ module.exports = class EditCard extends Command {
             name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
           }));
         }
-      });
-
-    menuOpts.push({
-      // Attach
-      names: ['attach'],
-      title: _('cards.menu.attach'),
-      async exec(client) {
-        const input = (message.attachments[0] ? message.attachments[0].url : args[2]) ||
-          await client.messageAwaiter.getInputOrAttachment(message, _, {
-            header: _('cards.input_attach')
-          });
-        if (!input) return;
-
-        const match = input.match(Util.Regex.url);
-        if (!match)
-          return message.channel.createMessage(_('cards.bad_attach'));
-
-        if ((await trello.handleResponse({
-          response: await trello.addAttachment(json.id, match[0]),
-          client, message, _ })).stop) return;
-        return message.channel.createMessage(_('cards.add_attach', {
-          name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
-        }));
-      }
-    });
+      } : null,
+      {
+        // Attach
+        names: ['attach'],
+        title: _('cards.menu.attach'),
+        async exec(client) {
+          const input = (message.attachments[0] ? message.attachments[0].url : args[2]) ||
+            await client.messageAwaiter.getInputOrAttachment(message, _, {
+              header: _('cards.input_attach')
+            });
+          if (!input) return;
+  
+          const match = input.match(Util.Regex.url);
+          if (!match)
+            return message.channel.createMessage(_('cards.bad_attach'));
+  
+          if ((await trello.handleResponse({
+            response: await trello.addAttachment(json.id, match[0]),
+            client, message, _ })).stop) return;
+          return message.channel.createMessage(_('cards.add_attach', {
+            name: Util.cutoffText(Util.Escape.markdown(json.name), 50)
+          }));
+        }
+      },
+      json.attachments.length ? {
+        // Edit Attachments
+        names: ['attachments', 'atch'],
+        title: _('cards.menu.attachments') + ` (${_.toLocaleString(json.attachments.length)})`,
+        exec: this.editAttachments.bind(this, args, json, trello, message, _)
+      } : null
+    ];
 
     return menu.start(message.channel.id, message.author.id, args[1], menuOpts.filter(v => !!v));
   }
@@ -280,6 +284,74 @@ module.exports = class EditCard extends Command {
     return message.channel.createMessage(_('cards.members_updated', {
       name: Util.cutoffText(Util.Escape.markdown(card.name), 50)
     }));
+  }
+
+  async editAttachments(args, card, trello, message, _) {
+    const attachment = await Util.Trello.findAttachment(args[2], card.attachments, this.client, message, _);
+    if (!attachment) return;
+
+    const menu = new SubMenu(this.client, message, {
+      header: `**${_('words.attachment.one')}:** ${
+        Util.cutoffText(Util.Escape.markdown(attachment.name), 25)}\n\n` +
+        _('attachments.wywtd'), itemTitle: 'words.subcmd.many', _ });
+    return menu.start(message.channel.id, message.author.id, args[3], [
+      {
+        // Name
+        names: ['name', 'rename'],
+        title: _('attachments.menu.name'),
+        async exec(client) {
+          const input = args[4] || await client.messageAwaiter.getInput(message, _, {
+            header: _('attachments.input_name')
+          });
+          if (!input) return;
+          if ((await trello.handleResponse({
+            response: await trello.updateAttachment(card.id, attachment.id, { name: input }),
+            client, message, _ })).stop) return;
+          return message.channel.createMessage(_('attachments.set_name', {
+            old: Util.cutoffText(Util.Escape.markdown(attachment.name), 50),
+            new: Util.cutoffText(Util.Escape.markdown(input), 50)
+          }));
+        }
+      },
+      card.idAttachmentCover !== attachment.id &&
+        attachment.url.startsWith(Util.Constants.IMAGE_ATTACHMENT_HOST) ? {
+        // Cover
+          names: ['cover', 'setcover'],
+          title: _('attachments.menu.cover'),
+          async exec(client) {
+            if ((await trello.handleResponse({
+              response: await trello.updateCard(card.id, { idAttachmentCover: attachment.id }),
+              client, message, _ })).stop) return;
+            
+            return message.channel.createMessage(
+              _('attachments.set_cover', {
+                attachment: Util.cutoffText(Util.Escape.markdown(attachment.name), 50),
+                card: Util.cutoffText(Util.Escape.markdown(card.name), 50)
+              }));
+          },
+        } : null,
+      {
+        // Delete
+        names: ['delete', 'remove'],
+        title: _('attachments.menu.delete'),
+        async exec(client) {
+          if (!await client.messageAwaiter.confirm(message, _, {
+            header: _('cards.remove_confirm', {
+              name: Util.cutoffText(Util.Escape.markdown(attachment.name), 50),
+              id: attachment.id
+            })
+          })) return;
+
+          if ((await trello.handleResponse({
+            response: await trello.deleteAttachment(card.id, attachment.id),
+            client: this.client, message, _ })).stop) return;
+
+          return message.channel.createMessage(_('attachments.removed', {
+            name: Util.cutoffText(Util.Escape.markdown(attachment.name), 50)
+          }));
+        },
+      }
+    ].filter(v => !!v));
   }
 
   get metadata() { return {

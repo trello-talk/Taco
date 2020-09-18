@@ -446,6 +446,19 @@ Util.Trello = {
       }
     });
   },
+  findAttachment(query, attachments, client, message, _) {
+    return Util.Trello._find({
+      query, _, client, message,
+      items: attachments,
+      noneString: _('attachments.none'),
+      promptOptions: {
+        itemTitle: 'words.attachment.many',
+        header: _('attachments.choose'),
+        display: atch =>
+          `${Util.cutoffText(Util.Escape.markdown(atch.name), 30)}`
+      }
+    });
+  },
   async findBoard(query, boards, client, message, _, userData) {
     // This wont use Util._find since it has a special clause when no
     // boards are shown.

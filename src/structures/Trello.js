@@ -464,6 +464,21 @@ class Trello {
   }
 
   /**
+   * Updates a card's attachment.
+   * @param {string} cardID The card's ID
+   * @param {string} id The attachment's ID
+   * @param {Object} payload The data to use
+   */
+  updateAttachment(cardID, id, payload) {
+    return this._request({
+      method: 'put',
+      url: `/cards/${cardID}/attachments/${id}`,
+      bodyType: 'form',
+      body: payload
+    });
+  }
+
+  /**
    * Updates a webhook.
    * @param {string} id The webhook's ID
    * @param {Object} payload The data to use
@@ -498,6 +513,18 @@ class Trello {
     return this._request({
       method: 'delete',
       url: `/cards/${id}`
+    });
+  }
+
+  /**
+   * Deletes a card's attachment.
+   * @param {string} cardID The card's ID
+   * @param {string} id The attachment's ID
+   */
+  deleteAttachment(cardID, id) {
+    return this._request({
+      method: 'delete',
+      url: `/cards/${cardID}/attachments/${id}`
     });
   }
 
