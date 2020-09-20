@@ -285,7 +285,11 @@ class WebhookData {
       description: embed.description || this.embedDescription(),
       type: 'rich',
       thumbnail: { url: this.invoker.avatar },
-      timestamp: this.action.date
+      timestamp: this.action.date,
+      footer: {
+        icon_url: 'https://tacobot.app/logo_happy.png',
+        text: 'tacobot.app'
+      }
     };
 
     if (this.webserver.batches.has(this.webhook.webhookID))
