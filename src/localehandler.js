@@ -132,7 +132,7 @@ class LocaleHandler {
         !currentLocale.includes('-') ? `${currentLocale}-${currentLocale.toUpperCase()}` : currentLocale;
 
       date.i18n.setLanguage(countryCode);
-      return Date.parse(query);
+      return date.parse(query);
     };
 
     _.locale = locale || this.config.sourceLocale;
