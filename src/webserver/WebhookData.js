@@ -324,7 +324,15 @@ class WebhookData {
             await this.client.airbrake.notify({
               error: e,
               params: {
-                type: 'webhook'
+                type: 'webhook',
+                webhook: {
+                  errName: e.name,
+                  errCode: e.code,
+                  id: this.webhook.webhookID,
+                  modelID: this.webhook.modelID,
+                  memberID: this.webhook.memberID,
+                  event: this.filterFlag
+                }
               }
             });
           } else if (this.client.config.debug) {
