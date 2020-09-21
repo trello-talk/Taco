@@ -5,7 +5,7 @@ exports.exec = async data => {
   return data.send({
     title: _('webhooks.card_add_label', {
       member: data.invoker.webhookSafeName,
-      label: data.util.cutoffText(data.label.name, 50),
+      label: data.util.cutoffText(data.label.name, 25),
       card: data.util.cutoffText(data.card.name, 50)
     }),
     description: data.embedDescription(['label', 'card', 'list']),
