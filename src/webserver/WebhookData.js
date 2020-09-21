@@ -311,7 +311,7 @@ class WebhookData {
         return await this.webserver.client.executeWebhook(this.webhook.webhookID,
           this.webhook.webhookToken, { embeds });
       } catch (e) {
-        if (e.name === 'DiscordRESTError') {
+        if (e.name.startsWith('DiscordRESTError')) {
           if (e.code === 10015) //  Unknown Webhook
             return await this.webserver.client.pg.models.get('webhook').update({
               webhookID: null,
