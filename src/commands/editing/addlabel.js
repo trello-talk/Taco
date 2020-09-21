@@ -30,11 +30,11 @@ module.exports = class AddLabel extends Command {
     if (!input) return;
 
     // Get new label
-    const listResponse = await trello.handleResponse({
+    const labelResponse = await trello.handleResponse({
       response: await trello.addLabel(json.id, { name: input }),
       client: this.client, message, _ });
-    if (listResponse.stop) return;
-    const label = listResponse.body;
+    if (labelResponse.stop) return;
+    const label = labelResponse.body;
     return message.channel.createMessage(_('labels.created', {
       name: Util.cutoffText(Util.Escape.markdown(label.name), 50),
       id: label.id
