@@ -87,7 +87,7 @@ module.exports = class Prefix extends Command {
     case 'd':
       if (!userData || userData && !userData.prefixes.length)
         return message.channel.createMessage(_('prefix.none'));
-      prefix = await this.findPrefix(args[1], userPrefixes, message, _);
+      prefix = await this.findPrefix(args[1] || '', userPrefixes, message, _);
       if (!prefix) return;
       await this.client.pg.models.get('user').removeFromArray(message.author, 'prefixes', prefix);
       return message.channel.createMessage(_('prefix.removed', { prefix }));
