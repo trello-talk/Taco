@@ -1,34 +1,27 @@
-# Trello Bot (Taco)
+<div align="center">
+  <img src="https://tacobot.app/logo_happy.svg" alt="logo" height=200 />
+  <hr>
+  
+  # Taco
 
-<a href="https://top.gg/bot/620126394390675466">
-  <img src="https://top.gg/api/widget/620126394390675466.svg" alt="Taco" align="right"/>
-</a>
+  Manage Trello boards straight from Discord!
 
-![Discord Shield](https://discordapp.com/api/guilds/617911034555924502/widget.png?style=shield) [![Discord Bots](https://top.gg/api/widget/servers/620126394390675466.svg?rightcolor=7289DA)](https://top.gg/bot/620126394390675466)![StatusWidget](http://translate.trellobot.xyz/widgets/trellobot/-/svg-badge.svg) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+***[tacobot.app](https://tacobot.app/) • [Invite Taco](https://tacobot.app/bot) • [Support Server](https://tacobot.app/server)***
 
-## Introduction
+![Discord Shield](https://discordapp.com/api/guilds/617911034555924502/widget.png?style=shield) [![Discord Bots](https://top.gg/api/widget/servers/620126394390675466.svg?rightcolor=93a01e)](https://top.gg/bot/620126394390675466) ![StatusWidget](http://translate.trellobot.xyz/widgets/trellobot/-/svg-badge.svg)
 
-The Trello Bot Is Back! [[Invite here](https://trellobot.xyz/bot)] [[Support Server](https://trellobot.xyz/server)]
+  <br>
 
-- Manage Your Trello Boards, See Board Activity, Manage Your Webhooks, Use Multiple Boards Per Server, And More!
-- Simple Web-based Authentication To Get You Started As Soon As Possible!
-- Friendly Support Staff Available To Assist With Any Issues You May Encounter!
+*[Guide](https://tacobot.app/guide) • [Self-host](https://tacobot.app/guide/dev/self-host/) • [FAQ](https://tacobot.app/faq) • [Contributing](https://tacobot.app/guide/dev)*
 
-## Selfhosting
-Coming soon™
+  <br>
+  <br>
+</div>
 
+## Features
 
-## FAQs
-- What happened to the original Trello Bot?
-
-The original Trello Bot (Trello#5300) has now been shutdown. This is the continuation of that project.
-
-- Why is the bot called Taco, but the repository is called TrelloBot
-
-Taco is the name of our "official" hosted copy. This repository is the code used for the bot and can be used to selfhost TrelloBot yourself.
-
-- Why are there no selfhosting instructions yet?
-
-We're currently not going to add selfhosting instructions until we're sure that the bot is stable. However, if you really need to selfhost this bot now, you can message Yamboy1#3959 or Coolguy3289#2290 on the Support Server, and they can help you set it up. Please note that until version 7.0.0 is released, this bot is currently in beta and lots of things are still likely to change, so please check the changelogs before updating your bot to a new version.
-
-*Trello, Taco The Husky and the Trello Logo are trademarks of Trello, Inc. and are not assosiated with this project*
+- View Trello information from Discord.
+- Create webhooks that send actions to a Discord channel as they are made.
+- Available to use in multiple languages.
+- Customizable for users and servers.
+- Edit almost anything on a board with Taco.
