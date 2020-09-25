@@ -24,7 +24,7 @@ exports.exec = async data => {
     small: {
       description: _(title, {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`
       }),
       fields: [{
         name: '*' + _('trello.old_desc') + '*',

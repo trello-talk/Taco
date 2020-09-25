@@ -14,8 +14,8 @@ exports.exec = async data => {
     small: {
       description: _('webhooks.copy_card', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        sourceCard: `[${data.util.cutoffText(data.sourceCard.name, 50)}](https://trello.com/c/${data.sourceCard.shortLink})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`
+        sourceCard: `[${data.util.cutoffText(data.sourceCard.name, 25)}](https://trello.com/c/${data.sourceCard.shortLink})`,
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`
       }),
     }
   });

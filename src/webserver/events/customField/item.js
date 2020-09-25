@@ -21,8 +21,8 @@ exports.exec = async data => {
     resultData.small.description = _(`webhooks.customfielditem_checkbox_${removed}`,
       {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`,
-        customField: data.util.cutoffText(data.customField.name, 50)
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`,
+        customField: data.util.cutoffText(data.customField.name, 25)
       });
     break;
   case 'text':
@@ -34,8 +34,8 @@ exports.exec = async data => {
     resultData.small.description = _(`webhooks.customfielditem_${!removed ? 'update' : 'remove'}`,
       {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`,
-        customField: data.util.cutoffText(data.customField.name, 50)
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`,
+        customField: data.util.cutoffText(data.customField.name, 25)
       });
     if (!removed)
       resultData.default.fields.push({
@@ -59,8 +59,8 @@ exports.exec = async data => {
     resultData.small.description = _(`webhooks.customfielditem_${!removed ? 'update' : 'remove'}`,
       {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`,
-        customField: data.util.cutoffText(data.customField.name, 50)
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`,
+        customField: data.util.cutoffText(data.customField.name, 25)
       });
     if (!removed)
       resultData.default.fields.push({
@@ -84,8 +84,8 @@ exports.exec = async data => {
     resultData.small.description = _(`webhooks.customfielditem_${!removed ? 'update' : 'remove'}`,
       {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`,
-        customField: data.util.cutoffText(data.customField.name, 50)
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`,
+        customField: data.util.cutoffText(data.customField.name, 25)
       });
     if (!removed)
       resultData.default.fields.push({
@@ -109,8 +109,8 @@ exports.exec = async data => {
     resultData.small.description = _(`webhooks.customfielditem_${data.oldData.idValue ? 'update' : 'remove'}`,
       {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`,
-        customField: data.util.cutoffText(data.customField.name, 50)
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`,
+        customField: data.util.cutoffText(data.customField.name, 25)
       });
     break;
   }

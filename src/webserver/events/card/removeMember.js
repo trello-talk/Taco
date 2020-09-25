@@ -17,7 +17,7 @@ exports.exec = async data => {
         'webhooks.card_remove_self' : 'webhooks.card_remove_member', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
         member2: `[${data.member.webhookSafeName}](https://trello.com/${data.member.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`
       })
     }
   });

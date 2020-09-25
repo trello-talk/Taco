@@ -16,8 +16,8 @@ exports.exec = async data => {
       description: _(data.checklistItem.state === 'complete' ?
         'webhooks.checkitem_state_on' : 'webhooks.checkitem_state_off', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`,
-        checklistItem: data.util.cutoffText(data.checklistItem.name, 50)
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`,
+        checklistItem: data.util.cutoffText(data.checklistItem.name, 25)
       }),
     }
   });

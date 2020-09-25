@@ -14,8 +14,8 @@ exports.exec = async data => {
     small: {
       description: _('webhooks.copy_checklist', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        sourceChecklist: data.util.cutoffText(data.sourceChecklist.name, 50),
-        checklist: data.util.cutoffText(data.checklist.name, 50)
+        sourceChecklist: data.util.cutoffText(data.sourceChecklist.name, 25),
+        checklist: data.util.cutoffText(data.checklist.name, 25)
       }),
     }
   });

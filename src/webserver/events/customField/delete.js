@@ -13,7 +13,7 @@ exports.exec = async data => {
     small: {
       description: _('webhooks.customfield_delete', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        customField: data.util.cutoffText(data.customField.name, 50)
+        customField: data.util.cutoffText(data.customField.name, 25)
       }),
     }
   });

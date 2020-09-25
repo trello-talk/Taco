@@ -14,7 +14,7 @@ exports.exec = async data => {
     small: {
       description: _('webhooks.move_in_list', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        list: data.util.cutoffText(data.list.name, 50)
+        list: data.util.cutoffText(data.list.name, 25)
       }),
     }
   });

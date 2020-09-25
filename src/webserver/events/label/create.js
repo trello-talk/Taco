@@ -13,7 +13,7 @@ exports.exec = async data => {
     small: {
       description: _('webhooks.create_label', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        label: data.util.cutoffText(data.label.name, 50)
+        label: data.util.cutoffText(data.label.name, 25)
       }),
     }
   });

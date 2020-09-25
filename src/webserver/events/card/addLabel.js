@@ -7,7 +7,7 @@ exports.exec = async data => {
       title: _('webhooks.card_add_label', {
         member: data.invoker.webhookSafeName,
         label: data.util.cutoffText(data.label.name, 25),
-        card: data.util.cutoffText(data.card.name, 50)
+        card: data.util.cutoffText(data.card.name, 25)
       }),
       description: data.embedDescription(['label', 'card', 'list']),
     },
@@ -15,7 +15,7 @@ exports.exec = async data => {
       description: _('webhooks.card_add_label', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
         label: data.util.cutoffText(data.label.name, 25),
-        card: `[${data.util.cutoffText(data.card.name, 50)}](https://trello.com/c/${data.card.shortLink})`
+        card: `[${data.util.cutoffText(data.card.name, 25)}](https://trello.com/c/${data.card.shortLink})`
       })
     }
   });

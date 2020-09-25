@@ -14,8 +14,8 @@ exports.exec = async data => {
     small: {
       description: _('webhooks.label_rename', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        label: data.util.cutoffText(data.label.name, 50),
-        oldName: data.util.cutoffText(data.oldData.name, 50)
+        label: data.util.cutoffText(data.label.name, 25),
+        oldName: data.util.cutoffText(data.oldData.name, 25)
       }),
     }
   });

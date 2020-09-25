@@ -17,7 +17,7 @@ exports.exec = async data => {
     small: {
       description: _('webhooks.label_recolor', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        label: data.util.cutoffText(data.label.name, 50),
+        label: data.util.cutoffText(data.label.name, 25),
         oldColor: data.oldData.color ? _(`trello.label_color.${data.oldData.color}`) :
           _('trello.label_color.none'),
         color: data.label.color ? _(`trello.label_color.${data.label.color}`) :

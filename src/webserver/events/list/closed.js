@@ -15,7 +15,7 @@ exports.exec = async data => {
       description: _(data.list.closed ?
         'webhooks.archive_list' : 'webhooks.unarchive_list', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        list: data.util.cutoffText(data.list.name, 50)
+        list: data.util.cutoffText(data.list.name, 25)
       }),
     }
   });
