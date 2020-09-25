@@ -308,6 +308,7 @@ class WebhookData {
         },
         url: this.model.url,
         title: Util.cutoffText(this.model.name, 256),
+        timestamp: this.action.date,
         footer: {
           icon_url: 'https://tacobot.app/logo_happy.png',
           text: 'tacobot.app'
