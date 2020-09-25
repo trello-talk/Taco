@@ -286,7 +286,6 @@ class WebhookData {
           url: this.model.url
         },
         description: embedStyles.default.description || this.embedDescription(),
-        type: 'rich',
         ...(this.invoker.avatar ? {
           thumbnail: { url: this.invoker.avatar }
         } : {}),
@@ -313,8 +312,48 @@ class WebhookData {
           icon_url: 'https://tacobot.app/logo_happy.png',
           text: 'tacobot.app'
         }
-      }
+      },
+      compact: {
+        color: 3092790,
+        author: {
+          icon_url: this.webserver.client.config.iconURL,
+          name: 'Trello: ' + Util.cutoffText(this.model.name, 248),
+          url: this.model.url
+        },
+        timestamp: this.action.date,
+        footer: {
+          icon_url: 'https://tacobot.app/logo_happy.png',
+          text: 'tacobot.app'
+        }
+      },
     };
+
+    if (this.webhook.style === 'compact') {
+      const batchKey = `compact:${this.model.id}:${this.webhook.webhookID}`;
+      const compactLine = `\`${this.isChildAction() ? WebhookData.COMPACT_EMOJIS.CHILD :
+        WebhookData.COMPACT_EMOJIS[this.filterFlag.split('_')[0]]}\` ${embedStyles.small.description}`;
+
+      if (this.webserver.batches.has(batchKey))
+        return (() => {
+          this.webserver.batches.get(batchKey).add(compactLine);
+        })();
+  
+      const batcher = new Bottleneck.Batcher({
+        maxTime: 2000,
+        maxSize: 10
+      });
+      this.webserver.batches.set(batchKey, batcher);
+  
+      batcher.on('batch', lines => {
+        this.webserver.batches.delete(batchKey);
+        this._send(lodash.defaultsDeep({
+          description: lines.join('\n')
+        }, EMBED_DEFAULTS.compact));
+      });
+  
+      batcher.add(compactLine);
+      return;
+    }
 
     return this._send(lodash.defaultsDeep(embedStyles[this.webhook.style],
       EMBED_DEFAULTS[this.webhook.style]));
@@ -398,6 +437,26 @@ WebhookData.DEFAULT_COLORS = {
   CONVERT: 0x9b59b6,
   COPY: 0xf19066,
   MOVE: 0xB53471
+};
+
+WebhookData.COMPACT_EMOJIS = {
+  ADD: '🟢',
+  CREATE: '🟩',
+  UPDATE: '🟧',
+  CHILD: '🟡',
+  UNCONFIRMED: '🟠',
+  REMOVE: '🔴',
+  DELETE: '🟥',
+  ENABLE: '✅',
+  DISABLE: '❎',
+  MAKE: '🟦',
+  MEMBER: '🔵',
+  VOTE: '🗳️',
+  EMAIL: '📧',
+  COMMENT: '💬',
+  CONVERT: '📇',
+  COPY: '📋',
+  MOVE: '📦'
 };
 
 module.exports = WebhookData;
