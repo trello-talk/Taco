@@ -12,13 +12,23 @@ exports.exec = async data => {
   if (prefMap[pref]) {
     const _ = data.localeModule;
     return data.send({
-      title: _(`webhooks.board_set_${prefMap[pref]}`, {
-        member: data.invoker.webhookSafeName,
-        board: data.util.cutoffText(data.board.name, 50),
-        oldPerm: _(`trello.${prefMap[pref]}.${data.oldData.prefs[pref]}`),
-        perm: _(`trello.${prefMap[pref]}.${data.board.prefs[pref]}`)
-      }),
-      description: '',
+      default: {
+        title: _(`webhooks.board_set_${prefMap[pref]}`, {
+          member: data.invoker.webhookSafeName,
+          board: data.util.cutoffText(data.board.name, 50),
+          oldPerm: _(`trello.${prefMap[pref]}.${data.oldData.prefs[pref]}`),
+          perm: _(`trello.${prefMap[pref]}.${data.board.prefs[pref]}`)
+        }),
+        description: '',
+      },
+      small: {
+        description: _(`webhooks.board_set_${prefMap[pref]}`, {
+          member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
+          board: data.util.cutoffText(data.board.name, 50),
+          oldPerm: _(`trello.${prefMap[pref]}.${data.oldData.prefs[pref]}`),
+          perm: _(`trello.${prefMap[pref]}.${data.board.prefs[pref]}`)
+        }),
+      }
     });
   }
 };

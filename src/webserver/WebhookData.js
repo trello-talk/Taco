@@ -84,6 +84,8 @@ class WebhookData {
       avatar: member.avatarUrl ? member.avatarUrl + '/170.png' : null,
       webhookSafeName: member.fullName ?
         Util.cutoffText(member.fullName, 50) : member.username,
+      titleSafeName: member.fullName ?
+        Util.cutoffText(member.fullName, 256) : member.username,
       ...member
     };
   }
@@ -271,32 +273,62 @@ class WebhookData {
 
   /**
    * Sends the embed to the webhook
-   * @param {Object} embed The embed of the massage
+   * @param {Object<string, Object>} embedStyles The embeds for each style
    */
-  async send(embed) {
-    const defaultEmbed = {
-      color: this.isChildAction() ? WebhookData.DEFAULT_COLORS.CHILD :
-        WebhookData.DEFAULT_COLORS[this.filterFlag.split('_')[0]],
-      author: {
-        icon_url: this.webserver.client.config.iconURL,
-        name: 'Trello: ' + Util.cutoffText(this.model.name, 248),
-        url: this.model.url
+  async send(embedStyles) {
+    const EMBED_DEFAULTS = {
+      default: {
+        color: this.isChildAction() ? WebhookData.DEFAULT_COLORS.CHILD :
+          WebhookData.DEFAULT_COLORS[this.filterFlag.split('_')[0]],
+        author: {
+          icon_url: this.webserver.client.config.iconURL,
+          name: 'Trello: ' + Util.cutoffText(this.model.name, 248),
+          url: this.model.url
+        },
+        description: embedStyles.default.description || this.embedDescription(),
+        type: 'rich',
+        ...(this.invoker.avatar ? {
+          thumbnail: { url: this.invoker.avatar }
+        } : {}),
+        timestamp: this.action.date,
+        footer: {
+          icon_url: 'https://tacobot.app/logo_happy.png',
+          text: 'tacobot.app'
+        }
       },
-      description: embed.description || this.embedDescription(),
-      type: 'rich',
-      thumbnail: { url: this.invoker.avatar },
-      timestamp: this.action.date,
-      footer: {
-        icon_url: 'https://tacobot.app/logo_happy.png',
-        text: 'tacobot.app'
+      small: {
+        color: this.isChildAction() ? WebhookData.DEFAULT_COLORS.CHILD :
+          WebhookData.DEFAULT_COLORS[this.filterFlag.split('_')[0]],
+        author: {
+          ...(this.invoker.avatar ? {
+            icon_url: this.invoker.avatar
+          } : {}),
+          name: this.invoker.titleSafeName,
+          url: this.model.url
+        },
+        url: this.model.url,
+        title: Util.cutoffText(this.model.name, 256),
+        footer: {
+          icon_url: 'https://tacobot.app/logo_happy.png',
+          text: 'tacobot.app'
+        }
       }
     };
 
+    return this._send(lodash.defaultsDeep(embedStyles[this.webhook.style],
+      EMBED_DEFAULTS[this.webhook.style]));
+  }
+
+  /**
+   * batches and sends the raw embed
+   * @private
+   */
+  async _send(embed) {
     if (this.webserver.batches.has(this.webhook.webhookID))
       // Since Batcher#add returns a promise that resolves after a flush, this won't return the promise and
       // therefore won't halt the request until flushed.
       return (() => {
-        this.webserver.batches.get(this.webhook.webhookID).add(lodash.defaultsDeep(embed, defaultEmbed));
+        this.webserver.batches.get(this.webhook.webhookID).add(embed);
       })();
 
     const batcher = new Bottleneck.Batcher({
@@ -343,7 +375,7 @@ class WebhookData {
       }
     });
 
-    batcher.add(lodash.defaultsDeep(embed, defaultEmbed));
+    batcher.add(embed);
   }
 }
 
