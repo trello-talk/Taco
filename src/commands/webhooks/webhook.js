@@ -47,6 +47,7 @@ module.exports = class Webhook extends Command {
       description: `**${_('webhook_cmd.model_filter')}:** ${
         _(webhook.whitelist ? 'webhook_cmd.whitelist' : 'webhook_cmd.blacklist')}\n` +
         `**${_('words.locale')}:** ${locale ? locale._.name : '*' + _('locale.unset') + '*'}\n` +
+        `**${_('words.style.one')}:** ${_(`webhook_cmd.styles.${webhook.style}.name`)}\n` +
         `${webhook.active ? checkEmoji : uncheckEmoji} ${_('words.active')}\n\n` +
         `${_.toLocaleString(webhook.lists.length)} ${
           _.numSuffix('webhook_cmd.filtered_list', webhook.lists.length)}\n` +
