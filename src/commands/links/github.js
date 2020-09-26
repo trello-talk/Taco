@@ -10,7 +10,7 @@ module.exports = class GitHUb extends Command {
 
   exec(message, { _ }) {
     return message.channel.createMessage(
-      `${_('links.github')} **<https://github.com/trello-talk/TrelloBot>**`);
+      `${_('links.github')} **<https://github.com/trello-talk/Taco>**`);
   }
 
   get metadata() { return {
