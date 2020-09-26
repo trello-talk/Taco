@@ -2,7 +2,6 @@ const Command = require('../../structures/Command');
 const SubMenu = require('../../structures/SubMenu');
 const GenericPrompt = require('../../structures/GenericPrompt');
 const Util = require('../../util');
-const { Query } = require('pg');
 
 module.exports = class EditLabel extends Command {
   get name() { return 'editlabel'; }
@@ -18,7 +17,7 @@ module.exports = class EditLabel extends Command {
       'none', 'green', 'yellow', 'red', 'orange',
       'lime', 'purple', 'blue', 'sky', 'pink', 'black'
     ];
-    const foundColor = colors.find(val => val === Query);
+    const foundColor = colors.find(val => val === query);
     if (foundColor) return foundColor;
     else if (['none', 'clear', 'transparent'].includes(query)) return null;
     else {
