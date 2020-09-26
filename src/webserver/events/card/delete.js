@@ -11,9 +11,10 @@ exports.exec = async data => {
       description: data.embedDescription(['list']),
     },
     small: {
-      description: _('webhooks.delete_card', {
+      description: _('webhooks_extended.delete_card', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
-        cardID: data.card.shortLink
+        cardID: data.card.shortLink,
+        list: data.util.cutoffText(data.listAfter.name, 25)
       })
     }
   });
