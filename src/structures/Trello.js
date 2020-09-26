@@ -41,7 +41,7 @@ class Trello {
       url.hash = options.hash;
 
     // User Agent
-    const userAgent = `TrelloBot (https://github.com/trello-talk/TrelloBot ${this.client.pkg.version}) Node.js/${process.version}`;
+    const userAgent = `TrelloBot (https://github.com/trello-talk/Taco, ${this.client.pkg.version}) Node.js/${process.version}`;
     if (!options.headers)
       options.headers = {
         'User-Agent': userAgent
