@@ -14,7 +14,7 @@ exports.exec = async data => {
       description: _('webhooks_extended.delete_card', {
         member: `[${data.invoker.webhookSafeName}](https://trello.com/${data.invoker.username})`,
         cardID: data.card.shortLink,
-        list: data.util.cutoffText(data.listAfter.name, 25)
+        list: data.util.cutoffText(data.list.name, 25)
       })
     }
   });
