@@ -92,7 +92,7 @@ module.exports = class EditWebhook extends Command {
       {
         // Change style
         names: ['style', 'setstyle'],
-        title: _('webhook_cmd.edit_menu.style') + `(${_(`webhook_cmd.styles.${webhook.style}.name`)})`,
+        title: _('webhook_cmd.edit_menu.style') + ` (${_(`webhook_cmd.styles.${webhook.style}.name`)})`,
         async exec() {
           const style = await _this.findStyle(args[2], message, _);
           if (!style) return;
@@ -101,7 +101,7 @@ module.exports = class EditWebhook extends Command {
             { where: { id: webhook.id } });
           
           return message.channel.createMessage(
-            _('webhook_cmd.set_locale', {
+            _('webhook_cmd.style_set', {
               name: _(`webhook_cmd.styles.${style}.name`)
             }));
         }
