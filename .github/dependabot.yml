@@ -7,8 +7,6 @@ updates:
     interval: daily
   open-pull-requests-limit: 10
   target-branch: dev
-  ignore:
-    - dependency-name: "dbots"
   commit-message:
     prefix: chore
     include: scope
