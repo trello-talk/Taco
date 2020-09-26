@@ -3,6 +3,7 @@ const Command = require('../../structures/Command');
 const SubMenu = require('../../structures/SubMenu');
 const MultiSelect = require('../../structures/MultiSelect');
 const WebhookFilters = require('../../structures/WebhookFilters');
+const GenericPrompt = require('../../structures/GenericPrompt');
 const Trello = require('../../structures/Trello');
 const Util = require('../../util');
 
@@ -14,6 +15,31 @@ module.exports = class EditWebhook extends Command {
     cooldown: 10,
     permissions: ['embed', 'webhooks', 'trelloRole', 'auth']
   }; }
+
+  async findStyle(query, message, _) {
+    const styles = [
+      'default', 'small', 'compact'
+    ];
+    const foundStyle = styles.find(val => val === query);
+    if (foundStyle) return foundStyle;
+    else {
+      const prompter = new GenericPrompt(this.client, message, {
+        items: styles, itemTitle: 'words.style.many',
+        header: _('webhook_cmd.choose_style'),
+        display: val => `[${_(`webhook_cmd.styles.${val}.name`)}](https://tacobot.app/images/webhook_style/${val}.png) - ${
+          _(`webhook_cmd.styles.${val}.description`)}`,
+        _
+      });
+      const promptResult = await prompter.search(query,
+        { channelID: message.channel.id, userID: message.author.id },
+        val => _(`webhook_cmd.styles.${val}.name`));
+      if (promptResult && promptResult._noresults) {
+        await message.channel.createMessage(_('prompt.no_search'));
+        return;
+      } else
+        return promptResult;
+    }
+  }
 
   async exec(message, { args, _, trello, userData }) {
     const requestedID = parseInt(args[0]);
@@ -57,10 +83,27 @@ module.exports = class EditWebhook extends Command {
       },
       {
         // Change locale
-        names: ['locale', 'setlocale', 'lang', 'setlant'],
+        names: ['locale', 'setlocale', 'lang', 'setlang'],
         title: _('webhook_cmd.edit_menu.locale'),
         async exec() {
           return _this.changeLocale(message, args[2], webhook, _);
+        }
+      },
+      {
+        // Change style
+        names: ['style', 'setstyle'],
+        title: _('webhook_cmd.edit_menu.style'),
+        async exec() {
+          const style = await _this.findStyle(args[2], message, _);
+          if (!style) return;
+
+          await this.client.pg.models.get('webhook').update({ style },
+            { where: { id: webhook.id } });
+          
+          return message.channel.createMessage(
+            _('webhook_cmd.set_locale', {
+              name: _(`webhook_cmd.styles.${style}.name`)
+            }));
         }
       },
       {
@@ -73,7 +116,7 @@ module.exports = class EditWebhook extends Command {
       },
       {
         // Whitelist/Blacklist
-        names: ['whitelist', 'wlist', 'blacklist', 'blist'],
+        names: ['whitelist', 'wlist', 'blacklist', 'blist', 'policy'],
         title: _(webhook.whitelist ? 'webhook_cmd.edit_menu.blist' : 'webhook_cmd.edit_menu.wlist'),
         async exec(client) {
           await client.pg.models.get('webhook').update({ whitelist: !webhook.whitelist },
