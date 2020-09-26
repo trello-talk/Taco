@@ -22,6 +22,9 @@ module.exports = class Vote extends Command {
       url: 'https://discord.boats/bot/620126394390675466/rate',
       name: 'Discord Boats',
       type: 'vote.rate'
+    }, {
+      url: 'https://discordextremelist.xyz/en-US/bots/taco',
+      name: 'Discord Extreme List'
     }];
     return message.channel.createMessage({ embed: {
       color: this.client.config.embedColor,
