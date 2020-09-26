@@ -92,12 +92,12 @@ module.exports = class EditWebhook extends Command {
       {
         // Change style
         names: ['style', 'setstyle'],
-        title: _('webhook_cmd.edit_menu.style'),
+        title: _('webhook_cmd.edit_menu.style') + `(${_(`webhook_cmd.styles.${webhook.style}.name`)})`,
         async exec() {
           const style = await _this.findStyle(args[2], message, _);
           if (!style) return;
 
-          await this.client.pg.models.get('webhook').update({ style },
+          await _this.client.pg.models.get('webhook').update({ style },
             { where: { id: webhook.id } });
           
           return message.channel.createMessage(
