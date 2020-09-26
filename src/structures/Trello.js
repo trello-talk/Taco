@@ -50,6 +50,8 @@ class Trello {
       options.headers['User-Agent'] = userAgent;
 
     return this.client.limiter.schedule(() => new Promise((resolve, reject) => {
+      this.client.stats.requestsSent++;
+
       // Abort Controller
       const controller = new AbortController();
       const controllerTimeout = setTimeout(controller.abort.bind(controller), 5000);

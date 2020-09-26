@@ -31,6 +31,7 @@ module.exports = class StatsManager extends EventEmitter {
     this.webhooksSent = 0;
     this.commandsRan = 0;
     this.messagesRecieved = 0;
+    this.requestsSent = 0;
 
 
     console.init('Stats initialized');
@@ -77,6 +78,12 @@ module.exports = class StatsManager extends EventEmitter {
         fields: {
           sent: Influx.FieldType.INTEGER,
           sentUnique: Influx.FieldType.INTEGER
+        },
+        tags: ['bot','cluster']
+      }, {
+        measurement: 'http_requests',
+        fields: {
+          sent: Influx.FieldType.INTEGER
         },
         tags: ['bot','cluster']
       }, {
@@ -173,6 +180,16 @@ module.exports = class StatsManager extends EventEmitter {
       },
       timestamp
     }));
+    
+    // Insert requests data
+    influxPoints.push({
+      measurement: 'http_requests',
+      tags: defaultTags,
+      fields: {
+        sent: this.requestsSent
+      },
+      timestamp
+    });
 
     // Insert shard data
     const serverMap = {};
@@ -216,6 +233,7 @@ module.exports = class StatsManager extends EventEmitter {
     this.commandsRan = 0;
     this.webhooksSent = 0;
     this.messagesRecieved = 0;
+    this.requestsSent = 0;
 
     // Send to influx    
     await this.influx.writePoints(influxPoints);
