@@ -41,6 +41,7 @@ class TrelloBot extends Eris.Client {
     this.config = config;
     this.typingIntervals = new Map();
     this.stats = new StatsManager(this);
+    this.requestHandler.userAgent += ` TrelloBot/${pkg.version} Node.js/${process.version}`;
 
     if (config.airbrake)
       this.airbrake = new Airbrake.Notifier({
