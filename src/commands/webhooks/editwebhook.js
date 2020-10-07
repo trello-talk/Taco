@@ -212,9 +212,9 @@ module.exports = class EditWebhook extends Command {
       display: card => {
         const list = handle.body.lists.find(list => list.id === card.idList);
         return `${card.closed ? '🗃️ ' : ''}${
-          card.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(card.name), 30)}` +
+          card.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(card.name), 20)}` +
           (list ? ` (${_('words.in_lower')} ${
-            Util.cutoffText(Util.Escape.markdown(list.name), 25)})` : '');
+            Util.cutoffText(Util.Escape.markdown(list.name), 15)})` : '');
       }
     });
     const newCards = await selector.start(message.channel.id, message.author.id);
