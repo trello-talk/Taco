@@ -5,3 +5,4 @@ Config
 cache
 package-lock.json
 .idea
+yarn-error.log

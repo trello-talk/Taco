@@ -380,6 +380,8 @@ class WebhookData {
     batcher.on('batch', async embeds => {
       this.webserver.batches.delete(this.webhook.webhookID);
       try {
+        this.client.stats.onWebhookSend(this.webhook.webhookID);
+        console.info('Posting webhook %d (guild=%s)', this.webhook.webhookID, this.webhook.guildID);
         return await this.webserver.client.executeWebhook(this.webhook.webhookID,
           this.webhook.webhookToken, { embeds });
       } catch (e) {
