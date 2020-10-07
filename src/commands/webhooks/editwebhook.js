@@ -177,6 +177,7 @@ module.exports = class EditWebhook extends Command {
         ...item,
         value: webhook.lists.includes(item.id)
       })), _,
+      itemsPerPage: 10,
       display: (item) => `${
         item.subscribed ? '🔔 ' : ''}${Util.cutoffText(Util.Escape.markdown(item.name), 25)} (${
         _.toLocaleString(item.cards.length)} ${_.numSuffix('words.card', item.cards.length)})`
@@ -209,6 +210,7 @@ module.exports = class EditWebhook extends Command {
         ...item,
         value: webhook.cards.includes(item.id)
       })), _,
+      itemsPerPage: 10,
       display: card => {
         const list = handle.body.lists.find(list => list.id === card.idList);
         return `${card.closed ? '🗃️ ' : ''}${
