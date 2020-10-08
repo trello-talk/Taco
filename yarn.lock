@@ -419,10 +419,10 @@ datejs@^1.0.0-rc3:
   resolved "https://registry.yarnpkg.com/datejs/-/datejs-1.0.0-rc3.tgz#bffa1efedefeb41fdd8a242af55afa01fb58de57"
   integrity sha1-v/oe/t7+tB/diiQq9Vr6AftY3lc=
 
-dbots@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/dbots/-/dbots-5.1.0.tgz#b879d646a5afa3ebb3acdd63c7b7a5e23c60bc28"
-  integrity sha512-pkOeUNrsTuSb+w8FEBj/I19OjQV4t4EXLpKYnaGZN53gGuy/dIzoG1Y+ePwNxNvcyvtSirARz9rWJCEG7f7+Ig==
+dbots@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/dbots/-/dbots-5.2.0.tgz#56cc2efc818dba30c96b7bdd88ca4b5e61d3b8c3"
+  integrity sha512-gwEwzhkaKeZgv/9T0r/U/5i6FB/Ug+KMBaH9sRc2gr8pw+FKLFEsBiaAbjRZqP7IGo91lyeWHpq8akTVjhpREA==
   dependencies:
     axios "^0.20.0"
     promise.allsettled "^1.0.2"
