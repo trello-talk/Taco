@@ -173,7 +173,8 @@ class WebServer {
             card.id, boardID, response.status);
           listID = null;
         } else {
-          response.body.forEach(({ id, idList }) => 
+          const cards = await response.json();
+          cards.forEach(({ id, idList }) => 
             this.cardListMapCache.set(id, [Date.now(), idList]));
           listID = this.cardListMapCache.get(card.id)[1];
         }
