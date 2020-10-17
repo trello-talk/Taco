@@ -276,6 +276,11 @@ class WebhookData {
    * @param {Object<string, Object>} embedStyles The embeds for each style
    */
   async send(embedStyles) {
+    // Update card-list pairing cache
+    if (this.card && (this.list || this.listAfter))
+      this.webserver.cardListMapCache.set(this.card.id,
+        [Date.now(), this.list ? this.list.id : this.listAfter.id]);
+
     const EMBED_DEFAULTS = {
       default: {
         color: this.isChildAction() ? WebhookData.DEFAULT_COLORS.CHILD :
