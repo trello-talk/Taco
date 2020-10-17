@@ -4,10 +4,12 @@ const gracefulExit = require('express-graceful-exit');
 const reload = require('require-reload')(require);
 const WebhookData = require('./WebhookData');
 const WebhookFilters = require('../structures/WebhookFilters');
+const Trello = require('../structures/Trello');
 const findFilter = require('./findFilter');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { CronJob } = require('cron');
 
 /**
  * Webserver class that listens to webhook events
@@ -38,8 +40,35 @@ class WebServer {
 
     this.events = new Map();
     this.batches = new Map();
+    this.cardListMapCache = new Map();
+    this.cron = new CronJob('0 * * * *', this._cronTick.bind(this));
 
     console.init('Webserver initialized');
+  }
+
+  async _cronTick() {
+    try {
+      this.cleanListIDCache();
+    } catch (e) {
+      if (this.client.airbrake) {
+        await this.client.airbrake.notify({
+          error: e,
+          params: {
+            type: 'webserv-cron'
+          }
+        });
+      } else if (this.client.config.debug) {
+        console.error('The webserver cron failed.');
+        console.log(e);
+      }
+    }
+  }
+
+  cleanListIDCache () {
+    Array.from(this.cardListMapCache).map(([cardID, [timestamp]]) => {
+      if (timestamp < Date.now() + (1000 * 60 * 60 * 24))
+        this.cardListMapCache.delete(cardID);
+    });
   }
 
   /**
@@ -107,6 +136,71 @@ class WebServer {
     return hash === request.get('x-trello-webhook');
   }
 
+  async canBeSent (webhook, requestBody) {
+    const actionData = requestBody.action.data;
+    const boardID = requestBody.model.id;
+    const list = actionData.list || actionData.listAfter;
+    let listID = list ? list.id : null;
+    const card = actionData.card;
+
+    // No filtered cards or lists have been assigned
+    if (!webhook.cards.length && !webhook.lists.length)
+      return true;
+    
+    // No card was found on the event
+    if (!card) return true;
+
+    let allowed = true;
+
+    // If there are list filters and no list was found on the event
+    if (!listID && webhook.lists.length) {
+      if (this.cardListMapCache.has(card.id))
+        listID = this.cardListMapCache.get(card.id)[1];
+      else {
+        // Get board cards to cache for later
+        const trelloMember = await this.client.pg.models.get('user').findOne({ where: {
+          trelloID: webhook.memberID
+        }});
+        const memberTrello = new Trello(this.client, trelloMember.trelloToken);
+
+        console.webserv('Caching cards for board %s ', boardID);
+
+        const response = await memberTrello.getCardPairs(boardID);
+        if (response.status !== 200) {
+          // Cache as null to prevent re-requesting
+          this.cardListMapCache.set(card.id, [Date.now(), null]);
+          console.webserv('Failed to cache list for card %s (board=%s, status=%s)',
+            card.id, boardID, response.status);
+          listID = null;
+        } else {
+          response.body.forEach(({ id, idList }) => 
+            this.cardListMapCache.set(id, [Date.now(), idList]));
+          listID = this.cardListMapCache.get(card.id)[1];
+        }
+      }
+    }
+
+    // Whitelist policy
+    if (webhook.whitelist) {
+      allowed = false;
+
+      if (webhook.cards.length && card)
+        allowed = allowed || webhook.cards.includes(card.id);
+      if (webhook.lists.length && listID)
+        allowed = allowed || webhook.lists.includes(listID);
+    } else {
+      // Blacklist policy
+      allowed = true;
+
+      if (webhook.cards.length && card)
+        allowed = !webhook.cards.includes(card.id);
+      if (webhook.lists.length && listID)
+        allowed = !(!allowed || webhook.lists.includes(listID));
+    }
+
+    return allowed;
+  }
+
   /**
    * @private
    */
@@ -135,22 +229,11 @@ class WebServer {
         active: true
       }});
   
-      await Promise.all(webhooks.map(webhook => {
+      await Promise.all(webhooks.map(async webhook => {
         const data = new WebhookData(request, webhook, this, filter);
         const filters = new WebhookFilters(BigInt(webhook.filters));
-        const list = request.body.action.data.list || request.body.action.data.listAfter;
-        const card = request.body.action.data.card;
-        let allowed = true;
-        
-        if (card || list) {
-          if (webhook.cards.length && card)
-            allowed = webhook.cards.includes(card.id);
-          if (webhook.lists.length && list)
-            allowed = webhook.lists.includes(list.id);
-        }
 
-        if (!webhook.whitelist && (webhook.cards.length || webhook.lists.length))
-          allowed = !allowed;
+        const allowed = await this.canBeSent(webhook, request.body);
 
         if (allowed && filters.has(filter) && webhook.webhookID)
           return this.events.get(filter)(data);
@@ -182,6 +265,7 @@ class WebServer {
   start() {
     return new Promise(resolve => {
       this.addMiddleware();
+      this.cron.start();
       this.server = this.app.listen(this.client.config.webserver.port, () => {
         console.info(`Running webhook on port ${this.client.config.webserver.port}`);
         resolve();
@@ -195,6 +279,7 @@ class WebServer {
    */
   stop() {
     return new Promise(resolve => {
+      this.cron.stop();
       gracefulExit.gracefulExitHandler(this.app, this.server, {
         exitProcess: false,
         logger: console.info,

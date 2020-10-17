@@ -247,10 +247,23 @@ class Trello {
     return this._request({
       url: `/boards/${id}/cards`,
       query: {
-        card_fields: [
+        fields: [
           'name', 'subscribed', 'shortLink',
           'shortUrl', 'labels'
         ]
+      }
+    });
+  }
+
+  /**
+   * Gets the card ID to list ID pairs
+   * @param {string} id The board's ID
+   */
+  getCardPairs(id) {
+    return this._request({
+      url: `/boards/${id}/cards`,
+      query: {
+        fields: ['idList']
       }
     });
   }
