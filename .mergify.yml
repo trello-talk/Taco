@@ -9,6 +9,7 @@ pull_request_rules:
     conditions:
       - author~=^dependabot(|-preview)\[bot\]$
       - label=dependabot-submodules
+      - base=dev
     actions:
       merge:
         method: merge
@@ -16,6 +17,7 @@ pull_request_rules:
     conditions:
       - author~=^dependabot(|-preview)\[bot\]$
       - title~=from (?P<major>\d+).\d+.\d+ to (?P=major).\d+.\d+
+      - base=dev
     actions:
       merge:
         method: merge
@@ -31,3 +33,16 @@ pull_request_rules:
         users:
           - Snazzah
           - Yamboy1
+  - name: Notify bad bases in automatic PRs
+    conditions:
+      - author~=^dependabot(|-preview)\[bot\]$
+      - base!=dev
+    actions:
+      comment:
+        message: |
+          This PR is not on the right branch.
+      request_reviews:
+        users:
+          - Snazzah
+          - Yamboy1
+
