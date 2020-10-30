@@ -199,11 +199,12 @@ module.exports = class StatsManager extends EventEmitter {
         serverMap[shardID] += 1;
       else serverMap[shardID] = 1;
     });
+    
     this.client.shards.map(shard => influxPoints.push({
       measurement: 'shards',
       tags: { ...defaultTags, shard: shard.id },
       fields: {
-        ms: shard.latency,
+        ms: isFinite(shard.latency) ? shard.latency : 0,
         state: shard.status,
         guilds: serverMap[shard.id]
       },
