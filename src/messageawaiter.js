@@ -18,7 +18,7 @@ class MessageAwaiter {
    * @param {string} userID The user's ID
    * @param {number} [timeout=30000] The time until the halt is auto-cleared
    */
-  createHalt(channelID, userID, timeout = 30000) {
+  createHalt(channelID, userID, timeout = 60000) {
     const id = `${channelID}:${userID}`;
     if (this.halts.has(id)) this.halts.get(id).end();
     const halt = new Halt(this, timeout);
@@ -33,7 +33,7 @@ class MessageAwaiter {
    * @param {string} userID The user's ID
    * @param {number} [timeout=30000] The time until the halt is auto-cleared
    */
-  createReactionCollector(message, userID, timeout = 30000) {
+  createReactionCollector(message, userID, timeout = 60000) {
     const id = `${message.id}:${userID}`;
     if (this.reactionCollectors.has(id)) this.reactionCollectors.get(id).end();
     const collector = new ReactionCollector(this, timeout);
@@ -73,7 +73,7 @@ class MessageAwaiter {
    * @param {number} [options.timeout=30000] The timeout for the halt
    * @returns {?Message}
    */
-  awaitMessage(message, { filter = () => true, timeout = 30000 } = {}) {
+  awaitMessage(message, { filter = () => true, timeout = 60000 } = {}) {
     return new Promise(resolve => {
       const halt = this.createHalt(message.channel.id, message.author.id, timeout);
       let foundMessage = null;
@@ -97,7 +97,7 @@ class MessageAwaiter {
    * @param {string} [options.header] The content to put in the bot message
    * @returns {?Message}
    */
-  async getInput(message, _, { filter = () => true, timeout = 30000, header = null } = {}) {
+  async getInput(message, _, { filter = () => true, timeout = 60000, header = null } = {}) {
     await message.channel.createMessage(`<@${message.author.id}>, ` + (header || _('prompt.input')) + '\n\n' +
       _('prompt.cancel_input', { cancelPrompt: `<@!${this.client.user.id}> cancel` }));
     return new Promise(resolve => {
@@ -132,7 +132,7 @@ class MessageAwaiter {
    * @param {string} [options.header] The content to put in the bot message
    * @returns {?Message}
    */
-  async getInputOrAttachment(message, _, { filter = () => true, timeout = 30000, header = null } = {}) {
+  async getInputOrAttachment(message, _, { filter = () => true, timeout = 60000, header = null } = {}) {
     await message.channel.createMessage(`<@${message.author.id}>, ` + (header || _('prompt.input')) + '\n\n' +
       _('prompt.cancel_input', { cancelPrompt: `<@!${this.client.user.id}> cancel` }));
     return new Promise(resolve => {
@@ -167,7 +167,7 @@ class MessageAwaiter {
    * @param {string} [options.header] The content to put in the bot message
    * @returns {?Message}
    */
-  async confirm(message, _, { timeout = 30000, header = null } = {}) {
+  async confirm(message, _, { timeout = 60000, header = null } = {}) {
     await message.channel.createMessage(`<@${message.author.id}>, ` +
       (header || _('prompt.confirm')) + '\n\n' + _('prompt.cancel_confirm'));
     return new Promise(resolve => {
