@@ -13,6 +13,25 @@ module.exports = class AddWebhook extends Command {
     permissions: ['embed', 'webhooks', 'trelloRole', 'auth']
   }; }
 
+  sortChannels(channels) {
+    function channelSort (a, b) {
+      if (a.type === 0 && b.type === 2) return -1;
+      if (b.type === 0 && a.type === 2) return 1;
+      if (a.position > b.position) return 1;
+      if (a.position < b.position) return -1;
+      return 0;
+    }
+
+    return [
+      // Sort non-categorized channels above others
+      ...channels.filter(chn => !chn.parentID && chn.type !== 4).sort(channelSort),
+      // Sort categories
+      ...channels.filter(chn => chn.type === 4).sort(channelSort).map(category => ([
+        category, ...channels.filter(chn => chn.parentID === category.id).sort(channelSort)
+      ])).flat()
+    ];
+  }
+
   async exec(message, { args, _, trello, userData, serverData }) {
     const maxWebhooks = serverData ? serverData.maxWebhooks : 5;
     const webhookCount = await this.client.pg.models.get('webhook').count({ where: {
@@ -69,7 +88,7 @@ module.exports = class AddWebhook extends Command {
   }
 
   async addWebhook(message, board, userData, trello, _) {
-    const availableChannels = message.channel.guild.channels
+    const availableChannels = this.sortChannels(message.channel.guild.channels)
       .filter(channel => (channel.type === 5 || channel.type === 0) &&
         channel.permissionsOf(this.client.user.id).has('manageWebhooks'));
 
