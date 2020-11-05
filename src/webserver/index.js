@@ -65,7 +65,7 @@ class WebServer {
   }
 
   cleanListIDCache () {
-    Array.from(this.cardListMapCache).map(([cardID, [timestamp]]) => {
+    Array.from(this.cardListMapCache).forEach(([cardID, [timestamp]]) => {
       if (timestamp < Date.now() + (1000 * 60 * 60 * 24))
         this.cardListMapCache.delete(cardID);
     });
@@ -185,7 +185,7 @@ class WebServer {
     if (webhook.whitelist) {
       allowed = false;
 
-      if (webhook.cards.length && card)
+      if (webhook.cards.length)
         allowed = allowed || webhook.cards.includes(card.id);
       if (webhook.lists.length && listID)
         allowed = allowed || webhook.lists.includes(listID);
@@ -193,7 +193,7 @@ class WebServer {
       // Blacklist policy
       allowed = true;
 
-      if (webhook.cards.length && card)
+      if (webhook.cards.length)
         allowed = !webhook.cards.includes(card.id);
       if (webhook.lists.length && listID)
         allowed = !(!allowed || webhook.lists.includes(listID));
