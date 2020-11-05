@@ -41,7 +41,7 @@ module.exports = class AddWebhook extends Command {
       return message.channel.createMessage(_('webhook_cmd.max_wh'));
 
     const handle = await trello.handleResponse({
-      response: await trello.getMember(userData.trelloID),
+      response: await trello.getMember(userData.trelloID, 'open'),
       client: this.client, message, _ });
     if (handle.stop) return;
     if (handle.response.status === 404) {
@@ -126,7 +126,7 @@ module.exports = class AddWebhook extends Command {
       header: _('webhook_cmd.choose_existwh'),
       display: (item) => `${
         Util.cutoffText(Util.Escape.markdown(item.name), 25)} (<#${item.channel_id}>, <@${item.user.id}>)`,
-      itemsPerPage: 15,
+      itemsPerPage: 10,
       _
     });
     const discordWebhook = await prompter.choose(message.channel.id, message.author.id);

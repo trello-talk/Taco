@@ -76,12 +76,13 @@ class Trello {
   /**
    * Gets the info on a member
    * @param {string} id The member's ID
+   * @param {string} [boardFilter="all"] What type of boards to show
    */
-  getMember(id) {
+  getMember(id, boardFilter = 'all') {
     return this._request({
       url: `/members/${id}`,
       query: {
-        boards: 'all',
+        boards: boardFilter,
         board_fields: [
           'subscribed', 'starred', 'pinned',
           'name', 'shortLink', 'shortUrl',
