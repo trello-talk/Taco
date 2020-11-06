@@ -512,10 +512,10 @@ enquirer@^2.3.5:
   dependencies:
     ansi-colors "^3.2.1"
 
-eris@^0.13.3:
-  version "0.13.3"
-  resolved "https://registry.yarnpkg.com/eris/-/eris-0.13.3.tgz#22abb71f9ce0d453200b537cad457dc39c7b302b"
-  integrity sha512-WBtLyknOWZpYZL9yPhez0oKUWvYpunSg43hGxawwjwSf3gFXmbEPYrT8KlmZXtpJnX16eQ7mzIq+MgSh3LarEg==
+eris@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/eris/-/eris-0.14.0.tgz#0d13391c0fc1a7b678b2f8d1fc3ec6aef05700d3"
+  integrity sha512-/W6X0SFR2swtA9oc4ga5Wh1TQcZtPgbUaDDdwYc67fvFUAtwC+V1xzWUZq2yDeJnTfB8Uot9SJWA8Lthe2sDtQ==
   dependencies:
     ws "^7.2.1"
   optionalDependencies:
