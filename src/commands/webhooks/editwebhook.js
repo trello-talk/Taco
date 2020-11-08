@@ -16,6 +16,25 @@ module.exports = class EditWebhook extends Command {
     permissions: ['embed', 'webhooks', 'trelloRole', 'auth']
   }; }
 
+  sortChannels(channels) {
+    function channelSort (a, b) {
+      if (a.type === 0 && b.type === 2) return -1;
+      if (b.type === 0 && a.type === 2) return 1;
+      if (a.position > b.position) return 1;
+      if (a.position < b.position) return -1;
+      return 0;
+    }
+
+    return [
+      // Sort non-categorized channels above others
+      ...channels.filter(chn => !chn.parentID && chn.type !== 4).sort(channelSort),
+      // Sort categories
+      ...channels.filter(chn => chn.type === 4).sort(channelSort).map(category => ([
+        category, ...channels.filter(chn => chn.parentID === category.id).sort(channelSort)
+      ])).flat()
+    ];
+  }
+
   async findStyle(query, message, _) {
     const styles = [
       'default', 'small', 'compact'
