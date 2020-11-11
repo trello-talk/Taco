@@ -7,6 +7,7 @@ module.exports = class Events {
     this.client = client;
     client.on('messageCreate', this.onMessage.bind(this));
     client.on('messageReactionAdd', this.onReaction.bind(this));
+    client.on('guildDelete', this.onGuildLeave.bind(this));
   }
 
   async onMessage(message) {
@@ -106,5 +107,10 @@ module.exports = class Events {
       const collector = this.client.messageAwaiter.reactionCollectors.get(id);
       collector._onReaction(emoji, userID);
     }
+  }
+
+  onGuildLeave(guild) {
+    // deactivate guild webhooks
+    this.client.pg.models.get('webhook').update({ active: false }, { where: { guildID: guild.id }});
   }
 };
