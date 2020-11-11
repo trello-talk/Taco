@@ -161,22 +161,25 @@ class WebServer {
         const trelloMember = await this.client.pg.models.get('user').findOne({ where: {
           trelloID: webhook.memberID
         }});
-        const memberTrello = new Trello(this.client, trelloMember.trelloToken);
 
-        console.webserv('Caching cards for board %s ', boardID);
+        if (trelloMember) {
+          const memberTrello = new Trello(this.client, trelloMember.trelloToken);
 
-        const response = await memberTrello.getCardPairs(boardID);
-        if (response.status !== 200) {
-          // Cache as null to prevent re-requesting
-          this.cardListMapCache.set(card.id, [Date.now(), null]);
-          console.webserv('Failed to cache list for card %s (board=%s, status=%s)',
-            card.id, boardID, response.status);
-          listID = null;
-        } else {
-          const cards = await response.json();
-          cards.forEach(({ id, idList }) => 
-            this.cardListMapCache.set(id, [Date.now(), idList]));
-          listID = this.cardListMapCache.get(card.id)[1];
+          console.webserv('Caching cards for board %s ', boardID);
+
+          const response = await memberTrello.getCardPairs(boardID);
+          if (response.status !== 200) {
+            // Cache as null to prevent re-requesting
+            this.cardListMapCache.set(card.id, [Date.now(), null]);
+            console.webserv('Failed to cache list for card %s (board=%s, status=%s)',
+              card.id, boardID, response.status);
+            listID = null;
+          } else {
+            const cards = await response.json();
+            cards.forEach(({ id, idList }) => 
+              this.cardListMapCache.set(id, [Date.now(), idList]));
+            listID = this.cardListMapCache.get(card.id)[1];
+          }
         }
       }
     }
