@@ -38,7 +38,7 @@ module.exports = class AddCard extends Command {
     if (cardResponse.stop) return;
     const card = cardResponse.body;
     return message.channel.createMessage(_('cards.created', {
-      name: Util.cutoffText(Util.Escape.markdown(card.name), 50),
+      name: Util.cutoffText(Util.Escape.markdown(card.name || input), 50),
       id: card.shortLink
     }));
   }
