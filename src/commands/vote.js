@@ -13,8 +13,16 @@ module.exports = class Vote extends Command {
       url: 'https://top.gg/bot/620126394390675466/vote',
       name: 'Top.gg'
     }, {
+      url: 'https://top.gg/bot/620126394390675466#reviews',
+      name: 'Top.gg',
+      type: 'vote.review'
+    }, {
       url: 'https://botsfordiscord.com/bot/620126394390675466/vote',
       name: 'Bots For Discord'
+    }, {
+      url: 'https://bots.ondiscord.xyz/bots/620126394390675466',
+      name: 'Bots On Discord',
+      type: 'vote.review'
     }, {
       url: 'https://discord.boats/bot/620126394390675466/vote',
       name: 'Discord Boats'
@@ -22,6 +30,9 @@ module.exports = class Vote extends Command {
       url: 'https://discord.boats/bot/620126394390675466/rate',
       name: 'Discord Boats',
       type: 'vote.rate'
+    }, {
+      url: 'https://discordbotlist.com/bots/taco/upvote',
+      name: 'Discord Bot List'
     }, {
       url: 'https://discordextremelist.xyz/en-US/bots/taco',
       name: 'Discord Extreme List'
