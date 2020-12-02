@@ -1775,10 +1775,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-systeminformation@^4.30.8:
-  version "4.30.8"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.30.8.tgz#dc5c6f83c6e74331b28066dc86650e5c5e906abc"
-  integrity sha512-hXLppzUBxOK8po3Q4Y9xRTESJgYrik+ZDInHh6O8f58TLCTXHtTZs5YbWg06rFk6RfupgNTABLyryQF2yS89NA==
+systeminformation@^4.30.10:
+  version "4.30.10"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.30.10.tgz#7fa94b3da5247a64d070b2b4100c0dbc18e20858"
+  integrity sha512-BndDV7hjRomUGkHK6MO661KUUWcDRbr5SlepDvREidYnR2QJIyHln0iSysH9GPOT7YJgwtswdyg/up/ZFYxHrQ==
 
 table@^5.2.3:
   version "5.4.6"
