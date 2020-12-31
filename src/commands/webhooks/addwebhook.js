@@ -89,8 +89,9 @@ module.exports = class AddWebhook extends Command {
 
   async addWebhook(message, board, userData, trello, _) {
     const availableChannels = this.sortChannels(message.channel.guild.channels)
-      .filter(channel => (channel.type === 5 || channel.type === 0) &&
-        channel.permissionsOf(this.client.user.id).has('manageWebhooks'));
+      .filter(async channel => (channel.type === 5 || channel.type === 0) &&
+        channel.permissionsOf(this.client.user.id).has('manageWebhooks') &&
+        (await channel.getWebhooks()).length < 10);
 
     if (!availableChannels.length)
       return message.channel.createMessage(_('webhook_cmd.no_channels'));
