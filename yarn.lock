@@ -214,10 +214,10 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
-axios@^0.20.0:
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.20.0.tgz#057ba30f04884694993a8cd07fa394cff11c50bd"
-  integrity sha512-ANA4rr2BDcmmAQLOKft2fufrtuvlqR+cXNNinUmvfeSNCOF98PZL+7M/v1zIdGo7OLjEA9J2gXJL+j4zGsl0bA==
+axios@^0.21.0:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
     follow-redirects "^1.10.0"
 
@@ -421,12 +421,12 @@ datejs@^1.0.0-rc3:
   resolved "https://registry.yarnpkg.com/datejs/-/datejs-1.0.0-rc3.tgz#bffa1efedefeb41fdd8a242af55afa01fb58de57"
   integrity sha1-v/oe/t7+tB/diiQq9Vr6AftY3lc=
 
-dbots@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/dbots/-/dbots-5.2.0.tgz#56cc2efc818dba30c96b7bdd88ca4b5e61d3b8c3"
-  integrity sha512-gwEwzhkaKeZgv/9T0r/U/5i6FB/Ug+KMBaH9sRc2gr8pw+FKLFEsBiaAbjRZqP7IGo91lyeWHpq8akTVjhpREA==
+dbots@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/dbots/-/dbots-6.0.0.tgz#b5c51d9f0bd935ef528e807ec468570ff0dc2f7a"
+  integrity sha512-ZWK4eU3PQBeC8rwfKhoP2fewswSETjlubkfllPLDfWreUv9pWvlOAjd0fxFdKbnunC8WTEnztzhSDEKoHDN7RQ==
   dependencies:
-    axios "^0.20.0"
+    axios "^0.21.0"
     promise.allsettled "^1.0.2"
 
 debug@2.6.9:
