@@ -88,10 +88,15 @@ module.exports = class AddWebhook extends Command {
   }
 
   async addWebhook(message, board, userData, trello, _) {
+    const webhookMap = new Map();
+    for (const webhook of await message.guild.getWebhooks()) {
+      webhookMap.set(webhook.channel_id, webhookMap.get(webhook.channel_id) + 1 || 1);
+    }
+
     const availableChannels = this.sortChannels(message.channel.guild.channels)
+      .filter(channel => webhookMap.get(channel.id) < 10)
       .filter(async channel => (channel.type === 5 || channel.type === 0) &&
-        channel.permissionsOf(this.client.user.id).has('manageWebhooks') &&
-        (await channel.getWebhooks()).length < 10);
+        channel.permissionsOf(this.client.user.id).has('manageWebhooks'));
 
     if (!availableChannels.length)
       return message.channel.createMessage(_('webhook_cmd.no_channels'));
