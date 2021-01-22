@@ -1,6 +1,6 @@
 {
   "name": "trello-bot",
-  "version": "7.2.3",
+  "version": "7.2.4",
   "description": "Manage Trello boards in Discord",
   "main": "src/bot.js",
   "scripts": {
