@@ -419,6 +419,7 @@ module.exports = class EditWebhook extends Command {
     const addCommand = this.client.cmds.get('addwebhook');
     const thisPatch = {
       client: this.client,
+      sortChannels: this.sortChannels,
       finalizeSetup(_, __, webhook) {
         return webhook;
       }
