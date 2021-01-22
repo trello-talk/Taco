@@ -63,7 +63,7 @@ module.exports = class Card extends Command {
           `**${_('trello.last_act')}:** ${lastAct.format('LLLL')} *(${lastAct.fromNow()})*\n` +
           (json.due ? `**${_('trello.due')}:** ${json.dueComplete ? checkEmoji : uncheckEmoji} ${
             due.format('LLLL')} *(${due.fromNow()})*\n` : '') +
-          (json.cover.sharedSourceUrl ?
+          (json.cover && json.cover.sharedSourceUrl ?
             `**${_('trello.cover_source')}:** ${json.cover.sharedSourceUrl}\n` : '') +
           `\n${json.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n` +
           (json.membersVoted.length ? `${hasVoted ? checkEmoji : uncheckEmoji} ${_('trello.voted')} (${
