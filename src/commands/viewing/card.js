@@ -32,7 +32,7 @@ module.exports = class Card extends Command {
       response: await trello.getCard(card.id),
       client: this.client, message, _ });
     if (handle.stop) return;
-    if (handle.response.status === 404)
+    if (handle.response.status === 404 || !cardHandle.body)
       return message.channel.createMessage(_('cards.error'));
 
     const json = cardHandle.body;
