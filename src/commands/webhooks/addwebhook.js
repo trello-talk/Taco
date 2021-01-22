@@ -89,7 +89,7 @@ module.exports = class AddWebhook extends Command {
 
   async addWebhook(message, board, userData, trello, _) {
     const webhookMap = new Map();
-    for (const webhook of await message.guild.getWebhooks()) {
+    for (const webhook of await message.channel.guild.getWebhooks()) {
       webhookMap.set(webhook.channel_id, webhookMap.get(webhook.channel_id) + 1 || 1);
     }
 
