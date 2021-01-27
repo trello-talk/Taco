@@ -94,7 +94,7 @@ module.exports = class AddWebhook extends Command {
     }
 
     const availableChannels = this.sortChannels(message.channel.guild.channels)
-      .filter(channel => webhookMap.get(channel.id) < 10)
+      .filter(channel => (webhookMap.get(channel.id) || 0) < 10)
       .filter(channel => (channel.type === 5 || channel.type === 0) &&
         channel.permissionsOf(this.client.user.id).has('manageWebhooks'));
 
