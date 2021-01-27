@@ -29,7 +29,7 @@
     "pg": "^8.5.1",
     "redis": "^3.0.2",
     "require-reload": "^0.2.2",
-    "sequelize": "^6.4.0",
+    "sequelize": "^6.5.0",
     "systeminformation": "^4.34.9",
     "winston": "^3.3.3"
   },
