@@ -13,6 +13,8 @@ module.exports = class Events {
   async onMessage(message) {
     this.client.stats.messagesRecieved++;
     if (message.author.bot || message.author.system) return;
+    // Don't respond to interaction responses
+    if (message.type === 20) return;
 
     // Check to see if bot can send messages
     if (message.channel.type !== 1 &&
