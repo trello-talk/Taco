@@ -226,7 +226,7 @@ class WebServer {
 
     const filter = findFilter(request, this);
     if (!filter) {
-      console.webserv(`Unknown filter: ${filter}`, request.body.action);
+      console.webserv(`Unknown filter: ${request.body.action.type}`, request.body.action.data);
       return response.status(200).send('Recieved');
     }
 
