@@ -281,6 +281,7 @@ module.exports = class EditWebhook extends Command {
         'MOVE_CARD_FROM_BOARD',
         'MOVE_CARD_TO_BOARD',
         'COPY_CARD',
+        'EMAIL_CARD',
       ],
       cardUpdate: [
         'UPDATE_CARD_NAME',
