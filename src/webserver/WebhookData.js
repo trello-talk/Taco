@@ -386,7 +386,8 @@ class WebhookData {
       this.webserver.batches.delete(this.webhook.webhookID);
       try {
         this.client.stats.onWebhookSend(this.webhook.webhookID);
-        console.info('Posting webhook %d (guild=%s)', this.webhook.webhookID, this.webhook.guildID);
+        console.info('Posting webhook %d (guild=%s, time=%d)',
+          this.webhook.webhookID, this.webhook.guildID, Date.now());
         return await this.webserver.client.executeWebhook(this.webhook.webhookID,
           this.webhook.webhookToken, { embeds });
       } catch (e) {

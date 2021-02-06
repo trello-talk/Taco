@@ -225,7 +225,10 @@ class WebServer {
     }
 
     const filter = findFilter(request, this);
-    if (!filter) return response.status(200).send('Recieved');
+    if (!filter) {
+      console.webserv(`Unknown filter: ${filter}`, request.body.action);
+      return response.status(200).send('Recieved');
+    }
 
     try {
       const webhooks = await this.client.pg.models.get('webhook').findAll({ where: {
