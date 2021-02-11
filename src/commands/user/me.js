@@ -28,10 +28,10 @@ module.exports = class Me extends Command {
 
     const embed = {
       author: {
-        name: json.prefs.privacy.fullName !== 'public' ?
+        name: json.prefs && json.prefs.privacy && json.prefs.privacy.fullName !== 'public' ?
           json.username : `${Util.cutoffText(Util.Escape.markdown(json.fullName),
             253 - json.username.length)} (${json.username})`,
-        icon_url: json.prefs.privacy.avatar !== 'public' ? null :
+        icon_url: json.prefs && json.prefs.privacy && json.prefs.privacy.avatar !== 'public' ? null :
           (json.avatarUrl ? json.avatarUrl + '/170.png' : null),
         url: json.url
       },
@@ -47,16 +47,20 @@ module.exports = class Me extends Command {
           `${_.toLocaleString(json.idOrganizations.length)} ${
             _.numSuffix('words.orgs', json.idOrganizations.length)}`,
         inline: true
-      }, {
-        // Preferences
+      }]
+    };
+
+    // Preferences
+    if (json.prefs) {
+      embed.fields.push({
         name: '*' + _('words.pref.many') + '*',
-        value: `**${_('trello.locale')}:** ${json.prefs.locale}\n\n` +
+        value: `**${_('trello.locale')}:** ${json.prefs.locale}\n` +
           `${json.prefs.colorBlind ? checkEmoji : uncheckEmoji} ${_('trello.colorblind')}\n` +
           `${json.prefs.sendSummaries ? checkEmoji : uncheckEmoji} ${_('trello.summ')}\n` +
           `${json.marketingOptIn.optedIn ? checkEmoji : uncheckEmoji} ${_('trello.marketing')}`,
         inline: true
-      }]
-    };
+      });
+    }
 
     // Products
     if (json.products.length) {

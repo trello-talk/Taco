@@ -27,9 +27,9 @@ module.exports = class Board extends Command {
     const checkEmoji = emojiFallback('632444546684551183', '☑️');
     const uncheckEmoji = emojiFallback('632444550115491910', '⬜');
 
-    const boardColor = json.prefs.backgroundTopColor ?
+    const boardColor = json.prefs && json.prefs.backgroundTopColor ?
       parseInt(json.prefs.backgroundTopColor.slice(1), 16) : this.client.config.embedColor;
-    const backgroundImg = json.prefs.backgroundImageScaled ?
+    const backgroundImg = json.prefs && json.prefs.backgroundImageScaled ?
       json.prefs.backgroundImageScaled.reverse()[1].url : null;
     const lastAct = _.moment(json.dateLastActivity);
     const archListCount = json.lists.filter(list => list.closed).length;
@@ -54,7 +54,7 @@ module.exports = class Board extends Command {
             `**${_('words.orgs.one')}:** [${
               Util.cutoffText(Util.Escape.markdown(json.organization.displayName), 50)
             }](https://trello.com/${json.organization.name})\n` : '') +
-          (json.prefs.backgroundImageScaled ?
+          (json.prefs && json.prefs.backgroundImageScaled ?
             `**${_('words.bg_img')}:** [${_('words.link.one')}](${backgroundImg})\n` : '')
       }, {
         // Counts
@@ -67,8 +67,12 @@ module.exports = class Board extends Command {
             _.toLocaleString(archCardCount)} ${_('trello.archived_lower')})\n` +
           `${_.toLocaleString(json.labels.length)} ${_.numSuffix('words.label', json.labels.length)}\n`,
         inline: true
-      }, {
-        // Preferences
+      }]
+    };
+
+    // Preferences
+    if (json.prefs) {
+      embed.fields.push({
         name: '*' + _('words.pref.many') + '*',
         value:`**${_('words.visibility')}:** ${_(`trello.perm_levels.${json.prefs.permissionLevel}`)}\n` +
           `**${_('words.comment.many')}:** ${_(`trello.comment_perms.${json.prefs.comments}`)}\n` +
@@ -80,15 +84,16 @@ module.exports = class Board extends Command {
           (json.prefs.permissionLevel === 'org' ?
             `${json.prefs.selfJoin ? checkEmoji : uncheckEmoji} ${_('trello.self_join')}\n` : ''),
         inline: true
-      }, {
-        // User Preferences
-        name: '*' + _('words.user_pref.many') + '*',
-        value: `${json.starred ? checkEmoji : uncheckEmoji} ${_('trello.starred')}\n` +
-          `${json.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n` +
-          `${json.pinned ? checkEmoji : uncheckEmoji} ${_('trello.pinned')}`,
-        inline: true
-      }]
-    };
+      });
+    }
+
+    embed.fields.push({
+      name: '*' + _('words.user_pref.many') + '*',
+      value: `${json.starred ? checkEmoji : uncheckEmoji} ${_('trello.starred')}\n` +
+        `${json.subscribed ? checkEmoji : uncheckEmoji} ${_('trello.subbed')}\n` +
+        `${json.pinned ? checkEmoji : uncheckEmoji} ${_('trello.pinned')}`,
+      inline: true
+    });
 
     return message.channel.createMessage({ embed });
   }
