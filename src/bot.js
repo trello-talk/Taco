@@ -176,9 +176,9 @@ class TrelloBot extends Eris.Client {
     });
 
     this.poster.post().then(this.onPost).catch(this.onPostFail);
-    this.poster.addHandler('autopost', this.onPost);
+    this.poster.addHandler('autopostSuccess', this.onPost);
     this.poster.addHandler('autopostFail', this.onPostFail.bind(this, true));
-    this.poster.addHandler('post', this.onPostOne);
+    this.poster.addHandler('postSuccess', this.onPostOne);
     this.poster.addHandler('postFail', this.onPostFail);
     this.poster.startInterval();
   }
