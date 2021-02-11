@@ -103,11 +103,11 @@ module.exports = class Events {
     }
   }
 
-  onReaction(message, emoji, userID) {
-    const id = `${message.id}:${userID}`;
+  onReaction(message, emoji, member) {
+    const id = `${message.id}:${member.id}`;
     if (this.client.messageAwaiter.reactionCollectors.has(id)) {
       const collector = this.client.messageAwaiter.reactionCollectors.get(id);
-      collector._onReaction(emoji, userID);
+      collector._onReaction(emoji, member.id);
     }
   }
 
