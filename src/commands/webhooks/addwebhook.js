@@ -114,7 +114,7 @@ module.exports = class AddWebhook extends Command {
     try {
       const webhook = await channel.createWebhook({
         name: Util.cutoffText(board.name, 32)
-      }, `[${message.author.username}#${message.author.discriminator} ${message.author.id}] Webhook Setup`);
+      }, `[${message.author.id}] Webhook Setup`);
       return this.finalizeSetup(message, board, webhook, userData, trello, _);
     } catch (e) {
       return message.channel.createMessage(_('webhook_cmd.couldnt_create'));
