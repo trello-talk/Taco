@@ -46,7 +46,7 @@ class TrelloBot extends Eris.Client {
     if (config.airbrake)
       this.airbrake = new Airbrake.Notifier({
         ...config.airbrake,
-        keysBlacklist: [
+        keysBlocklist: [
           config.token,
           config.redis.password,
           config.pg.password,
