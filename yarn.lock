@@ -420,10 +420,10 @@ datejs@^1.0.0-rc3:
   resolved "https://registry.yarnpkg.com/datejs/-/datejs-1.0.0-rc3.tgz#bffa1efedefeb41fdd8a242af55afa01fb58de57"
   integrity sha1-v/oe/t7+tB/diiQq9Vr6AftY3lc=
 
-dbots@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/dbots/-/dbots-6.1.0.tgz#1d2bab2530e25d94c0dcbbae22dbb5ecf3193b09"
-  integrity sha512-KNK2uZZBSHzw3JVdwbH6/8LjVRJMOVIW+iJjNAsU9/EEJCO9STD6bS9ACZT6zTPOCmfJusoRZji7ycXF0Gs0mA==
+dbots@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/dbots/-/dbots-7.0.1.tgz#fd4aef2151a01fedb2f9fc577829749cc7e0c9a6"
+  integrity sha512-WUL3VXjQcQ4Q620JeYpsvFiGhA1qHqo8OG8hmc2Qbe1zmGrfQWUE6pbYviiT3lkPVXEeheBxbwOfjRnUhrnWQQ==
   dependencies:
     axios "^0.21.0"
     promise.allsettled "^1.0.2"
