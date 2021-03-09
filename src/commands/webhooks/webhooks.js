@@ -37,10 +37,10 @@ module.exports = class Webhooks extends Command {
         
         if (item.discordWebhook)
           result += `${
-            Util.cutoffText(Util.Escape.markdown(item.discordWebhook.name), 50)} ` + 
+            Util.cutoffText(Util.Escape.markdown(item.discordWebhook.name), 40)} ` + 
             `(<@${item.discordWebhook.user.id}>)`;
         else
-          result += `[${_('webhook_cmd.unknown')}] (${_('words.board.one')} \`${item.modelID}\`)`;
+          result += `[${_('webhook_cmd.unknown')}]`;
 
         return result;
       }
