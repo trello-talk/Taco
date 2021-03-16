@@ -43,7 +43,8 @@ module.exports = class Webhooks extends Command {
           result += `[${_('webhook_cmd.unknown')}]`;
 
         return result;
-      }
+      },
+      itemsPerPage: 10
     });
 
     if (args[0])

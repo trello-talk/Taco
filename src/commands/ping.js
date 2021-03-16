@@ -13,11 +13,11 @@ module.exports = class Ping extends Command {
       .map(shard => shard.latency).reduce((prev, val) => prev + val, 0);
     const timeBeforeMessage = Date.now();
     const sentMessage = await message.channel.createMessage(`> :ping_pong: ***${_('ping.message')}***\n` +
-      `> ${_('ping.ws', { ms: _.toLocaleString(currentPing) })}`);
+      `> WS: ${_.toLocaleString(currentPing)}`);
     await sentMessage.edit(
       `> :ping_pong: ***${_('ping.message')}***\n` +
-      `> ${_('ping.ws', { ms: _.toLocaleString(currentPing) })}\n` +
-      `> ${_('ping.rest', { ms: _.toLocaleString(Date.now() - timeBeforeMessage) })}`);
+      `> WS: ${_.toLocaleString(currentPing)}\n` +
+      `> REST: ${_.toLocaleString(Date.now() - timeBeforeMessage)}`);
   }
 
   get metadata() { return {
