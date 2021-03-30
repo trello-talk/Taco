@@ -30,7 +30,7 @@
     "redis": "^3.0.2",
     "require-reload": "^0.2.2",
     "sequelize": "^6.6.2",
-    "systeminformation": "^5.6.9",
+    "systeminformation": "^5.6.10",
     "winston": "^3.3.3"
   },
   "devDependencies": {
