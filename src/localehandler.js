@@ -124,7 +124,7 @@ class LocaleHandler {
      */
     _.toDurationFormat = number => {
       return moment
-        .duration(67223453239)
+        .duration(number)
         .format(`y [y], M [M], w [w], d [d], h [h], m [m] [${_('words.and')}] s [s]`);
     };
 
