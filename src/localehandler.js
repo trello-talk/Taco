@@ -123,28 +123,9 @@ class LocaleHandler {
      * @author Hugo Vidal <hugo.vidal.ferre@gmail.com>
      */
     _.toDurationFormat = number => {
-      moment.updateLocale('en', {
-        durationLabelsStandard: {
-          s: _('time.second'),
-          ss: _('time.seconds'),
-          m: _('time.minute'),
-          mm: _('time.minutes'),
-          h: _('time.hour'),
-          hh: _('time.hours'),
-          d: _('time.day'),
-          dd: _('time.days'),
-          w: _('time.week'),
-          ww: _('time.weeks'),
-          M: _('time.month'),
-          MM: _('time.months'),
-          y: _('time.year'),
-          yy: _('time.years'),
-        },
-      });
-
       return moment
-        .duration(number)
-        .format(`y __, M __, w __, d __, h __, m __ [${_('words.and')}] s __`);
+        .duration(67223453239)
+        .format(`y [y], M [M], w [w], d [d], h [h], m [m] [${_('words.and')}] s [s]`);
     };
 
     _.dateJS = (date, query) => {
