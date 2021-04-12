@@ -30,7 +30,7 @@ module.exports = class Info extends Command {
         + `**:computer: ${this.client.user.username} ${_('words.version')}** ${this.client.pkg.version}\n`
 
         + `**:clock: ${_('words.uptime')}**: ${
-          process.uptime() ? _.toDurationFormat(process.uptime()) : '???'}\n`
+          this.client.uptime ? _.toDurationFormat(this.client.uptime) : '???'}\n`
 
         + `**:gear: ${_('words.mem_usage')}**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
 
