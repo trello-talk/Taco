@@ -119,7 +119,7 @@ class LocaleHandler {
       moment(...args).locale((locale || this.config.sourceLocale).replace('_', '-'));
 
     /**
-     * @example 514279423 equals "5 days, 22 hours, 51 minutes and 19 seconds"
+     * @example 514279423 equals "5 d, 22 h, 51 m and 19 s"
      * @author Hugo Vidal <hugo.vidal.ferre@gmail.com>
      */
     _.toDurationFormat = number => {
