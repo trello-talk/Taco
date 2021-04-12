@@ -24,6 +24,7 @@
     "influx": "^5.8.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "moment-duration-format": "^2.3.2",
     "mustache": "^4.2.0",
     "node-fetch": "^2.6.1",
     "pg": "^8.5.1",
