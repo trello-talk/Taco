@@ -27,6 +27,7 @@
     "mustache": "^4.2.0",
     "node-fetch": "^2.6.1",
     "pg": "^8.5.1",
+    "pretty-ms": "^7.0.1",
     "redis": "^3.1.0",
     "require-reload": "^0.2.2",
     "sequelize": "^6.6.2",
@@ -38,7 +39,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trello-talk/TrelloBot.git"
+    "url": "git+https://github.com/trello-talk/Taco.git"
   },
   "author": "Snazzah <suggesttosnazzy@gmail.com>",
   "license": "MIT"

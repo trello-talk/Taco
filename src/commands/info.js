@@ -1,5 +1,6 @@
 const Command = require('../structures/Command');
 const Util = require('../util');
+const prettyMs = require('pretty-ms');
 
 module.exports = class Info extends Command {
   get name() { return 'info'; }
@@ -29,8 +30,7 @@ module.exports = class Info extends Command {
       description: _('info.faux') + '\n\n'
         + `**:computer: ${this.client.user.username} ${_('words.version')}** ${this.client.pkg.version}\n`
 
-        + `**:clock: ${_('words.uptime')}**: ${
-          process.uptime() ? Util.toHHMMSS(process.uptime().toString()) : '???'}\n`
+        + `**:clock: ${_('words.uptime')}**: ${prettyMs(Math.round(process.uptime()) * 1000)}\n`
 
         + `**:gear: ${_('words.mem_usage')}**: ${(process.memoryUsage().heapUsed / 1000000).toFixed(2)} MB\n`
 
