@@ -420,10 +420,10 @@ datejs@^1.0.0-rc3:
   resolved "https://registry.yarnpkg.com/datejs/-/datejs-1.0.0-rc3.tgz#bffa1efedefeb41fdd8a242af55afa01fb58de57"
   integrity sha1-v/oe/t7+tB/diiQq9Vr6AftY3lc=
 
-dbots@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/dbots/-/dbots-8.0.2.tgz#60c24f417fd2b2d06aa4b1537b8a537e2011823e"
-  integrity sha512-j2tMmxXgk+X114EeSKwA2FwbGmv4oL4aH7279+rZDxvi5xLCQCYx+rQjKt3D7jsRaaKBDTpbtjBtiUgoxhZfqQ==
+dbots@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/dbots/-/dbots-9.0.0.tgz#54bac90d996bb72cfe786e8bc41af885b3a97bc9"
+  integrity sha512-YJ18eMAwrQ3nfYWmuqyoj6lFsrSYD7Vy/sy0RqcLG/efDrDq30hvCAZ34UMNfbHaQBMMiP0IFu+c67/NAxOXWw==
   dependencies:
     axios "^0.21.0"
     promise.allsettled "^1.0.2"
@@ -609,10 +609,10 @@ eslint-visitor-keys@^2.0.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-2.0.0.tgz#21fdc8fbcd9c795cc0321f0563702095751511a8"
   integrity sha512-QudtT6av5WXels9WjIM7qz1XD1cWGvX4gGXvp/zBn9nXG02D0utdU3Em2m/QjTnrsk6bBjmCygl3rmj118msQQ==
 
-eslint@^7.23.0:
-  version "7.23.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.23.0.tgz#8d029d252f6e8cf45894b4bee08f5493f8e94325"
-  integrity sha512-kqvNVbdkjzpFy0XOszNwjkKzZ+6TcwCQ/h+ozlcIWwaimBBuhlQ4nN6kbiM2L+OjDcznkTJxzYfRFH92sx4a0Q==
+eslint@^7.24.0:
+  version "7.24.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.24.0.tgz#2e44fa62d93892bfdb100521f17345ba54b8513a"
+  integrity sha512-k9gaHeHiFmGCDQ2rEfvULlSLruz6tgfA8DEn+rY9/oYPFFTlz55mM/Q/Rij1b2Y42jwZiK3lXvNTw6w6TXzcKQ==
   dependencies:
     "@babel/code-frame" "7.12.11"
     "@eslint/eslintrc" "^0.4.0"
@@ -1775,10 +1775,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-systeminformation@^5.6.10:
-  version "5.6.10"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.6.10.tgz#832fb1e57a798f4419123119e0e90ed8eeb38e56"
-  integrity sha512-OHOsd0OuVxocAzrG0TXz4yw7bixR6qrYot9G3w8oNX8OF7hjmGTePCieVvSfgWNgK2NBA5tfziwxTfNqX0ej9g==
+systeminformation@^5.6.12:
+  version "5.6.12"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.6.12.tgz#cdb8338eef48c219352d95f2b0839f9ad5399fae"
+  integrity sha512-prJAt+iS2ITeygjLt/FGtN1qsIQHrRePCUqWtP0hGv6JsS0LSQTR+y5hWAd4frUIM/sjG95jHFUK1gx244KwUA==
 
 table@^6.0.4:
   version "6.0.4"
