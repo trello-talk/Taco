@@ -9,7 +9,7 @@
     "eslint:fix": "eslint ./src --fix"
   },
   "dependencies": {
-    "@airbrake/node": "^2.1.4",
+    "@airbrake/node": "^2.1.5",
     "abort-controller": "^3.0.0",
     "bottleneck": "^2.19.5",
     "cat-loggr": "^1.1.0",
