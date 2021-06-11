@@ -12,7 +12,7 @@
     "@airbrake/node": "^2.1.5",
     "abort-controller": "^3.0.0",
     "bottleneck": "^2.19.5",
-    "cat-loggr": "^1.1.0",
+    "cat-loggr": "^1.2.2",
     "cron": "^1.8.2",
     "datejs": "^1.0.0-rc3",
     "dbots": "^9.0.0",
