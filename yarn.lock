@@ -284,13 +284,13 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-cat-loggr@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/cat-loggr/-/cat-loggr-1.1.0.tgz#ed47d95213a20c619d9c36ba4ae1272f4fa8ef7c"
-  integrity sha512-91HA5xug2mYbfBqKd4ldAUAo7rTQpA39Cy3rzM7rfPynueiYSBe60tskwP8SriG+UwZKCsKycTk7FyR1N557zg==
+cat-loggr@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/cat-loggr/-/cat-loggr-1.2.2.tgz#2496fc66e87665a65a1334e60a7a138bbb96c46e"
+  integrity sha512-4CiRwzPZ4E5/1XX+zgu4cxUZ0otElnSYUjx5KZO+ZhthGUSH5ly7UrMXqcYHC/yep+pv1HhXJAP8KkCPt7G2AA==
   dependencies:
     chalk "^2.4.1"
-    moment "^2.22.2"
+    dayjs "^1.10.5"
 
 chalk@^2.0.0, chalk@^2.4.1:
   version "2.4.2"
@@ -429,6 +429,11 @@ datejs@^1.0.0-rc3:
   version "1.0.0-rc3"
   resolved "https://registry.yarnpkg.com/datejs/-/datejs-1.0.0-rc3.tgz#bffa1efedefeb41fdd8a242af55afa01fb58de57"
   integrity sha1-v/oe/t7+tB/diiQq9Vr6AftY3lc=
+
+dayjs@^1.10.5:
+  version "1.10.5"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.5.tgz#5600df4548fc2453b3f163ebb2abbe965ccfb986"
+  integrity sha512-BUFis41ikLz+65iH6LHQCDm4YPMj5r1YFLdupPIyM4SGcXMmtiLQ7U37i+hGS8urIuqe7I/ou3IS1jVc4nbN4g==
 
 dbots@^9.0.0:
   version "9.0.0"
@@ -1227,7 +1232,7 @@ moment-timezone@^0.5.31, moment-timezone@^0.5.x:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.22.2, moment@^2.26.0, moment@^2.29.1:
+"moment@>= 2.9.0", moment@^2.26.0, moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
