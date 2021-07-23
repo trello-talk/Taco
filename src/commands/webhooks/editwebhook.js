@@ -66,7 +66,7 @@ module.exports = class EditWebhook extends Command {
       guildID: message.guildID
     }});
 
-    if (maxWebhooks <= webhookCount) {
+    if (maxWebhooks < webhookCount) {
       const webhooks = await this.client.pg.models.get('webhook').findAll({
         limit: maxWebhooks,
         order: [['createdAt', 'ASC']],
