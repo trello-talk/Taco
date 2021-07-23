@@ -8,7 +8,7 @@
 
 ***[tacobot.app](https://tacobot.app/) • [Invite Taco](https://tacobot.app/bot) • [Support Server](https://tacobot.app/server)***
 
-![Discord Shield](https://discordapp.com/api/guilds/617911034555924502/widget.png?style=shield) [![Discord Bots](https://top.gg/api/widget/servers/620126394390675466.svg?rightcolor=93a01e)](https://top.gg/bot/620126394390675466) ![StatusWidget](http://translate.trellobot.xyz/widgets/trellobot/-/svg-badge.svg) [![DeepScan grade](https://deepscan.io/api/teams/11934/projects/14875/branches/287017/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=11934&pid=14875&bid=287017)
+![Discord Shield](https://discordapp.com/api/guilds/617911034555924502/widget.png?style=shield) [![Discord Bots](https://top.gg/api/widget/servers/620126394390675466.svg?rightcolor=93a01e)](https://top.gg/bot/620126394390675466) ![TranslationWidget](https://translate.tacobot.app/widgets/trellobot/-/svg-badge.svg) [![DeepScan grade](https://deepscan.io/api/teams/11934/projects/14875/branches/287017/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=11934&pid=14875&bid=287017)
 
   <br>
 
