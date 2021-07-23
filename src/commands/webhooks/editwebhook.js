@@ -60,7 +60,28 @@ module.exports = class EditWebhook extends Command {
     }
   }
 
-  async exec(message, { args, _, trello, userData }) {
+  async webhookAvailable(message, webhookID, serverData) {
+    const maxWebhooks = serverData ? serverData.maxWebhooks : 5;
+    const webhookCount = await this.client.pg.models.get('webhook').count({ where: {
+      guildID: message.guildID
+    }});
+
+    if (maxWebhooks <= webhookCount) {
+      const webhooks = await this.client.pg.models.get('webhook').findAll({
+        limit: maxWebhooks,
+        order: [['createdAt', 'ASC']],
+        where: {
+          guildID: message.guildID
+        }
+      });
+
+      return !!webhooks.find((webhook) => webhook.id === webhookID);
+    }
+
+    return true;
+  }
+
+  async exec(message, { args, _, trello, userData, serverData }) {
     const requestedID = parseInt(args[0]);
     if (isNaN(requestedID) || requestedID < 1)
       return message.channel.createMessage(_('webhook_cmd.invalid'));
@@ -72,6 +93,10 @@ module.exports = class EditWebhook extends Command {
 
     if (!webhook)
       return message.channel.createMessage(_('webhook_cmd.not_found'));
+
+    const available = await this.webhookAvailable(message, requestedID, serverData);
+    if (!available)
+      return message.channel.createMessage(_('webhook_cmd.wh_expire'));
 
     const locale = webhook.locale ?
       (this.client.locale.locales.get(webhook.locale) || null) : null;
