@@ -3,7 +3,6 @@ const dbots = require('dbots');
 const Postgres = require('./postgres');
 const Database = require('./database');
 const EventHandler = require('./events');
-const Webserver = require('./webserver');
 const CommandLoader = require('./commandloader');
 const LocaleHandler = require('./localehandler');
 const MessageAwaiter = require('./messageawaiter');
@@ -54,9 +53,6 @@ class TrelloBot extends Eris.Client {
         ],
         version: pkg.version
       });
-
-    if (this.config.webserver.enabled)
-      this.webserver = new Webserver(this);
 
     // Events
     this.on('ready', () => console.info('All shards ready.'));
@@ -154,9 +150,6 @@ class TrelloBot extends Eris.Client {
     // Botlist poster
     if (Object.keys(this.config.botlists).length) this.initPoster();
 
-    if (this.webserver)
-      await this.webserver.start();
-
     if (this.config.influx.enabled) {
       this.stats.connect();
       this.stats.cron.start();
@@ -213,9 +206,6 @@ class TrelloBot extends Eris.Client {
       this.waitTill('disconnect')
         .then(() => this.db.disconnect())
         .then(() => {
-          if (this.webserver)
-            return this.webserver.stop();
-        }).then(() => {
           console.info('It\'s all gone...');
           resolve();
         });

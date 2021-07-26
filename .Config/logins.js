@@ -1,8 +1,6 @@
 module.exports = {
   // [Object] Trello config
   trello: {
-    // [string] The trello OAuth secret (https://trello.com/app-key#secret)
-    secret: "",
     // [string] The trello API key (https://trello.com/app-key#key)
     key: ""
   },

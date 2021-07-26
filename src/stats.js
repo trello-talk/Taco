@@ -23,12 +23,6 @@ module.exports = class StatsManager extends EventEmitter {
      */
     this.commandCounts = new Map();
 
-    /**
-     * Array of webhook IDs that have been used between crons
-     */
-    this.activeWebhooks = [];
-
-    this.webhooksSent = 0;
     this.commandsRan = 0;
     this.messagesRecieved = 0;
     this.requestsSent = 0;
@@ -116,14 +110,6 @@ module.exports = class StatsManager extends EventEmitter {
     this.commandCounts.set(commandName, commandCount);
   }
 
-  onWebhookSend(webhookID) {
-    if (!this.influx) return;
-
-    if (!this.activeWebhooks.includes(webhookID))
-      this.activeWebhooks.push(webhookID);
-    this.webhooksSent++;
-  }
-
   /**
    * @private
    */
@@ -158,17 +144,6 @@ module.exports = class StatsManager extends EventEmitter {
       },
       timestamp
     });
-
-    if (this.client.config.webserver.enabled)
-      influxPoints.push({
-        measurement: 'webhook_traffic',
-        tags: defaultTags,
-        fields: {
-          sent: this.webhooksSent,
-          sentUnique: this.activeWebhooks.length
-        },
-        timestamp
-      });
     
     // Insert command counts
     this.commandCounts.forEach((counts, name) => influxPoints.push({
