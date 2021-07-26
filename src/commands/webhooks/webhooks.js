@@ -13,9 +13,12 @@ module.exports = class Webhooks extends Command {
 
   async exec(message, { args, _ }) {
     const discordWebhooks = await message.channel.guild.getWebhooks();
-    const webhooks = (await this.client.pg.models.get('webhook').findAll({ where: {
-      guildID: message.guildID
-    }}))
+    const webhooks = (await this.client.pg.models.get('webhook').findAll({
+      order: [['createdAt', 'ASC']],
+      where: {
+        guildID: message.guildID
+      }
+    }))
       .map(wh => wh.get({ plain: true }))
       .map(wh => ({
         ...wh,
