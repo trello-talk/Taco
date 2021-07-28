@@ -1508,10 +1508,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-systeminformation@^5.7.12:
-  version "5.7.12"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.7.12.tgz#9acbcb75149ce50db2ff2dc3e6c3f046aa038f8d"
-  integrity sha512-rRMi8JafAXSrGd/aIxgmIxJyGRgRzyOZd75JilvVw13vD98aEaAJzKtezba5DYlTC/86c/XiZzd6VCed5fr/sA==
+systeminformation@^5.7.13:
+  version "5.7.13"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.7.13.tgz#372f7a2f87e7f16fe14544027f0cb108a6a700e9"
+  integrity sha512-yGzRLLdZ4xR37+3WM89rFG1zEQ10BqefeCv0YUfXp26bZGPoZtGQt/IEtIa40i1VmGBMGFTQCVClZ7/optxtvw==
 
 table@^6.0.9:
   version "6.7.1"
