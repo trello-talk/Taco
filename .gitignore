@@ -1,8 +1,9 @@
 node_modules
 config/default.json
-assets/video/thumbnail
 Config
 cache
 package-lock.json
 .idea
 yarn-error.log
+.env
+db/*.sql

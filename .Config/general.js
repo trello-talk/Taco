@@ -18,8 +18,6 @@ module.exports = {
   sourceLocale: 'en_US',
   // [string] Where the locales will be found
   localePath: "./locale/bot",
-  // [string] Where the postgres models will be found
-  modelsPath: "./src/models",
   // [object?] Airbrake config (https://airbrake.io/)
   airbrake: {
     projectId: '',

@@ -2,6 +2,7 @@ const Influx = require('influx');
 const si = require('systeminformation');
 const { CronJob } = require('cron');
 const { EventEmitter } = require('eventemitter3');
+const prisma = require('./prisma');
 const platform = require('os').platform();
 
 /**
@@ -124,8 +125,8 @@ module.exports = class StatsManager extends EventEmitter {
     };
 
     // Get postgres counts
-    const dbUserCount = await this.client.pg.models.get('user').count();
-    const webhookCount = await this.client.pg.models.get('webhook').count();
+    const dbUserCount = await prisma.user.count();
+    const webhookCount = await prisma.webhook.count();
 
     // Insert bot counts & webhook traffic
     influxPoints.push({

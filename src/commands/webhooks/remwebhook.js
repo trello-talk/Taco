@@ -1,3 +1,4 @@
+const prisma = require('../../prisma');
 const Command = require('../../structures/Command');
 const Trello = require('../../structures/Trello');
 
@@ -15,10 +16,12 @@ module.exports = class RemWebhook extends Command {
     if (isNaN(requestedID) || requestedID < 1)
       return message.channel.createMessage(_('webhook_cmd.invalid'));
 
-    const webhook = await this.client.pg.models.get('webhook').findOne({ where: {
-      guildID: message.guildID,
-      id: requestedID
-    }});
+    const webhook = await prisma.webhook.findUnique({
+      where: {
+        guildID: message.guildID,
+        id: requestedID
+      }
+    });
 
     if (!webhook)
       return message.channel.createMessage(_('webhook_cmd.not_found'));
@@ -26,17 +29,17 @@ module.exports = class RemWebhook extends Command {
     if (await this.client.messageAwaiter.confirm(message, _, {
       header: _('webhook_cmd.confirm_delete')
     })) {
-      await this.client.pg.models.get('webhook').destroy({ where: { id: webhook.id } });
+      await prisma.webhook.delete({ where: { id: webhook.id } });
       
       // Remove the internal webhook if there are no more webhooks depending on it
-      const trelloMember = await this.client.pg.models.get('user').findOne({ where: {
-        trelloID: webhook.memberID
-      }});
+      const trelloMember = await prisma.user.findUnique({
+        where: { trelloID: webhook.memberID }
+      });
       if (trelloMember) {
         const trello = new Trello(this.client, trelloMember.trelloToken);
-        const webhooks = await this.client.pg.models.get('webhook').findAll({ where: {
-          trelloWebhookID: webhook.trelloWebhookID
-        }});
+        const webhooks = await prisma.webhook.findMany({
+          where: { trelloWebhookID: webhook.trelloWebhookID }
+        });
         if (!webhooks.length)
           await trello.deleteWebhook(webhook.trelloWebhookID);
       }

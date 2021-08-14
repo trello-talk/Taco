@@ -11,13 +11,6 @@ module.exports = {
     password: "",
     prefix: "trello:"
   },
-  // [Object] Postgres config
-  pg: {
-    user: "postgres",
-    host: "127.0.0.1",
-    database: "trello",
-    password: ""
-  },
   // [Object] InfluxDB config
   influx: {
     // [boolean] Whether or not to post statistics to influx

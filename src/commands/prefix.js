@@ -1,3 +1,4 @@
+const prisma = require('../prisma');
 const Command = require('../structures/Command');
 const GenericPrompt = require('../structures/GenericPrompt');
 const Util = require('../util');
@@ -63,10 +64,14 @@ module.exports = class Prefix extends Command {
       if (serverPrefix.toLowerCase() === prefix.toLowerCase())
         return message.channel.createMessage(_('prefix.already'));
       if (await this.checkPrefix(prefix, message, prefixUsed, _)) return;
-      if (!serverData)
-        await this.client.pg.models.get('server').get(message.channel.guild);
-      await this.client.pg.models.get('server').update({ prefix },
-        { where: { serverID: message.guildID } });
+      // TODO make this statement better
+      if (!serverData) await prisma.server.create({
+        data: { serverID: message.guildID }
+      });
+      await prisma.server.update({
+        where: { serverID: message.guildID },
+        data: { prefix }
+      });
       return message.channel.createMessage(_('prefix.set_server', { prefix }));
     case 'add':
     case 'a':
@@ -77,9 +82,15 @@ module.exports = class Prefix extends Command {
       if (canUse <= 0 && !Util.CommandPermissions.elevated(this.client, message))
         return message.channel.createMessage(_('prefix.limit'));
       if (await this.checkPrefix(prefix, message, prefixUsed, _)) return;
-      if (!userData)
-        await this.client.pg.models.get('user').get(message.author);
-      await this.client.pg.models.get('user').addToArray(message.author, 'prefixes', prefix);
+      if (!userData) await prisma.user.create({
+        data: { userID: message.author.id }
+      });
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: {
+          prefixes: { push: prefix }
+        }
+      });
       return message.channel.createMessage(_('prefix.added', { prefix }));
     case 'remove':
     case 'r':
@@ -89,7 +100,12 @@ module.exports = class Prefix extends Command {
         return message.channel.createMessage(_('prefix.none'));
       prefix = await this.findPrefix(args[1] || '', userPrefixes, message, _);
       if (!prefix) return;
-      await this.client.pg.models.get('user').removeFromArray(message.author, 'prefixes', prefix);
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: {
+          prefixes: { set: userData.prefixes.filter((p) => p != prefix) }
+        }
+      });
       return message.channel.createMessage(_('prefix.removed', { prefix }));
     default:
       embed = {
