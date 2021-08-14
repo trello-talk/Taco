@@ -64,13 +64,15 @@ module.exports = class Prefix extends Command {
       if (serverPrefix.toLowerCase() === prefix.toLowerCase())
         return message.channel.createMessage(_('prefix.already'));
       if (await this.checkPrefix(prefix, message, prefixUsed, _)) return;
-      // TODO make this statement better
-      if (!serverData) await prisma.server.create({
-        data: { serverID: message.guildID }
-      });
-      await prisma.server.update({
+      await prisma.server.upsert({
         where: { serverID: message.guildID },
-        data: { prefix }
+        create: {
+          serverID: message.guildID,
+          maxWebhooks: 5,
+          prefix,
+          locale: this.client.config.sourceLocale
+        },
+        update: { prefix }
       });
       return message.channel.createMessage(_('prefix.set_server', { prefix }));
     case 'add':
@@ -82,12 +84,13 @@ module.exports = class Prefix extends Command {
       if (canUse <= 0 && !Util.CommandPermissions.elevated(this.client, message))
         return message.channel.createMessage(_('prefix.limit'));
       if (await this.checkPrefix(prefix, message, prefixUsed, _)) return;
-      if (!userData) await prisma.user.create({
-        data: { userID: message.author.id }
-      });
-      await prisma.user.update({
+      await prisma.user.upsert({
         where: { userID: message.author.id },
-        data: {
+        create: {
+          userID: message.author.id,
+          prefixes: { set: [prefix] }
+        },
+        update: {
           prefixes: { push: prefix }
         }
       });

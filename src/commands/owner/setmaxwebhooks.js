@@ -13,6 +13,7 @@ module.exports = class SetMaxWebhooks extends Command {
   }; }
 
   async exec(message, { args, _ }) {
+    const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const idRegex = /^\d{17,18}$/;
     const targetID = args[0];
     
@@ -20,14 +21,17 @@ module.exports = class SetMaxWebhooks extends Command {
       return message.channel.createMessage(_('setmaxwebhooks.invalid'));
 
     const webhookLimit = parseInt(args[1]) || 5;
-    // Create a row if there is none
-    // TODO make this statement better
-    await prisma.server.create({ data: { serverID: targetID } });
-    const emojiFallback = Util.emojiFallback({ client: this.client, message });
-
-    await prisma.server.update({
+    await prisma.server.upsert({
       where: { serverID: targetID },
-      data: { maxWebhooks: webhookLimit }
+      create: {
+        serverID: targetID,
+        maxWebhooks: webhookLimit,
+        prefix: this.client.config.prefix,
+        locale: this.client.config.sourceLocale
+      },
+      update: {
+        maxWebhooks: webhookLimit
+      }
     });
 
     const doneEmoji = emojiFallback('632444546684551183', '✅');

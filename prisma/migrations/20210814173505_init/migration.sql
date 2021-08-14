@@ -5,7 +5,7 @@ CREATE TABLE "servers" (
     "bannedFromUse" BOOLEAN NOT NULL DEFAULT false,
     "banReason" VARCHAR(255),
     "locale" VARCHAR(255) DEFAULT E'en_US',
-    "prefix" VARCHAR(255) NOT NULL DEFAULT E'TD!',
+    "prefix" VARCHAR(255) NOT NULL DEFAULT E'T!',
     "maxWebhooks" INTEGER NOT NULL DEFAULT 5,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,

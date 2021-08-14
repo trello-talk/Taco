@@ -21,8 +21,8 @@ model Server {
   serverID      String   @unique @db.VarChar(255)
   bannedFromUse Boolean  @default(false)
   banReason     String?  @db.VarChar(255)
-  locale        String?  @default("en_US") @db.VarChar(255)
-  prefix        String   @default("TD!") @db.VarChar(255)
+  locale        String?  @db.VarChar(255)
+  prefix        String?  @db.VarChar(255)
   maxWebhooks   Int      @default(5)
   createdAt     DateTime @db.Timestamptz(6) @default(now())
   updatedAt     DateTime @db.Timestamptz(6) @updatedAt

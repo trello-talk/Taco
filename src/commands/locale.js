@@ -69,14 +69,13 @@ module.exports = class Locale extends Command {
     case 's':
       locale = await this.findLocale(args[1], localeArray, message, _);
       if (!locale) return;
-      // Create user
-      // TODO make this statement better
-      if (!userData) await prisma.user.create({
-        data: { userID: message.author.id }
-      });
-      await prisma.user.update({
+      await prisma.user.upsert({
         where: { userID: message.author.id },
-        data: { locale: locale[1] ? locale[0] : null }
+        create: {
+          userID: message.author.id,
+          locale: locale[1] ? locale[0] : null
+        },
+        update: { locale: locale[1] ? locale[0] : null }
       });
       if (locale[1])
         _n = this.client.locale.createModule(locale[0], _.prefixes);
@@ -92,14 +91,17 @@ module.exports = class Locale extends Command {
         return message.channel.createMessage(_('command_permissions.trelloRole'));
       locale = await this.findLocale(args[1], localeArray, message, _);
       if (!locale) return;
-      // Create server
-      // TODO make this statement better
-      if (!serverData) await prisma.server.create({
-        data: { serverID: message.guildID }
-      });
-      await prisma.server.update({
+      await prisma.server.upsert({
         where: { serverID: message.guildID },
-        locale: { locale: locale[1] ? locale[0] : null }
+        create: {
+          serverID: message.guildID,
+          maxWebhooks: 5,
+          prefix: this.client.config.prefix,
+          locale: { locale: locale[1] ? locale[0] : null }
+        },
+        update: {
+          locale: { locale: locale[1] ? locale[0] : null }
+        }
       });
       if (locale[1])
         _n = this.client.locale.createModule(locale[0], _.prefixes);
