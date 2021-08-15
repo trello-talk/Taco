@@ -97,11 +97,9 @@ module.exports = class Locale extends Command {
           serverID: message.guildID,
           maxWebhooks: 5,
           prefix: this.client.config.prefix,
-          locale: { locale: locale[1] ? locale[0] : null }
+          locale: locale[1] ? locale[0] : null
         },
-        update: {
-          locale: { locale: locale[1] ? locale[0] : null }
-        }
+        update: { locale: locale[1] ? locale[0] : null }
       });
       if (locale[1])
         _n = this.client.locale.createModule(locale[0], _.prefixes);
