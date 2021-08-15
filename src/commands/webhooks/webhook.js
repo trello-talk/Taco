@@ -19,7 +19,7 @@ module.exports = class Webhook extends Command {
     if (isNaN(requestedID) || requestedID < 1)
       return message.channel.createMessage(_('webhook_cmd.invalid'));
 
-    const webhook = await prisma.webhook.findUnique({
+    const webhook = await prisma.webhook.findFirst({
       where: {
         guildID: message.guildID,
         id: requestedID
