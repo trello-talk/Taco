@@ -33,7 +33,7 @@ module.exports = class RemWebhook extends Command {
       
       // Remove the internal webhook if there are no more webhooks depending on it
       const trelloMember = await prisma.user.findUnique({
-        where: { trelloID: webhook.memberID }
+        where: { userID: webhook.memberID }
       });
       if (trelloMember) {
         const trello = new Trello(this.client, trelloMember.trelloToken);
