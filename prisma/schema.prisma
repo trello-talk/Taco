@@ -10,8 +10,8 @@ datasource db {
 model ApiUser {
   id        String   @id @db.VarChar(255)
   jwtDate   DateTime @db.Timestamptz(6)
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @db.Timestamptz(6) @default(now())
+  updatedAt DateTime @db.Timestamptz(6) @updatedAt
 
   @@map("apiusers")
 }
