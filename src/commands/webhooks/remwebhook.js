@@ -37,10 +37,10 @@ module.exports = class RemWebhook extends Command {
       });
       if (trelloMember) {
         const trello = new Trello(this.client, trelloMember.trelloToken);
-        const webhooks = await prisma.webhook.findMany({
+        const webhookCount = await prisma.webhook.count({
           where: { trelloWebhookID: webhook.trelloWebhookID }
         });
-        if (!webhooks.length)
+        if (webhookCount <= 0)
           await trello.deleteWebhook(webhook.trelloWebhookID);
       }
 
