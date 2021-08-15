@@ -1,6 +1,7 @@
 const ArgumentInterpreter = require('./structures/ArgumentInterpreter');
 const Trello = require('./structures/Trello');
 const Util = require('./util');
+const prisma = require('./prisma');
 
 module.exports = class Events {
   constructor(client) {
@@ -33,15 +34,17 @@ module.exports = class Events {
     if (this.client.messageAwaiter.processHalt(message)) return;
 
     // Postgres Data
-    const userData = await this.client.pg.models.get('user').onlyGet(message.author.id);
+    const userData = await prisma.user.findUnique({
+      where: { userID: message.author.id }
+    });
     if (userData && userData.bannedFromUse) return;
     const serverData = message.guildID ?
-      await this.client.pg.models.get('server').onlyGet(message.guildID) : null;
+      await prisma.server.findUnique({ where: { serverID: message.guildID } }) : null;
     if (serverData && serverData.bannedFromUse) return;
 
     // Prefixes
     const userPrefixes = userData ? userData.prefixes : [];
-    const serverPrefix = serverData ? [serverData.prefix] : [this.client.config.prefix];
+    const serverPrefix = serverData && serverData.prefix ? [serverData.prefix] : [this.client.config.prefix];
     const prefixes = [...userPrefixes, ...serverPrefix];
 
     // Command parsing
@@ -113,6 +116,9 @@ module.exports = class Events {
 
   onGuildLeave(guild) {
     // deactivate guild webhooks
-    this.client.pg.models.get('webhook').update({ active: false }, { where: { guildID: guild.id }});
+    prisma.webhook.updateMany({
+      where: { guildID: guild.id },
+      data: { active: false }
+    });
   }
 };

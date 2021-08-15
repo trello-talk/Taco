@@ -1,3 +1,4 @@
+const prisma = require('../../prisma');
 const Command = require('../../structures/Command');
 const Util = require('../../util');
 
@@ -16,7 +17,10 @@ module.exports = class Switch extends Command {
       client: this.client, message, _ });
     if (handle.stop) return;
     if (handle.response.status === 404) {
-      await this.client.pg.models.get('user').removeAuth(message.author);
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: { trelloID: null, trelloToken: null }
+      });
       return message.channel.createMessage(_('trello_response.unauthorized'));
     }
 
@@ -25,8 +29,10 @@ module.exports = class Switch extends Command {
     const board = await Util.Trello.findBoard(args.join(' '), json.boards, this.client, message, _, userData);
     if (!board) return;
 
-    await this.client.pg.models.get('user').update({ currentBoard: board.id },
-      { where: { userID: message.author.id } });
+    await prisma.user.update({
+      where: { userID: message.author.id },
+      data: { currentBoard: board.id }
+    });
     
     const emojiFallback = Util.emojiFallback({ client: this.client, message });
     const doneEmoji = emojiFallback('632444546684551183', ':white_check_mark:');

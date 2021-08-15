@@ -16,11 +16,7 @@ module.exports = class List extends Command {
       response: await trello.getAllLists(userData.currentBoard),
       client: this.client, message, _ });
     if (handle.stop) return;
-    if (Util.Trello.cannotUseBoard(handle)) {
-      await this.client.pg.models.get('user').update({ currentBoard: null },
-        { where: { userID: message.author.id } });
-      return message.channel.createMessage(_('boards.gone'));
-    }
+    if (await Util.Trello.ensureBoard(handle, message, _)) return;
 
     const json = handle.body;
     const list = await Util.Trello.findList(args[0], json, this.client, message, _);

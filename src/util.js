@@ -1,5 +1,6 @@
 const GenericPrompt = require('./structures/GenericPrompt');
 const fetch = require('node-fetch');
+const prisma = require('./prisma');
 
 /**
  * Represents the utilities for the bot
@@ -494,8 +495,10 @@ Util.Trello = {
     } else {
       // Remove current board
       if (userData.currentBoard)
-        await client.pg.models.get('user').update({ currentBoard: null },
-          { where: { userID: message.author.id } });
+        await prisma.user.update({
+          where: { userID: message.author.id },
+          data: { currentBoard: null }
+        });
 
       await message.channel.createMessage(_('boards.none'));
       return;
@@ -504,6 +507,20 @@ Util.Trello = {
   cannotUseBoard(handle) {
     return handle.response.status === 404 ||
       handle.response.status === 401 && handle.body === 'unauthorized permission requested';
+  },
+  async ensureBoard(handle, message, _) {
+    const cannotUseBoard = handle.response.status === 404 ||
+      handle.response.status === 401 && handle.body === 'unauthorized permission requested';
+
+    if (cannotUseBoard) {
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: { currentBoard: null }
+      });
+      await message.channel.createMessage(_('boards.gone'));
+      return true;
+    }
+    return false;
   }
 };
 

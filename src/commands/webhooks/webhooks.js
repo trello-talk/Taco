@@ -1,3 +1,4 @@
+const prisma = require('../../prisma');
 const Command = require('../../structures/Command');
 const GenericPager = require('../../structures/GenericPager');
 const Util = require('../../util');
@@ -13,13 +14,10 @@ module.exports = class Webhooks extends Command {
 
   async exec(message, { args, _ }) {
     const discordWebhooks = await message.channel.guild.getWebhooks();
-    const webhooks = (await this.client.pg.models.get('webhook').findAll({
-      order: [['createdAt', 'ASC']],
-      where: {
-        guildID: message.guildID
-      }
+    const webhooks = (await prisma.webhook.findMany({
+      where: { guildID: message.guildID },
+      orderBy: [{ createdAt: 'asc' }]
     }))
-      .map(wh => wh.get({ plain: true }))
       .map(wh => ({
         ...wh,
         discordWebhook: discordWebhooks.find(dwh => dwh.id === wh.webhookID)
@@ -37,7 +35,7 @@ module.exports = class Webhooks extends Command {
       _, header: _('webhook_cmd.header'), itemTitle: 'words.webhook.many',
       display: (item) => {
         let result = `${item.active ? checkEmoji : uncheckEmoji} \`ID: ${item.id}\` `;
-        
+
         if (item.discordWebhook)
           result += `${
             Util.cutoffText(Util.Escape.markdown(item.discordWebhook.name), 40)} ` + 

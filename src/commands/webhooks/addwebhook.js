@@ -3,6 +3,7 @@ const SubMenu = require('../../structures/SubMenu');
 const GenericPrompt = require('../../structures/GenericPrompt');
 const WebhookFilters = require('../../structures/WebhookFilters');
 const Util = require('../../util');
+const prisma = require('../../prisma');
 
 module.exports = class AddWebhook extends Command {
   get name() { return 'addwebhook'; }
@@ -34,9 +35,7 @@ module.exports = class AddWebhook extends Command {
 
   async exec(message, { args, _, trello, userData, serverData }) {
     const maxWebhooks = serverData ? serverData.maxWebhooks : 5;
-    const webhookCount = await this.client.pg.models.get('webhook').count({ where: {
-      guildID: message.guildID
-    }});
+    const webhookCount = await prisma.webhook.count({ where: { guildID: message.guildID } });
     if (maxWebhooks <= webhookCount)
       return message.channel.createMessage(_('webhook_cmd.max_wh'));
 
@@ -45,7 +44,10 @@ module.exports = class AddWebhook extends Command {
       client: this.client, message, _ });
     if (handle.stop) return;
     if (handle.response.status === 404) {
-      await this.client.pg.models.get('user').removeAuth(message.author);
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: { trelloID: null, trelloToken: null }
+      });
       return message.channel.createMessage(_('trello_response.unauthorized'));
     }
 
@@ -176,15 +178,17 @@ module.exports = class AddWebhook extends Command {
         .find(twh => twh.idModel === board.id && twh.callbackURL === callbackURL);
     }
 
-    this.client.pg.models.get('webhook').create({
-      memberID: userData.trelloID,
-      modelID: board.id,
-      trelloWebhookID: trelloWebhook.id,
-      webhookID: webhook.id,
-      guildID: message.guildID,
-      filters: WebhookFilters.DEFAULT.toString(),
-      locale: _.locale,
-      webhookToken: webhook.token
+    await prisma.webhook.create({
+      data: {
+        memberID: userData.trelloID,
+        modelID: board.id,
+        trelloWebhookID: trelloWebhook.id,
+        webhookID: webhook.id,
+        guildID: message.guildID,
+        filters: WebhookFilters.DEFAULT.toString(),
+        locale: _.locale,
+        webhookToken: webhook.token
+      }
     });
 
     await this.client.executeWebhook(webhook.id, webhook.token, {

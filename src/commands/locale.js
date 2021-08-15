@@ -3,6 +3,7 @@ const GenericPrompt = require('../structures/GenericPrompt');
 const GenericPager = require('../structures/GenericPager');
 const Util = require('../util');
 const lodash = require('lodash');
+const prisma = require('../prisma');
 
 module.exports = class Locale extends Command {
   get name() { return 'locale'; }
@@ -68,10 +69,14 @@ module.exports = class Locale extends Command {
     case 's':
       locale = await this.findLocale(args[1], localeArray, message, _);
       if (!locale) return;
-      if (!userData)
-        await this.client.pg.models.get('user').get(message.author);
-      await this.client.pg.models.get('user').update({ locale: locale[1] ? locale[0] : null },
-        { where: { userID: message.author.id } });
+      await prisma.user.upsert({
+        where: { userID: message.author.id },
+        create: {
+          userID: message.author.id,
+          locale: locale[1] ? locale[0] : null
+        },
+        update: { locale: locale[1] ? locale[0] : null }
+      });
       if (locale[1])
         _n = this.client.locale.createModule(locale[0], _.prefixes);
       return message.channel.createMessage(_n(
@@ -86,10 +91,16 @@ module.exports = class Locale extends Command {
         return message.channel.createMessage(_('command_permissions.trelloRole'));
       locale = await this.findLocale(args[1], localeArray, message, _);
       if (!locale) return;
-      if (!serverData)
-        await this.client.pg.models.get('server').get(message.channel.guild);
-      await this.client.pg.models.get('server').update({ locale: locale[1] ? locale[0] : null },
-        { where: { serverID: message.guildID } });
+      await prisma.server.upsert({
+        where: { serverID: message.guildID },
+        create: {
+          serverID: message.guildID,
+          maxWebhooks: 5,
+          prefix: this.client.config.prefix,
+          locale: locale[1] ? locale[0] : null
+        },
+        update: { locale: locale[1] ? locale[0] : null }
+      });
       if (locale[1])
         _n = this.client.locale.createModule(locale[0], _.prefixes);
       return message.channel.createMessage(_n(

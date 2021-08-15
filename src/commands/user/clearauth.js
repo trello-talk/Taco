@@ -1,3 +1,4 @@
+const prisma = require('../../prisma');
 const Command = require('../../structures/Command');
 
 module.exports = class ClearAuth extends Command {
@@ -14,7 +15,10 @@ module.exports = class ClearAuth extends Command {
       header: _('user_mgmt.clearauth_confirm')
     })) {
       await trello.invalidate();
-      await this.client.pg.models.get('user').removeAuth(message.author);
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: { trelloID: null, trelloToken: null }
+      });
       return message.channel.createMessage(_('user_mgmt.clearauth'));
     }
   }

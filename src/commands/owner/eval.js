@@ -2,6 +2,8 @@
 
 const Command = require('../../structures/Command');
 const Util = require('../../util');
+// eslint-disable-next-line no-unused-vars
+const prisma = require('../../prisma');
 
 module.exports = class Eval extends Command {
   get name() { return 'eval'; }

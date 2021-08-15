@@ -1,6 +1,7 @@
+require('dotenv').config();
+
 const Eris = require('eris');
 const dbots = require('dbots');
-const Postgres = require('./postgres');
 const Database = require('./database');
 const EventHandler = require('./events');
 const CommandLoader = require('./commandloader');
@@ -48,7 +49,7 @@ class TrelloBot extends Eris.Client {
         keysBlocklist: [
           config.token,
           config.redis.password,
-          config.pg.password,
+          process.env.DATABASE_URL,
           config.trello.token,
         ],
         version: pkg.version
@@ -100,10 +101,6 @@ class TrelloBot extends Eris.Client {
     // Redis
     this.db = new Database(this);
     await this.db.connect(this.config.redis);
-
-    // Postgres
-    this.pg = new Postgres(this, path.join(this.dir, this.config.modelsPath));
-    await this.pg.connect(this.config.pg);
 
     // Bottleneck
     this.limiterConnection = new Bottleneck.RedisConnection({

@@ -6,6 +6,7 @@ const WebhookFilters = require('../../structures/WebhookFilters');
 const GenericPrompt = require('../../structures/GenericPrompt');
 const Trello = require('../../structures/Trello');
 const Util = require('../../util');
+const prisma = require('../../prisma');
 
 module.exports = class EditWebhook extends Command {
   get name() { return 'editwebhook'; }
@@ -62,17 +63,13 @@ module.exports = class EditWebhook extends Command {
 
   async webhookAvailable(message, webhookID, serverData) {
     const maxWebhooks = serverData ? serverData.maxWebhooks : 5;
-    const webhookCount = await this.client.pg.models.get('webhook').count({ where: {
-      guildID: message.guildID
-    }});
+    const webhookCount = await prisma.webhook.count({ where: { guildID: message.guildID } });
 
     if (maxWebhooks < webhookCount) {
-      const webhooks = await this.client.pg.models.get('webhook').findAll({
-        limit: maxWebhooks,
-        order: [['createdAt', 'ASC']],
-        where: {
-          guildID: message.guildID
-        }
+      const webhooks = await prisma.webhook.findMany({
+        take: maxWebhooks,
+        where: { guildID: message.guildID },
+        orderBy: [{ createdAt: 'asc' }]
       });
 
       return !!webhooks.find((webhook) => webhook.id === webhookID);
@@ -86,10 +83,12 @@ module.exports = class EditWebhook extends Command {
     if (isNaN(requestedID) || requestedID < 1)
       return message.channel.createMessage(_('webhook_cmd.invalid'));
 
-    const webhook = await this.client.pg.models.get('webhook').findOne({ where: {
-      guildID: message.guildID,
-      id: requestedID
-    }});
+    const webhook = await prisma.webhook.findFirst({
+      where: {
+        guildID: message.guildID,
+        id: requestedID
+      }
+    });
 
     if (!webhook)
       return message.channel.createMessage(_('webhook_cmd.not_found'));
@@ -110,9 +109,11 @@ module.exports = class EditWebhook extends Command {
         // Activate/deactivate
         names: ['activate', 'deactivate', 'enable', 'disable'],
         title: _(webhook.active ? 'webhook_cmd.edit_menu.off' : 'webhook_cmd.edit_menu.on'),
-        async exec(client) {
-          await client.pg.models.get('webhook').update({ active: !webhook.active },
-            { where: { id: webhook.id } });
+        async exec() {
+          await prisma.webhook.update({
+            where: { id: webhook.id },
+            data: { active: !webhook.active }
+          });
           return message.channel.createMessage(
             _(webhook.active ? 'webhook_cmd.wh_off' : 'webhook_cmd.wh_on'));
         }
@@ -141,8 +142,10 @@ module.exports = class EditWebhook extends Command {
           const style = await _this.findStyle(args[2], message, _);
           if (!style) return;
 
-          await _this.client.pg.models.get('webhook').update({ style },
-            { where: { id: webhook.id } });
+          await prisma.webhook.update({
+            where: { id: webhook.id },
+            data: { style }
+          });
           
           return message.channel.createMessage(
             _('webhook_cmd.style_set', {
@@ -162,9 +165,11 @@ module.exports = class EditWebhook extends Command {
         // Whitelist/Blacklist
         names: ['whitelist', 'wlist', 'blacklist', 'blist', 'policy'],
         title: _(webhook.whitelist ? 'webhook_cmd.edit_menu.blist' : 'webhook_cmd.edit_menu.wlist'),
-        async exec(client) {
-          await client.pg.models.get('webhook').update({ whitelist: !webhook.whitelist },
-            { where: { id: webhook.id } });
+        async exec() {
+          await prisma.webhook.update({
+            where: { id: webhook.id },
+            data: { whitelist: !webhook.whitelist }
+          });
           return message.channel.createMessage(
             _(webhook.active ? 'webhook_cmd.to_blist' : 'webhook_cmd.to_wlist'));
         }
@@ -193,8 +198,10 @@ module.exports = class EditWebhook extends Command {
     const localeCommand = this.client.cmds.get('locale');
     const locale = await localeCommand.findLocale(arg, localeArray, message, _);
     if (!locale) return;
-    await this.client.pg.models.get('webhook').update({ locale: locale[1] ? locale[0] : null },
-      { where: { id: webhook.id } });
+    await prisma.webhook.update({
+      where: { id: webhook.id },
+      data: { locale: locale[1] ? locale[0] : null }
+    });
     return message.channel.createMessage(
       _(locale[1] ? 'webhook_cmd.locale_set' : 'webhook_cmd.locale_unset', {
         name: locale[1] ? locale[1]._.name : null
@@ -228,9 +235,10 @@ module.exports = class EditWebhook extends Command {
     });
     const newLists = await selector.start(message.channel.id, message.author.id);
     if (!newLists) return;
-    await this.client.pg.models.get('webhook').update(
-      { lists: newLists.filter(item => item.value).map(item => item.id) },
-      { where: { id: webhook.id } });
+    await prisma.webhook.update({
+      where: { id: webhook.id },
+      data: { lists: { set: newLists.filter(item => item.value).map(item => item.id) } }
+    });
     return message.channel.createMessage(_('webhook_cmd.lists_updated'));
   }
 
@@ -265,9 +273,10 @@ module.exports = class EditWebhook extends Command {
     });
     const newCards = await selector.start(message.channel.id, message.author.id);
     if (!newCards) return;
-    await this.client.pg.models.get('webhook').update(
-      { cards: newCards.filter(item => item.value).map(item => item.id) },
-      { where: { id: webhook.id } });
+    await prisma.webhook.update({
+      where: { id: webhook.id },
+      data: { cards: { set: newCards.filter(item => item.value).map(item => item.id) } }
+    });
     return message.channel.createMessage(_('webhook_cmd.cards_updated'));
   }
 
@@ -411,11 +420,12 @@ module.exports = class EditWebhook extends Command {
     });
     const newPerms = await selector.start(message.channel.id, message.author.id);
     if (!newPerms) return;
-    await this.client.pg.models.get('webhook').update(
-      { filters: new WebhookFilters(newPerms
+    await prisma.webhook.update({
+      where: { id: webhook.id },
+      data: { filters: new WebhookFilters(newPerms
         .filter(item => !!item.flag && item.value)
-        .map(item => item.flag)).bitfield },
-      { where: { id: webhook.id } });
+        .map(item => item.flag)).bitfield }
+    });
     return message.channel.createMessage(_('webhook_cmd.filter_update'));
   }
 
@@ -425,11 +435,14 @@ module.exports = class EditWebhook extends Command {
     const trelloWebhook = await this.repairTrelloWebhook(message, webhook, userData, trello, _);
     if (!trelloWebhook) return;
 
-    await this.client.pg.models.get('webhook').update(
-      { ...trelloWebhook,
+    await prisma.webhook.update({
+      where: { id: webhook.id },
+      data: {
+        ...trelloWebhook,
         webhookID: discordWebhook.id,
-        webhookToken: discordWebhook.token },
-      { where: { id: webhook.id } });
+        webhookToken: discordWebhook.token
+      }
+    });
 
     return message.channel.createMessage(_('webhook_cmd.repaired'));
   }
@@ -485,9 +498,10 @@ module.exports = class EditWebhook extends Command {
 
   async repairTrelloWebhook(message, webhook, userData, trello, _) {
     const callbackURL = this.client.config.webserver.base + webhook.memberID;
-    const trelloMember = await this.client.pg.models.get('user').findOne({ where: {
-      trelloID: webhook.memberID
-    }});
+    const trelloMember = await prisma.user.findUnique({
+      where: { trelloID: webhook.memberID }
+    });
+
     if (!trelloMember)
       return this.createTrelloWebhook(message, webhook.modelID, userData, trello, _);
     else {

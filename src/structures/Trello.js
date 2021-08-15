@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const AbortController = require('abort-controller');
+const prisma = require('../prisma');
 
 class Trello {
   constructor(client, token) {
@@ -587,7 +588,10 @@ class Trello {
       await client.createMessage(message.channel.id, _('trello_response.aborted'));
       return { body, response, stop: true };
     } else if (response.status === 401 && body === 'invalid token') {
-      await client.pg.models.get('user').removeAuth(message.author);
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: { trelloID: null, trelloToken: null }
+      });
       await client.createMessage(message.channel.id, _('trello_response.unauthorized'));
       return { body, response, stop: true };
     } else if (response === 419) {

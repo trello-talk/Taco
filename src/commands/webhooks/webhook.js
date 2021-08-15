@@ -1,4 +1,5 @@
 /* global BigInt */
+const prisma = require('../../prisma');
 const Command = require('../../structures/Command');
 const WebhookFilters = require('../../structures/WebhookFilters');
 const Util = require('../../util');
@@ -18,17 +19,19 @@ module.exports = class Webhook extends Command {
     if (isNaN(requestedID) || requestedID < 1)
       return message.channel.createMessage(_('webhook_cmd.invalid'));
 
-    const webhook = await this.client.pg.models.get('webhook').findOne({ where: {
-      guildID: message.guildID,
-      id: requestedID
-    }});
+    const webhook = await prisma.webhook.findFirst({
+      where: {
+        guildID: message.guildID,
+        id: requestedID
+      }
+    });
 
     if (!webhook)
       return message.channel.createMessage(_('webhook_cmd.not_found'));
 
-    const trelloMember = await this.client.pg.models.get('user').findOne({ where: {
-      trelloID: webhook.memberID
-    }});
+    const trelloMember = prisma.user.findUnique({
+      where: { trelloID: webhook.memberID }
+    });
 
     const discordWebhook = (await message.channel.guild.getWebhooks())
       .find(dwh => dwh.id === webhook.webhookID);

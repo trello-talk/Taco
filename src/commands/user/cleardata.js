@@ -1,3 +1,4 @@
+const prisma = require('../../prisma');
 const Command = require('../../structures/Command');
 
 module.exports = class ClearData extends Command {
@@ -15,7 +16,7 @@ module.exports = class ClearData extends Command {
     })) {
       if (userData.trelloToken)
         await trello.invalidate();
-      await this.client.pg.models.get('user').destroy({ where: { userID: message.author.id } });
+      await prisma.user.delete({ where: { userID: message.author.id } });
       return message.channel.createMessage(_('user_mgmt.cleardata'));
     }
   }

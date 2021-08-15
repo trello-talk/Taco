@@ -1,3 +1,4 @@
+const prisma = require('../../prisma');
 const Command = require('../../structures/Command');
 const Util = require('../../util');
 
@@ -17,7 +18,10 @@ module.exports = class Watch extends Command {
       client: this.client, message, _ });
     if (handle.stop) return;
     if (handle.response.status === 404) {
-      await this.client.pg.models.get('user').removeAuth(message.author);
+      await prisma.user.update({
+        where: { userID: message.author.id },
+        data: { trelloID: null, trelloToken: null }
+      });
       return message.channel.createMessage(_('trello_response.unauthorized'));
     }
 
