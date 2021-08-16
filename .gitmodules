@@ -1,3 +1,6 @@
 [submodule "locale"]
 	path = locale
 	url = https://github.com/trello-talk/Translation
+[submodule "prisma"]
+	path = prisma
+	url = https://github.com/trello-talk/schema.git
