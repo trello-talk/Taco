@@ -1,4 +1,0 @@
--- AlterTable
-ALTER TABLE "servers" ALTER COLUMN "locale" DROP DEFAULT,
-ALTER COLUMN "prefix" DROP NOT NULL,
-ALTER COLUMN "prefix" DROP DEFAULT;

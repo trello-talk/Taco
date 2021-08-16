@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "apiusers" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
