@@ -424,7 +424,7 @@ module.exports = class EditWebhook extends Command {
       where: { id: webhook.id },
       data: { filters: new WebhookFilters(newPerms
         .filter(item => !!item.flag && item.value)
-        .map(item => item.flag)).bitfield }
+        .map(item => item.flag)).bitfield.toString() }
     });
     return message.channel.createMessage(_('webhook_cmd.filter_update'));
   }
@@ -498,7 +498,7 @@ module.exports = class EditWebhook extends Command {
 
   async repairTrelloWebhook(message, webhook, userData, trello, _) {
     const callbackURL = this.client.config.webserver.base + webhook.memberID;
-    const trelloMember = await prisma.user.findUnique({
+    const trelloMember = await prisma.user.findFirst({
       where: { trelloID: webhook.memberID }
     });
 
