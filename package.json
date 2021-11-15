@@ -16,7 +16,7 @@
     "cat-loggr": "^1.2.2",
     "cron": "^1.8.2",
     "datejs": "^1.0.0-rc3",
-    "dbots": "^9.0.1",
+    "dbots": "^10.0.0",
     "dotenv": "^10.0.0",
     "eris": "^0.16.0",
     "eventemitter3": "^4.0.7",
