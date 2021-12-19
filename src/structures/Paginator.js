@@ -20,8 +20,7 @@ class Paginator extends EventEmitter {
     this.message = message;
     this.itemsPerPage = itemsPerPage;
     this.pageNumber = 1;
-    this.reactionsCleared = false;
-    this._reactBind = this._react.bind(this);
+    this.componentsRemoved = false;
   }
 
   /**
@@ -82,15 +81,6 @@ class Paginator extends EventEmitter {
   }
 
   /**
-   * Whether or not this instance can paginate
-   * @returns {boolean}
-   */
-  canPaginate() {
-    return this.message.channel.type === 1 ||
-      this.message.channel.permissionsOf(this.client.user.id).has('addReactions');
-  }
-
-  /**
    * Whether or not this instance can manage messages
    * @returns {boolean}
    */
@@ -106,49 +96,20 @@ class Paginator extends EventEmitter {
    */
   async start(userID, timeout) {
     this.reactionsCleared = false;
-    if (this.maxPages > 1 && this.canPaginate()) {
-      try {
-        await Promise.all([
-          this.message.addReaction(Paginator.PREV),
-          this.message.addReaction(Paginator.STOP),
-          this.message.addReaction(Paginator.NEXT),
-        ]);
-        this.collector = this.messageAwaiter.createReactionCollector(this.message, userID, timeout);
-        this._hookEvents();
-      } catch (e) {
-        return this.clearReactions();
-      }
-    }
+    this.collector = this.messageAwaiter.createComponentCollector(this.message, userID, timeout);
+    this.collector.on('interaction', this._interact.bind(this));
+    this.collector.once('end', this.removeComponents.bind(this));
   }
 
   /**
-   * Clears reaction from the message
+   * Remove components from the message
    */
-  async clearReactions() {
-    if (!this.reactionsCleared) {
-      this.reactionsCleared = true;
-      this.emit('clearReactions');
-      try {
-        if (!this.canManage())
-          await Promise.all([
-            this.message.removeReaction(Paginator.NEXT).catch(() => {}),
-            this.message.removeReaction(Paginator.STOP).catch(() => {}),
-            this.message.removeReaction(Paginator.PREV).catch(() => {})
-          ]);
-        else
-          await this.message.removeReactions().catch(() => {});
-      } catch (e) {
-        // Do nothing
-      }
+  async removeComponents() {
+    if (!this.componentsRemoved) {
+      this.componentsRemoved = true;
+      this.message.edit({ components: [] });
+      this.emit('removeComponents');
     }
-  }
-
-  /**
-   * @private
-   */
-  _hookEvents() {
-    this.collector.on('reaction', this._react.bind(this));
-    this.collector.once('end', this.clearReactions.bind(this));
   }
 
   /**
@@ -161,18 +122,17 @@ class Paginator extends EventEmitter {
   /**
    * @private
    */
-  _react(emoji, userID) {
+  async _interact(interaction) {
+    await interaction.acknowledge();
     const oldPage = this.pageNumber;
-    if (Paginator.PREV == emoji.name)
+    if (interaction.data.custom_id === 'prev')
       this.previousPage();
-    else if (Paginator.NEXT == emoji.name)
+    else if (interaction.data.custom_id === 'next')
       this.nextPage();
-    else if (Paginator.STOP == emoji.name)
+    else if (interaction.data.custom_id === 'stop')
       this.collector.end();
     if (this.pageNumber !== oldPage)
-      this._change();
-    if ([Paginator.PREV, Paginator.STOP, Paginator.NEXT].includes(emoji.name) && this.canManage())
-      this.message.removeReaction(emoji.name, userID).catch(() => {});
+      this._change(interaction);
     this.collector.restart();
   }
 }
@@ -180,5 +140,6 @@ class Paginator extends EventEmitter {
 Paginator.PREV = '⬅️';
 Paginator.STOP = '🛑';
 Paginator.NEXT = '➡️';
+Paginator.DONE = '✅';
 
 module.exports = Paginator;

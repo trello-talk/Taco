@@ -1,6 +1,5 @@
 const EventEmitter = require('eventemitter3');
 const GenericPager = require('./GenericPager');
-const Paginator = require('./Paginator');
 const lodash = require('lodash');
 
 /**
@@ -40,6 +39,7 @@ class MultiSelect extends EventEmitter {
       name: `${message.author.username}#${message.author.discriminator}`,
       icon_url: message.author.avatarURL || message.author.defaultAvatarURL
     };
+    this.pagerOptions.includeDone = true;
 
     this.pager = new GenericPager(client, message, this.pagerOptions);
     this.halt = null;
@@ -56,9 +56,6 @@ class MultiSelect extends EventEmitter {
       return null;
 
     await this.pager.start(channelID, userID, timeout);
-    // React with done
-    if (this.pager.collector)
-      await this.pager.message.addReaction(MultiSelect.DONE);
     this.halt = this.client.messageAwaiter.createHalt(channelID, userID, timeout);
 
     // Sync timeouts
@@ -119,15 +116,11 @@ class MultiSelect extends EventEmitter {
       });
 
       if (this.pager.collector) {
-        this.pager.collector.on('clearReactions', () => {
-          if (!this.pager.canManage())
-            this.pager.message.removeReaction(MultiSelect.DONE).catch(() => {});
-        });
-        this.pager.collector.on('reaction', emoji => {
-          if (Paginator.STOP === emoji.name) {
+        this.pager.collector.on('interaction', interaction => {
+          if (interaction.data.custom_id === 'stop') {
             result = { _canceled: true };
             this.halt.end();
-          } else if (MultiSelect.DONE === emoji.name) {
+          } else if (interaction.data.custom_id === 'done') {
             result = this.pager.items;
             this.halt.end();
           }
@@ -139,7 +132,6 @@ class MultiSelect extends EventEmitter {
   }
 }
 
-MultiSelect.DONE = '✅';
 MultiSelect.CANCEL_TRIGGERS = [
   'cancel', 'stop', 'quit'
 ];

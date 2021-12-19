@@ -22,7 +22,7 @@ class GenericPager extends Paginator {
     items = [], itemsPerPage = 15,
     display = item => item.toString(),
     _, embedExtra = {}, itemTitle = 'words.item.many',
-    header = null, footer = null
+    header = null, footer = null, includeDone = false
   } = {}) {
     super(client, message, { items, itemsPerPage });
     this.displayFunc = display;
@@ -31,6 +31,7 @@ class GenericPager extends Paginator {
     this.localeModule = _;
     this.header = header;
     this.footer = footer;
+    this.includeDone = includeDone;
   }
 
   /**
@@ -46,8 +47,49 @@ class GenericPager extends Paginator {
    * Updates the current message
    * @returns {Promise}
    */
-  updateMessage() {
-    return this.message.edit(this.currentMessage).catch(() => {});
+  updateMessage(interaction) {
+    return interaction ? interaction.editParent(this.currentMessage).catch(() => {})
+      : this.message.edit(this.currentMessage).catch(() => {});
+  }
+
+  get components() {
+    return this.maxPages > 1 ? [
+      {
+        type: 1,
+        components: [
+          {
+            type: 2,
+            style: 2,
+            label: '',
+            custom_id: 'prev',
+            emoji: { id: '902219517969727488' },
+            disabled: this.pageNumber <= 1
+          },
+          {
+            type: 2,
+            style: 4,
+            label: '',
+            custom_id: 'stop',
+            emoji: { id: '887142796560060426' }
+          },
+          ...(this.includeDone ? [{
+            type: 2,
+            style: 3,
+            label: '',
+            custom_id: 'done',
+            emoji: { name: Paginator.DONE }
+          }] : []),
+          {
+            type: 2,
+            style: 2,
+            label: '',
+            custom_id: 'next',
+            emoji: { id: '902219517965525042' },
+            disabled: this.pageNumber >= this.maxPages
+          }
+        ]
+      }
+    ] : [];
   }
 
   /**
@@ -62,23 +104,20 @@ class GenericPager extends Paginator {
       const embed = lodash.defaultsDeep({
         title: `${_(this.itemTitle)} ` +
           `(${this.items.length}, ${_('words.page.one')} ${this.pageNumber}/${this.maxPages})`,
-        description: this.header || undefined,
-        footer: this.footer ? { text: this.footer } : undefined,
-        fields: []
+        description: (this.header ? this.header + '\n\n' : '') + displayPage.join('\n'),
+        footer: this.footer ? { text: this.footer } : undefined
       }, this.embedExtra, { color: this.client.config.embedColor });
 
-      embed.fields.push({
-        name: '*' + _('prompt.list') + '*',
-        value: displayPage.join('\n')
-      });
-
-      return { embed };
+      return { embed, components: this.components };
     } else {
       const top = `${_(this.itemTitle)} ` +
         `(${this.items.length}, ${_('words.page.one')} ${this.pageNumber}/${this.maxPages})`;
       const lines = '─'.repeat(top.length);
-      return (this.header || '') + '```prolog\n' + `${top}\n` + `${lines}\n` +
-        displayPage.join('\n') + `${lines}\`\`\`` + (this.footer || '');
+      return {
+        content: (this.header || '') + '```prolog\n' + `${top}\n` + `${lines}\n` +
+          displayPage.join('\n') + `${lines}\`\`\`` + (this.footer || ''),
+        components: this.components
+      };
     }
   }
 
@@ -96,8 +135,8 @@ class GenericPager extends Paginator {
   /**
    * @private
    */
-  _change() {
-    this.updateMessage().catch(() => this.collector.end());
+  _change(interaction) {
+    this.updateMessage(interaction).catch(() => this.collector.end());
     this.emit('change', this.pageNumber);
   }
 }

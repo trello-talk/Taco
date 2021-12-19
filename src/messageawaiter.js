@@ -1,3 +1,4 @@
+const ComponentCollector = require('./structures/ComponentCollector');
 const Halt = require('./structures/Halt');
 const ReactionCollector = require('./structures/ReactionCollector');
 
@@ -9,6 +10,7 @@ class MessageAwaiter {
     this.client = client;
     this.halts = new Map();
     this.reactionCollectors = new Map();
+    this.componentCollectors = new Map();
   }
 
   /**
@@ -39,6 +41,21 @@ class MessageAwaiter {
     const collector = new ReactionCollector(this, timeout);
     collector.once('end', () => this.reactionCollectors.delete(id));
     this.reactionCollectors.set(id, collector);
+    return collector;
+  }
+
+  /**
+   * Creates a component collector. Any component interactions from the user will be emitted from the collector.
+   * @param {string} message The message to collect from
+   * @param {string} userID The user's ID
+   * @param {number} [timeout=30000] The time until the halt is auto-cleared
+   */
+  createComponentCollector(message, userID, timeout = 60000) {
+    const id = `${message.id}:${userID}`;
+    if (this.componentCollectors.has(id)) this.componentCollectors.get(id).end();
+    const collector = new ComponentCollector(this, timeout);
+    collector.once('end', () => this.componentCollectors.delete(id));
+    this.componentCollectors.set(id, collector);
     return collector;
   }
 

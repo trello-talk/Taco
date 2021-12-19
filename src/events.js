@@ -8,6 +8,7 @@ module.exports = class Events {
     this.client = client;
     client.on('messageCreate', this.onMessage.bind(this));
     client.on('messageReactionAdd', this.onReaction.bind(this));
+    client.on('interactionCreate', this.onInteractionCreate.bind(this));
     client.on('guildDelete', this.onGuildLeave.bind(this));
   }
 
@@ -112,6 +113,31 @@ module.exports = class Events {
       const collector = this.client.messageAwaiter.reactionCollectors.get(id);
       collector._onReaction(emoji, member.id);
     }
+  }
+
+  onInteractionCreate(interaction) {
+    if (interaction.type === 1) return interaction.pong();
+    if (interaction.type !== 3) return;
+    const id = `${interaction.message.id}:${
+      interaction.member ? interaction.member.id : interaction.user.id
+    }`;
+    if (this.client.messageAwaiter.componentCollectors.has(id)) {
+      const collector = this.client.messageAwaiter.componentCollectors.get(id);
+      collector._onInteract(interaction);
+    } else interaction.editParent({ components: [
+      {
+        type: 1,
+        components: [
+          {
+            type: 2,
+            style: 2,
+            label: 'Prompt expired.',
+            custom_id: 'null',
+            disabled: true
+          }
+        ]
+      }
+    ] });
   }
 
   onGuildLeave(guild) {

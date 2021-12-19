@@ -1,5 +1,4 @@
 const GenericPager = require('./GenericPager');
-const Paginator = require('./Paginator');
 const lodash = require('lodash');
 const fuzzy = require('fuzzy');
 
@@ -75,7 +74,7 @@ class GenericPrompt {
 
       this.halt.on('end', () => {
         // In case the halt ends before reactions are finished coming up
-        this.pager.reactionsCleared = true;
+        this.pager.componentsRemoved = true;
         if (this.pager.collector) 
           this.pager.collector.end();
         this.pager.message.delete().catch(() => {});
@@ -90,9 +89,9 @@ class GenericPrompt {
       });
 
       if (this.pager.collector)
-        this.pager.collector.on('reaction', emoji => {
+        this.pager.collector.on('interaction', interaction => {
           this.halt.restart();
-          if (Paginator.STOP === emoji.name) {
+          if (interaction.data.custom_id === 'stop') {
             foundItem = { _canceled: true };
             this.halt.end();
           }
