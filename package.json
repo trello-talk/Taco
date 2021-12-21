@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "eslint": "^8.5.0",
-    "prisma": "^3.6.0"
+    "prisma": "^3.7.0"
   },
   "repository": {
     "type": "git",
