@@ -29,7 +29,7 @@ module.exports = class Webhook extends Command {
     if (!webhook)
       return message.channel.createMessage(_('webhook_cmd.not_found'));
 
-    const trelloMember = prisma.user.findUnique({
+    const trelloMember = await prisma.user.findUnique({
       where: { trelloID: webhook.memberID }
     });
 
@@ -47,6 +47,7 @@ module.exports = class Webhook extends Command {
 
     const embed = {
       color: this.client.config.embedColor,
+      url: `https://trello.com/b/${webhook.modelID}`,
       description: `**${_('webhook_cmd.model_filter')}:** ${
         _(webhook.whitelist ? 'webhook_cmd.whitelist' : 'webhook_cmd.blacklist')}\n` +
         `**${_('words.locale')}:** ${locale ? locale._.name : '*' + _('locale.unset') + '*'}\n` +
