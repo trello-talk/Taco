@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ApiUser {
+  id        String   @id @db.VarChar(255)
+  jwtDate   DateTime @db.Timestamptz(6)
+  createdAt DateTime @db.Timestamptz(6) @default(now())
+  updatedAt DateTime @db.Timestamptz(6) @updatedAt
+
+  @@map("apiusers")
+}
+
+model Server {
+  id            Int      @id @default(autoincrement())
+  serverID      String   @unique @db.VarChar(255)
+  bannedFromUse Boolean  @default(false)
+  banReason     String?  @db.VarChar(255)
+  premium       Boolean  @default(false)
+  locale        String?  @db.VarChar(255)
+  prefix        String?  @db.VarChar(255)
+  maxWebhooks   Int      @default(5)
+  createdAt     DateTime @db.Timestamptz(6) @default(now())
+  updatedAt     DateTime @db.Timestamptz(6) @updatedAt
+
+  @@map("servers")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  userID         String   @unique @db.VarChar(255)
+  bannedFromUse  Boolean  @default(false)
+  banReason      String?  @db.VarChar(255)
+  premium        Boolean  @default(false)
+  trelloToken    String?  @db.VarChar(255)
+  trelloID       String?  @db.VarChar(255)
+  currentBoard   String?  @db.VarChar(255)
+  locale         String?  @db.VarChar(255)
+  prefixes       String[] @db.VarChar(255)
+  createdAt      DateTime @db.Timestamptz(6) @default(now())
+  updatedAt      DateTime @db.Timestamptz(6) @updatedAt
+  discordToken   String?  @db.VarChar(255)
+  discordRefresh String?  @db.VarChar(255)
+
+  @@map("users")
+}
+
+model Webhook {
+  id              Int      @id @default(autoincrement())
+  memberID        String?  @db.VarChar(255)
+  modelID         String   @db.VarChar(255)
+  trelloWebhookID String?  @db.VarChar(255)
+  filters         String   @default("0") @db.VarChar(255)
+  active          Boolean  @default(true)
+  locale          String?  @db.VarChar(255)
+  style           String   @default("default") @db.VarChar(255)
+  guildID         String   @db.VarChar(255)
+  webhookID       String?  @db.VarChar(255)
+  webhookToken    String?  @db.VarChar(255)
+  whitelist       Boolean  @default(true)
+  lists           String[] @db.VarChar(255)
+  cards           String[] @db.VarChar(255)
+  createdAt       DateTime @db.Timestamptz(6) @default(now())
+  updatedAt       DateTime @db.Timestamptz(6) @updatedAt
+
+  @@map("webhooks")
+}
