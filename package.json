@@ -34,7 +34,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "eslint": "^8.5.0",
+    "eslint": "^8.6.0",
     "prisma": "^3.7.0"
   },
   "repository": {
