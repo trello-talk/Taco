@@ -394,10 +394,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dotenv@^11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-11.0.0.tgz#ee37feddf8ada6d348a79e198312d4a8abfd1c1e"
-  integrity sha512-Fp/b504Y5W+e+FpCxTFMUZ7ZEQkQYF0rx+KZtmwixJxGQbLHrhCwo3FjZgNC8vIfrSi29PABNbMoCGD9YoiXbQ==
+dotenv@^14.1.1:
+  version "14.1.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-14.1.1.tgz#54d2cc35c938743659a5f8bb7da5568bbe094c3c"
+  integrity sha512-g7ptu0p9gCDIWTLY62fTYT+PasFLNj9FRGg8Wmjr0v/dOL2LEe8guNjpkY59OX91fwIFU7qth4RO89pDSTTG2g==
 
 enabled@2.0.x:
   version "2.0.0"
