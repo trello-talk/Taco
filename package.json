@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@airbrake/node": "^2.1.7",
-    "@prisma/client": "^3.8.1",
+    "@prisma/client": "^3.9.0",
     "abort-controller": "^3.0.0",
     "bottleneck": "^2.19.5",
     "cat-loggr": "^1.2.2",
