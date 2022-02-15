@@ -19,7 +19,7 @@ module.exports = class Events {
     if (message.type === 20) return;
 
     // Check to see if bot can send messages
-    if (message.channel.type !== 1 &&
+    if (message.channel.permissionsOf &&
       !message.channel.permissionsOf(this.client.user.id).has('sendMessages')) return;
 
     // Don't parse if Taco is in the guild and not using a mention prefix
