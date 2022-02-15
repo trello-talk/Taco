@@ -29,7 +29,7 @@ module.exports = class Webhook extends Command {
     if (!webhook)
       return message.channel.createMessage(_('webhook_cmd.not_found'));
 
-    const trelloMember = await prisma.user.findUnique({
+    const trelloMember = await prisma.user.findFirst({
       where: { trelloID: webhook.memberID }
     });
 
