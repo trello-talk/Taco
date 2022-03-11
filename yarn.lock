@@ -1317,10 +1317,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-systeminformation@^5.11.7:
-  version "5.11.7"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.11.7.tgz#9a418d8719e3450cb475420f925a6290c614cb68"
-  integrity sha512-MI6HtSoBF2e1pTpRGQC8b5X5QDln8mazQTD3KyFFlLGkk7291kQv+mjeriz30TDVTcWEnEfKPxZwHnZBFYnr6w==
+systeminformation@^5.11.8:
+  version "5.11.8"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.11.8.tgz#fd6244cd13e5fcb863e6dde9cb02edb4a5a3115b"
+  integrity sha512-u30rM0KwGKiJof44Ak25WeSh9661NU2GshXpHPpv/zGXvvSGI5eALjpVJ3EYnIroceToWzy9+xkuMfjHIx6OiQ==
 
 tdigest@^0.1.1:
   version "0.1.1"
