@@ -25,7 +25,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
     "mustache": "^4.2.0",
-    "node-fetch": "2",
+    "node-fetch": "3",
     "pg": "^8.7.3",
     "pretty-ms": "^7.0.1",
     "redis": "^3.1.2",
