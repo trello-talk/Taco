@@ -14,7 +14,7 @@
     "abort-controller": "^3.0.0",
     "bottleneck": "^2.19.5",
     "cat-loggr": "^1.2.2",
-    "cron": "^1.8.3",
+    "cron": "^2.0.0",
     "datejs": "^1.0.0-rc3",
     "dbots": "^11.0.0",
     "dotenv": "^16.0.0",
