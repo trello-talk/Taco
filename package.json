@@ -30,7 +30,7 @@
     "pretty-ms": "^7.0.1",
     "redis": "^3.1.2",
     "require-reload": "^0.2.2",
-    "systeminformation": "^5.12.3",
+    "systeminformation": "^5.12.4",
     "winston": "^3.8.1"
   },
   "devDependencies": {
