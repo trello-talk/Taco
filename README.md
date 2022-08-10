@@ -1,3 +1,5 @@
+> **Warning** This has been deprecated in favor of [TacoInteractions](https://github.com/trello-talk/TacoInteractions)!
+
 <div align="center">
   <img src="https://tacobot.app/logo_happy.svg" alt="logo" height=200 />
   <hr>
